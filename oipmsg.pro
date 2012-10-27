@@ -13,8 +13,22 @@ TEMPLATE = app
 
 
 SOURCES += src/main.cpp\
-        src/mainwindow.cpp
+        src/mainwindow.cpp \
+    src/config.cpp \
+    src/log.cpp \
+    src/systray.cpp \
+    src/protocol.cpp \
+    src/comm.cpp \
+    src/version.cpp \
+    src/whiteboard.cpp
 
-HEADERS  += src/mainwindow.h
+HEADERS  += src/mainwindow.h \
+    src/config.h \
+    src/log.h \
+    src/systray.h \
+    src/protocol.h \
+    src/comm.h \
+    src/version.h \
+    src/whiteboard.h
 
 FORMS    += src/mainwindow.ui
