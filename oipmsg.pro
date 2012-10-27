@@ -34,7 +34,8 @@ HEADERS  += \
     src/whiteboard.h \
     src/main_window.h \
     src/about_dialog.h \
-    src/setup_window.h
+    src/setup_window.h \
+    src/ipmsg.h
 
 FORMS    += \
     src/about_dialog.ui \
