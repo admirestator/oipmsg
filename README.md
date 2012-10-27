@@ -4,7 +4,7 @@ An open source client using ipmsg protocol with Qt.
 
 Author
 ------
-admirestator <admirestator$gmail.com>
+@admirestator <admirestator$gmail.com>
 
 Requirements
 ------------
