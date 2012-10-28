@@ -1,3 +1,4 @@
+// class for oipmsg initial
 #ifndef INIT_H
 #define INIT_H
 

@@ -1,3 +1,4 @@
+// class for log info
 #ifndef LOG_H
 #define LOG_H
 
