@@ -1,6 +1,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+namespace config{
+    class Config;
+};
+
 class Config
 {
 public:

@@ -1,6 +1,11 @@
 #ifndef WHITEBOARD_H
 #define WHITEBOARD_H
 
+namespace wihiteboard{
+    class WhiteBoard;
+};
+
+
 class WhiteBoard
 {
 public:

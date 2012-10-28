@@ -22,6 +22,10 @@
 #include <QList>
 #include <QSystemTrayIcon>
 
+namespace systray{
+    class SysTray;
+};
+
 class QAction;
 class QMenu;
 class QActionGroup;

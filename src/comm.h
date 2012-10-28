@@ -3,6 +3,10 @@
 
 #include "protocol.h"
 
+namespace comm{
+    class Comm;
+};
+
 class Comm : public Protocol
 {
 public:
