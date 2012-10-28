@@ -1,3 +1,5 @@
+//class for tcp/ip communication
+
 #ifndef COMM_H
 #define COMM_H
 

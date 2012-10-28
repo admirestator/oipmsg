@@ -1,3 +1,5 @@
+// class for implemet to protocal for ipmsg and self defined one.
+
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 

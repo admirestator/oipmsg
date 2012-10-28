@@ -1,3 +1,5 @@
+//class for global configuration
+
 #ifndef CONFIG_H
 #define CONFIG_H
 

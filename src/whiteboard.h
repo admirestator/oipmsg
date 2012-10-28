@@ -1,3 +1,5 @@
+// class for whiteboard
+
 #ifndef WHITEBOARD_H
 #define WHITEBOARD_H
 

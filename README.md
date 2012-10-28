@@ -1,4 +1,4 @@
-OIPMsg
+OpenIPMsg
 ======
 An open source client using ipmsg protocol with Qt.  
 Create at 2012-10-26.
