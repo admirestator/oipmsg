@@ -23,7 +23,8 @@ SOURCES += src/main.cpp\
     src/main_window.cpp \
     src/setup_window.cpp \
     src/about_dialog.cpp \
-    src/init.cpp
+    src/init.cpp \
+    src/screenshot.cpp
 
 HEADERS  += \
     src/config.h \
@@ -37,7 +38,8 @@ HEADERS  += \
     src/about_dialog.h \
     src/setup_window.h \
     src/ipmsg.h \
-    src/init.h
+    src/init.h \
+    src/screenshot.h
 
 FORMS    += \
     src/about_dialog.ui \

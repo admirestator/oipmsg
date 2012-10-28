@@ -3,7 +3,6 @@
 #ifndef COMM_H
 #define COMM_H
 
-//#include <QByteArray>
 #include "protocol.h"
 
 namespace comm{
@@ -16,30 +15,30 @@ public:
     Comm();
     ~Comm();
 
-    int sendcmd_nooperation();
-    int sendcmd_br_entry();
-    int sendcmd_br_exit();
-    int sendcmd_ansentry();
-    int sendcmd_br_absence();
-    int sendcmd_br_isgetlist();
-    int sendcmd_okgetlist();
-    int sendcmd_getlist();
-    int sendcmd_anslist();
-    int sendcmd_br_isgetlist2();
-    int sendcmd_sendmsg();
-    int sendcmd_recvmsg();
-    int sendcmd_readmsg();
-    int sendcmd_delmsg();
-    int sendcmd_ansreadmsg();
-    int sendcmd_getinfo();
-    int sendcmd_sendinfo();
-    int sendcmd_getabsenceinfo();
-    int sendcmd_sendabsenceinfo();
-    int sendcmd_getfiledata();
-    int sendcmd_releasefiles();
-    int sendcmd_getdirfiles();
-    int sendcmd_getpubkey();
-    int sendcmd_anspubkey();
+    bool sendcmd_nooperation();
+    bool sendcmd_br_entry();
+    bool sendcmd_br_exit();
+    bool sendcmd_ansentry();
+    bool sendcmd_br_absence();
+    bool sendcmd_br_isgetlist();
+    bool sendcmd_okgetlist();
+    bool sendcmd_getlist();
+    bool sendcmd_anslist();
+    bool sendcmd_br_isgetlist2();
+    bool sendcmd_sendmsg();
+    bool sendcmd_recvmsg();
+    bool sendcmd_readmsg();
+    bool sendcmd_delmsg();
+    bool sendcmd_ansreadmsg();
+    bool sendcmd_getinfo();
+    bool sendcmd_sendinfo();
+    bool sendcmd_getabsenceinfo();
+    bool sendcmd_sendabsenceinfo();
+    bool sendcmd_getfiledata();
+    bool sendcmd_releasefiles();
+    bool sendcmd_getdirfiles();
+    bool sendcmd_getpubkey();
+    bool sendcmd_anspubkey();
 };
 
 #endif // COMM_H
