@@ -1,5 +1,5 @@
 #include "setup_window.h"
-#include "ui_setupwindow.h"
+#include "ui_setup_window.h"
 
 SetupWindow::SetupWindow(QWidget *parent) :
     QMainWindow(parent),

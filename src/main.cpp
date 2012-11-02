@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "main_window.h"
+#include "systray.h"
 
 using namespace std;
 
@@ -11,6 +12,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
+
+    Systray system_tray;
+    system_tray.show();
 
 #ifdef Q_WS_WIN
    cout << "Win32 Platform"  << endl;

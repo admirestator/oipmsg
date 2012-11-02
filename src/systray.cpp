@@ -64,32 +64,34 @@ Systray::~Systray()
     trayIcon = 0;
 }
 
-void Systray::updateToolTip(int i)
+//void Systray::updateToolTip(int i)
+void Systray::updateToolTip()
 {
-    trayIcon->setToolTip(tr("IP Messenger (%1)").arg(i));
+    //trayIcon->setToolTip(tr("IP Messenger (%1)").arg(i));
+    trayIcon->setToolTip(tr("Open IP Messenger"));
 }
 
 void Systray::createActions()
 {
-    showTransferFileAction
-        = new QAction(tr("Show file transfer monitor (%1)").arg(0), 0);
-    delAckWindowAction = new QAction(tr("Delete all acknowledge windows"), 0);
+    //showTransferFileAction
+    //    = new QAction(tr("Show file transfer monitor (%1)").arg(0), 0);
+    //delAckWindowAction = new QAction(tr("Delete all acknowledge windows"), 0);
     topWindowAction = new QAction(tr("Top all windows"), 0);
-    setupAction = new QAction(tr("Setup preferences..."), 0);
-    aboutAction = new QAction(tr("About..."), 0);
+    setupAction = new QAction(tr("Setup"), 0);
     aboutQtAction = new QAction(tr("About Qt"), 0);
-    readMsgLogAction = new QAction(tr("Read message log file"), 0);
-    quitAction = new QAction(tr("Quit IP Messenger"), 0);
+    aboutAction = new QAction(tr("About"), 0);
+    readMsgLogAction = new QAction(tr("Log"), 0);
+    quitAction = new QAction(tr("Quit"), 0);
 }
 
 void Systray::createMenus()
 {
     trayIconMenu = new QMenu;
 
-    trayIconMenu->addAction(showTransferFileAction);
+    //trayIconMenu->addAction(showTransferFileAction);
 
     trayIconMenu->addSeparator();
-    trayIconMenu->addAction(delAckWindowAction);
+    //trayIconMenu->addAction(delAckWindowAction);
     trayIconMenu->addAction(topWindowAction);
 
     trayIconMenu->addSeparator();
@@ -121,26 +123,26 @@ void Systray::show()
 
 void Systray::createConnections()
 {
-    connect(showTransferFileAction, SIGNAL(triggered()),
-            this, SLOT(showTransferFile()));
+    //connect(showTransferFileAction, SIGNAL(triggered()),
+    //        this, SLOT(showTransferFile()));
 
     connect(setupAction, SIGNAL(triggered()), this, SLOT(setup()));
-    connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+    connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
     connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
 
-    connect(topWindowAction, SIGNAL(triggered()),
-            this, SLOT(setAllWindowVisible()));
-    connect(readMsgLogAction, SIGNAL(triggered()),
-            this, SLOT(readLog()));
+    //connect(topWindowAction, SIGNAL(triggered()),
+    //        this, SLOT(setAllWindowVisible()));
+    //connect(readMsgLogAction, SIGNAL(triggered()),
+    //        this, SLOT(readLog()));
 
 }
 
 void Systray::setup()
 {
-    SetupWindow *setupWindow = new SetupWindow;
+    SetupWindow *setupWindow = new SetupWindow();
     setupWindow->show();
 }
 
@@ -175,5 +177,5 @@ void Systray::createMainWindow()
     mainWindow->show();
 
     // prepend mainWindow to the list
-    mainWindowList.insert(0, mainWindow);
+    //mainWindowList.insert(0, mainWindow);
 }

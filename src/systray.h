@@ -31,7 +31,7 @@ class QMenu;
 class QActionGroup;
 class QIcon;
 
-class MainWindow;
+//class MainWindow;
 
 class Systray : public QObject
 {
@@ -43,13 +43,14 @@ public:
 
     void show();
 
-    QList<MainWindow *> mainWindowList;
+    //QList<MainWindow *> mainWindowList;
 
 protected:
     //void timerEvent(QTimerEvent *event);
 
 private slots:
-    void updateToolTip(int i);
+    //void updateToolTip(int i);
+    void updateToolTip();
     //void updateTransferCount(int);
 
 private slots:
@@ -69,8 +70,8 @@ private:
     void destroyMainWindowList();
     void visibleAllMainWindow();
 
-    QAction *showTransferFileAction;
-    QAction *delAckWindowAction;
+    //QAction *showTransferFileAction;
+    //QAction *delAckWindowAction;
     QAction *topWindowAction;
     QAction *setupAction;
     QAction *aboutAction;

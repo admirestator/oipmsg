@@ -10,6 +10,11 @@ class Init
 {
 public:
     Init();
+    virtual ~Init();
+
+
+private:
+    QString language;
 };
 
 #endif // INIT_H
