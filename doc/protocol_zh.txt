@@ -79,7 +79,7 @@
 
 	IPMSG_RETRYOPT		重发标志（获取HOST/LIST時使用）
 
-     3) 暗号拡張部用フラグ (拡張部に組み合わせを hex 表現で使用)
+     3)  加密扩展标志（扩展部分在表达式中使用十六进制组合）
 
 	IPMSG_RSA_512		RSA 512位公钥加密
 	IPMSG_RSA_1024		RSA 1024位公钥加密
@@ -89,7 +89,7 @@
 	IPMSG_AES_256		ÅES 256位加密
 	IPMSG_PACKETNO_IV	公钥密码的第四Packet编号字符串 共通鍵暗号の IV に Packet番号文字列を利用
 	IPMSG_ENCODE_BASE64	使用公用密钥加密的密文为Base64编码 暗号文の共通鍵以降の記述に base64 を利用
-	IPMSG_SIGN_SHA1		格兰特SHA1数字签名的明文 平文に SHA1電子署名を付与
+	IPMSG_SIGN_SHA1		使用SHA1纯文本数字签名 平文に SHA1電子署名を付与
 
      4) 用于附加文件类型（fileattr低8位）
 
@@ -102,8 +102,7 @@
 	IPMSG_FILE_FIFO
 	IPMSG_FILE_RESFORK
 
-     5) 添付ファイル拡張用ファイル属性（fileattr上位24bit）
-
+     5) 附件文件扩展文件属性（fileattr高24bit）
 	IPMSG_FILE_RONLYOPT
 	IPMSG_FILE_HIDDENOPT
 	IPMSG_FILE_EXHIDDENOPT
@@ -132,38 +131,35 @@
 	IPMSG_FILE_ALIASFNAME
 
 
-  2.コマンドフォーマット（すべて文字列として表現）
+  2.命令格式（所有命令应使用字符串形式）
+      
 
-     1) コマンド（フォーマットバージョン1）
+     1) 命令（格式版本一）
 
-	Ver(1) : Packet番号 : 自User名 : 自Host名 : Command番号 : 追加部
+	Ver(1) : Packet编号 : 本机User名称 : 本机Host名称 : Command编号 : 附加部分
 
-     2) 現在のコマンドフォーマットによるメッセージの送信文字列例
-
+     2) 使用当前命令格式发送字符串消息示例
+     
 	"1:100:shirouzu:jupiter:32:Hello"
 
 
-  3.コマンド処理概要
+  3.命令处理概述
 
-     1) メンバ認識
+     1) 成员识别
 
-	起動時に、IPMSG_BR_ENTRY コマンドをブロードキャストし、すでに
-	立ち上がっているメンバに、新規参加を知らせます。
 
-	このブロードキャストにより、すでに立ち上がっているメンバは、
-	自分の送信先リストに新規参加メンバの情報を追加します。さらに、
-	IPMSG_ANSENTRY コマンドをその新規参加メンバに対し、返信します。
-	（備考: Win版では、メンバ数やIPアドレス距離等に基づいて、0-4秒
-	　程度のランダムな待ちを入れています）
+	启动时，发送IPMSG_BR_ENTRY广播命令，向已经在线成员通告新成员的进入。
+	根据这个广播命令，已在线成员把新进入成员的信息添加到自己的发送列表当中，
+	并对新进入的成员应答IPMSG_ANSENTRY命令。
+	（注：Windows版的IPMSG根据成员数量和IP地址或范围的基础上，加入了0-4秒的随机等待时间）
 
-	新規参加メンバは、この IPMSG_ANSENTRY を受信することにより、
-	すでに立ち上がっている全メンバの情報を得ることができます。
-	したがい、IPパケットが失われない限りは、全てのメンバが同一の
-	送信先リストを保持できるというわけです。
 
-	不在モードやニックネームの変更などを、メンバ全員に通知するには、
-	IPMSG_BR_ABSENCE をブロードキャストします。（IPMSG_BR_ENTRY と
-	違い、受け取ったメンバは IPMSG_ANSENTRY を返しません）
+	新进入的成员通过接收 IPMSG_ANS_ENTRY命令，可以获得所有在线用户的信息，
+	因此，如果IP包没有丢失，全部的成员都能持有相关的发送列表。
+	
+
+	对于离开模式和昵称的改变，向所有成员广播 IPMSG_BR_ABSENCE命令。
+	（与 IPMSG_BR_ABSENCE命令不同，接收到的成员不会应答 IPMSG_ANS_ENTRY命令 ）
 
 	IPMSG_BR_ENTRY, IPMSG_ANSENTRY, IPMSG_BR_ABSENCE コマンドでは、
 	不在モードにあわせて IPMSG_ABSENCEOPT を立てて、コマンドの追加
@@ -171,75 +167,77 @@
 	ネットワーク指定のブロードキャストが届かないメンバは、さらに、
 	IPMSG_DIALUPOPT を立てます。このオプションが立っているメンバに
 	は、メンバ認識系のコマンドを個別に送出します。
+ 	
+	IPMSG_BR_ENTRY、 IPMSG_ANSENTRY、 以及 IPMSG_BR_ABSENCE 命令
+	据用户是否处于离开模式而决定是否设置IPMSG_ABSENCEOPT标志，并在命令的扩展部分加入昵称。
+	此外，网络指定的广播不到达的成员，比如拨号用户等，需要设置 IPMSG_DIALUPOPT标志。
+	设置了该标志位的成员单独发出命令，用以识别系统中的成员。
+	
+	（分组扩展）IPMSG_BR_ENTRY，IPMSG_ANSENTRY，在IPMSG_BR_ABSENCE，
+	  按照传统命令格式的字符串（跨'\0'），能传达自己的所属(设定)的组名。
 
-	（グループ化拡張）IPMSG_BR_ENTRY, IPMSG_ANSENTRY, IPMSG_BR_ABSENCE
-	において、従来のコマンドフォーマット文字列に続いて('\0'を挟んで)
-	グループ名を入れることによって、自分の所属(設定)するグループ名
-	を伝えることができます。
+     2) 信息接收
 
-     2) メッセージ送受信
+	使用 IPMSG_SENDMSG命令发送信息，在扩展部分放入信息的实体，
+	对于接收方，如果发送时设置了 IPMSG_SENDCHECKOPT标志，
+	则应答 IPMSG_RECVMSG命令，前将接收到的包号真入扩展部分。
 
-	メッセージ送信には IPMSG_SENDMSG を使用し、拡張部にメッセージ
-	本体を入れます。受信側は、IPMSG_SENDCHECKOPT が立っている場合
-	に限り、IPMSG_RECVMSG を返します。拡張部には元のパケット番号を
-	入れます。
 
-	ブロードキャストによるメッセージ送信は、IPMSG_BOADCASTOPT を
-	立てた IPMSG_SENDMSG を使用します。（不在通知文など）自動送出
-	されるパケットには、ピンポン防止のため IPMSG_AUTORETOPT をつけ
-	ます。どちらかのオプションが立っているパケットには、確認および
-	自動送出パケットを返しません。
+	广播信息时，使用设置了 IPMSG_BOADCASTOPT标志位的IPMSG_SENDMSG命令发送信息
+	为了预防乒乓效应，自动发出的数据包中都应设置 IPMSG_AUTORETOPT标志。
+	如果该数据包设置了该标志位，就不会返回确认和自动传输数据包。
+	
+	
+	如果要发送密封的消息 则分组应该设置IPMSG_SECRETOPT标志位。
+	在这个情况下，接收方面在启封时应返回IPMSG_READMSG 命令，
+	并在扩展部分放入该包的编号。
 
-	封書で送出するには、IPMSG_SECRETOPT を立てたパケットを送出しま
-	す。この場合、受信側は開封時に IPMSG_READMSG を送出します。
-	拡張部には元のパケット番号を入れます。
+	（被添加为 IPMSG_NOADDLISTOPT）
+	当收到来自不在发送列表中主机发送的 IPMSG_SENDMSG命令时
+	・ 向目标主机发送 IPMSG_BR_ENTRY命令确定该主机是否存在
+	・ 直接添加到收件人列表   直接添加到本机的发送列表
+	作为最有可能执行的随机数据包溢漏项的操作之一。
+	然而，对于没有进行申请而参加的单向信息发送是不可取的行为，
+	在这种情况下，建议接收主机不遵循这样的行为，
+	在 IPMSG_SENDMSG命令里设置 IPMSG_NOADDLISTOPT标志位。
+	
+	（IPMSG_READCHECKOPT标志在第8版追加）
+	如果在IPMSG_READMSG命令中设置了IPMSG_READCHECKOPT标志位，
+	正好和IPMSG_SENDMSG命令中设置了IPMSG_SENDCHECKOPT标志位一样地处理。
+	但是在应答的时候使用 IPMSG_ANSREADMSG而不是IPMSG_RECVMSG。
+	
+	此外，信息的图像埋入4)文件添加扩张说明。
+     3) 收发信息与加密扩展（第9版追加）
+     
+	公钥(RSA)组合公用密钥(AES/Blowfish/RC2)的实现。
+	在原则上，与加密有关的扩展部分用十六进制表示。
+	但是，IPMSG_ENCODE_BASE64 具有加密功能 （见下文）
+	发送加密消息的时候使用base64编码替代十六进制对除了公用密钥部分的表示。（第10版添加）
 
-	（追加された、IPMSG_NOADDLISTOPT について）
-	自分の送信先リストに載っていないホストからの IPMSG_SENDMSG
-	パケット到着時には、
-	・ 送信先に IPMSG_BR_ENTRY を送信して、ホスト存在確認を行う
-	・ 直接自分の送信先リストに加える
-	のいずれかの処理を行うことにより、エントリー系パケット取りこぼ
-	しをフォローする実装が考えられます。しかし、エントリーを行わな
-	い単発メッセージ送信の場合は、これは望ましくない動作ですので、
-	この場合は受信ホストにそのようなフォロー動作をしないことを推奨
-	するため、IPMSG_SENDMSG に IPMSG_NOADDLISTOPT フラグを立てます。
-
-	（8版で追加された、IPMSG_READCHECKOPT について）
-	IPMSG_READMSG に、IPMSG_READCHECKOPT がついていた場合、丁度、
-	IPMSG_SENDMSG における IPMSG_SENDCHECKOPT のように処理します。
-	ただし、返信には、IPMSG_RECVMSG ではなく、IPMSG_ANSREADMSG
-	を使用します。
-
-	なお、メッセージの画像埋め込みは 4)ファイル添付拡張にて説明。
-
-     3) メッセージ送受信－暗号化拡張（9版で追加）
-
-	公開鍵(RSA)と共通鍵(AES/Blowfish/RC2)を組み合わせて実現します。
-	暗号関連の拡張部は原則として、hex フォーマットで表します。
-	ただし、暗号対応能力（後述）に IPMSG_ENCODE_BASE64 が含まれ
-	ている暗号メッセージ送信では、共通鍵部分以降の記述について
-	hex の代わりに、base64 で記述します。（10版で追加）
-
-	（公開鍵取得）まず受信側に IPMSG_GETPUBKEY を送信します。相手
-	から IPMSG_ANSPUBKEY を受け取ることにより、相手側 RSA 公開鍵
-	を得ます。IPMSG_GETPUBKEY/IPMSG_ANSPUBKEY ともに、拡張部の最初
-	に自ホストの暗号対応能力（IPMSG_RSA_2048 等）をフラグの OR で
-	表した値を入れます。
-	（フラグ詳細は「1. 3) 暗号拡張部用フラグ」をご覧ください）
-
+	（获取公钥）首先由接收方发送 IPMSG_GETPUBKEY命令，
+	接收发送方的IPMSG_ANSPUBKEY命令，得到发送方的RSA 公钥。
+	IPMSG_GETPUBKEY/IPMSG_ANSPUBKEY都在扩展部分的开头
+	放入主机的加密能力（IPMSG_RSA_2048等）设置按位或的标志位。
+	（标记的细节，请参阅“1.3）中的加密扩展标志”）
+	
 	さらに、IPMSG_ANSPUBKEY では':'を挟んで、公開鍵を EE-NNNNNN
 	（E=指数、N=法）という形を入れます。E と N の間には '-' を
 	入れて、区切りにします。
 	なお、２度目以降の送信時には、公開鍵および暗号対応能力を記憶
 	することにより、このシーケンスを省略することができます。
 
-	（メッセージ暗号化）送信側は、両者でサポートしている共通鍵
-	種類を選んでセッション用共通鍵を作り、その共通鍵を用いて本文
-	を暗号化します。さらにその共通鍵を相手側公開鍵で暗号化します。
-	なお、実装により組み合わせに制限があります（4. その他を参照）
+	此外，IPMSG_ANSPUBKEY在':'两侧，放入EE-NNNNNN（E=指数、N=法）形式的公钥，
+	E与N 的间放入’-’，要段落。
+	再者，第二次以后发送消息时，通过记录公钥和加密强度，可以省略这个序列。
+	（消息加密）发送者选择以双方都支持的共用密钥类型作为会话的共用密钥，
+	使用该共用密钥对所有信息进行加密。
+	
+	
+	公用密钥的另一侧要
+	并且对方使用公钥加密共用密钥，但是这受限于具体的实现组合。（其它可参照4）
 
-	（暗号メッセージ送信）IPMSG_SENDMSG に IPMSG_ENCRYPTOPT を
+
+	IPMSG_SENDMSG に IPMSG_ENCRYPTOPT を
 	を立てて、拡張部の最初に、暗号化に使用した公開鍵/共通鍵種類
 	の組み合わせを OR で表現した値を入れます。続いて、':' を入れ
 	た後、（これ以降 IPMSG_ENCODE_BASE64 を立てた場合は hex の
@@ -247,70 +245,80 @@
 	':' を挟んで、共通鍵で暗号化した本文を入れます。
 	なお、平文には末尾の'\0'を含めます。
 
-	（電子署名オプション）両者が SHA-1による電子署名をサポート
-	している場合、IPMSG_SIGN_SHA1 立てた上で、平文への SHA-1ダイ
-	ジェスト値を自分自身の秘密鍵で暗号化した署名を、上記の暗号化
-	本文に続けて ':'をはさんで追加します。
+	 （密码信息发送）在 IPMSG_SENDMSG命令里设置IPMSG_ENCEXTMSGOPT标志位，
+	 在扩展部分的开头，使用公钥和公用密钥类型的组合表示加密类型，
+	 
+	（在设置了 IPMSG_ENCODE_BASE64标志位之后，使用base64编码，而不是十六进制）
+	注意，纯文本以'\0'结尾。
+	
+      （电子签名选项）如果两者都支持SHA-1数字签名，那么设置 IPMSG_SIGN_SHA1标志位，
+	使用自己的私钥加密SHA-1摘要的明文，上述加密的主体在':'之后添加。
 
-	なお、エンコード・パディング方式については、RSA 公開鍵による
-	暗号/署名では PKCS#1-v1_5、AES/Blowfish/RC2 共通鍵による暗号
-	化は PKCS#5 CBC を使用します。
-	IPMSG_PACKETNO_IV が立っている場合、IV は Packet番号文字列を
-	利用します。（IV サイズより短いため、残りは 0 で補完します）
-	IPMSG_PACKETNO_IV が立っていない場合、IV は 0 となります。
+	注意，关于编码和填充方式，使用RSA由公钥的密码/签名PKCS#1-V1_5，
+	由AES/Blowfish/RC2共通钥匙的加密 PKCS#5 CBC 。
+	如果设置了 IPMSG_PACKETNO_IV标识位，	IV 使用Packet编号的字符串形式
+	（如果小于IV的长度，则剩下的部分用0补全）
+	如果没有设置 IPMSG_PACKETNO_IV标识位，则将IV设置为0.
 
-	また、Entry 系パケットには IPMSG_ENCRYPTOPT を立て、暗号機能
-	をサポート可能であることを表明します。
+	如果系统设置了IPMSG_ENCEXTMSGOPT标志位，那么表明是系统支持加密功能。
 
-	（公開鍵指紋付ユーザ名）（10版で追加）
-	2048bitRSA かつ SHA-1 署名が利用可能なユーザは、ユーザIDの
-	末尾に、公開鍵を利用した指紋（後述）を付与することで、
-	 1) ユーザ名の一意性を保ちやすくする
-	 2) 公開鍵詐称によるなりすましを防ぐ（IPMSG_ANSPUBKEY受信時
-	 　 に鍵と指紋の一致を確認）
-	ことができます。
+  
+	（与用户名的公共密钥指纹 第10版添加）
+	2048位RSA 且 SHA-1签名利用可以的用户，是在用户ID的末尾，通过授权（见下文）使用公钥指纹，
+	可以同时使用2048位RSA和SHA-1签名的用户，在其用户ID末尾添加
+	 1) 以帮助保持用户名称的唯一性
+	 2) 抵御伪造公钥攻击（在收到IPMSG_ANSPUBKEY时，确认钥匙和指纹的一致性）。
 
-	公開鍵指紋付きユーザ名は以下のようにして作成します。
-	 1) 公開鍵の法に対する SHA-1 ダイジェスト値(160bit)を生成
-	 2) 末尾に 32bit の 0 を付与して、192bit の値とする
-	 3) 192bit を 64bit*3つのフィールドに分割し、3つを XORする
-	 4) 64bit値を16文字固定のhex文字列化する
-	 5) ユーザ名の末尾に、ユーザ名-<指紋文字列> の形式で指紋を付加
+	通过以下方式创建公钥指纹和用户名。
+	 1) 生成公钥的 sha-1 摘要值 (160 位)
+	 2) 末尾32bit置0 ，192bit作为的代价
+	 3) 192bit分割为64bit*3个场，做3个XOR
+	 4) 16个字固定的hex字符串化做64bit价值
+	 5) 在最终用户的名称后添加指纹格式 < 指纹字符串 >
 
-	なお、この公開鍵指紋付ユーザ名を使っているにもかかわらず、
-	Entry系に IPMSG_ENCRYPTOPT フラグが立っていない、もしくは
-	IPMSG_GETPUBKEY/IPMSG_ANSPUBKEY での暗号対応能力 に、
-	IPMSG_RSA_2048/IPMSG_SIGN_SHA1 が含まれていない場合は、
-	不正パケットとして破棄することを推奨します。
+	注意，尽管使用了用户名和公钥指纹，却未设置IPMSG_ENCEXTMSGOPT标志位，
+	或者在表明能够支持加密的IPMSG_GETPUBKEY/ IPMSG_ANSPUBKEY上，
+	不包含IPMSG_RSA_2048/IPMSG_SIGN_SHA1标志位，建议丢弃该分组。
 
-     4) ファイル添付拡張（9版で追加）
-
-	ファイル添付（ダウンロード許可）通知するには、IPMSG_SENDMSG
-	に IPMSG_FILEATTACHOPT を立てたメッセージを送信します。
-	その際、通常（or 暗号）メッセージに続けて、'\0'をはさんで、
-	添付（ダウンロード許可）ファイル情報を列挙します。
-
+	4) 文件附件扩展名 （第9版本添加）
+	发送文件附件（下载许可）通知要在发送 IPMSG_SENDMSG命令时设置 IPMSG_FILEATTACHOPT标志位。
+	在这种情况下通常的消息跟 '\0'。枚举文件附件信息（下载许可）。
+	
 	fileID:filename:size:mtime:fileattr[:extend-attr=val1
 	[,val2...][:extend-attr2=...]]:\a[:]fileID...
-	(なお、size, mtime, fileattr は hex で表現します。
-	 filenameに':'がある場合、"::"でエスケープします)
+	(注意size, mtime, fileattr以十六进制表示。
+	如果filename中含有':'符号，则转义为“::”)
 
-	受信側が添付ファイルをダウンロードしたい場合、送信元UDPポート
-	と同じ番号のTCPポートに対して、IPMSG_GETFILEDATA コマンドを使
-	い、拡張部に packetID:fileID:offset を入れて、データ送信要求
-	パケットを出します。（すべてhex）
+
+	 接收方想要下载附件时，使用与发送方UDP端口号一样的TCP端口，
+	 发送 IPMSG_GETFILEDATA命令，在扩展部分 packetID:fileID:放入offset数据,
+	 发送请求数据包命令。（均为十六进制）
+	
 	添付側がそのリクエストを受信して、送信要求を正しいと認めると、
 	その通信路に該当ファイルのデータを流します（フォーマットなし）
 
 	受信側が階層添付ファイルをダウンロードしたい場合は、コマンド
 	に IPMSG_GETDIRFILES を使い、拡張部に packetID:fileID を入れて
 	データ送信要求パケットを出します。（すべてhex）
-
-	データ送信側は、以下のフォーマットで階層データを流します。
+	接收方面想下载阶层附加文件的情况，指令为使
+用 IPMSG_GETDIRFILES ，扩张部packetID∶放入fi
+leID 放到 数据发送要求包。(全部hex)
+ 	
+如果接收方想要下载的附件层次结构是一个命令
+若要使用 IPMSG_GETDIRFILES packetID:fileID 扩展中
+数据发送请求数据包出来。所有十六进制）
+	
+	
+	发信人的数据按以下格式分层
 	header-size:filename:file-size:fileattr[:extend-attr=val1
 	[,val2...][:extend-attr2=...]]:contents-data
 	次のheadersize:次のfilename...
 	（filename と contetns-data 以外はすべて hex）
+	
+	下面
+的.headersize∶
+下面的filename...
+ （filename与contetns-data 以外全部hex）
 
 	header-size は header-size の先頭から contents-data の直前の
 	':'までのサイズをあらわします。extend-attr は省略可かつ複数
@@ -318,16 +326,31 @@
 
 	fileattr が IPMSG_FILE_DIR の場合、自動的にそのディレクトリに
 	潜った状態とみなして、後続のファイル情報が続きます。
-
+ 	
+FileAttr 自动是 IPMSG_FILE_DIR 的目录
+紧跟其后的文件的信息，和鸽进入状态。
+	 与fileattr 关于 IPMSG_FILE_DIR ，自动地对那个
+目录钻过的状态看作，后续的文件信息持续。
+	
+	
 	fileattr が IPMSG_FILE_RETPARENT の場合、親ディレクトリに戻
 	ることを表し、ファイル名は常に"."です。このときの属性値は、
 	親ディレクトリに戻る前の、現在ディレクトリの情報を表します。
 
 	送信は添付ディレクトリ自体から開始し、最後に添付ディレクトリ
 	に戻る IPMSG_FILE_RETPARENT 情報を送信して終了を伝えます。
+ 发送从添加目录本身开始发送，最后返回添加目录
+在(到) 的 IPMSG_FILE_RETPARENT 信息传达结束。
+	  	
+发送附件目录本身从开始，到最后附加目录
+若要发送回 IPMSG_FILE_RETPARENT 信息，告诉结束。
 
 	なお、Entry 系パケットに IPMSG_FILEATTACHOPT を立て、ファイル
 	添付をサポート可能であることを表明します。
+	PMSG_FILEATTACHOPT 文件系统输入数据包，
+表示可以支持该附件。
+再者，表明支持可以在Entry 系包上(里)立 IPMS
+G_FILEATTACHOPT ，文件添加的事。
 
 	（添付ファイル名暗号化）上記フォーマット内容を、メッセージ平文
 	末尾から '\0' に続けて記述した後、メッセージ全体の暗号化を行う
@@ -346,17 +369,26 @@
 
 	なお、メッセージ画像埋め込みをサポートしているホストは、Entry系
 	パケットに IPMSG_CLIPBOARDOPT を立てます。
+ 再者，支持信息图像埋入主人，Entry系 在包上
+(里)立 IPMSG_CLIPBOARDOPT 。
+主机，嵌入图像的输入系统支持的消息
+计划您的 IPMSG_CLIPBOARDOPT 数据包。
 
-     5) 多言語(UTF-8)拡張
+     5) 多语言扩展(UTF-8)
 
+	主机可通过UTF-8编码集在多种语言之间进行文件的发送和消息的收发。
 	ファイル送受信を含むメッセージの送受信で UTF-8 での多言語通信を
 	行えるホストは、IPMSG_BR_ENTRY/IPMSG_ANS_ENTRY/IPMSG_BR_ABSENCE
 	コマンドで IPMSG_CAPUTF8OPT を立てたパケットを流すことで、UTF-8
 	での送受信が可能であることを表明します。お互いが IPMSG_CAPUTF8OPT
-	をサポートしている場合、IPMSG_UTF8OPT を立てた上で、メッセージ
+	をサポートしている場合、
+	IPMSG_UTF8OPT を立てた上で、メッセージ
 	（ファイル添付メッセージ部分を含む）を UTF-8 で表現したパケット
 	を送信することができます。
 
+	在发送消息（包括文件附加消息部分）的时候设置 IPMSG_UTF8OPT标志
+	以表明发送的是utf-8编码的数据包。
+	
 	添付ファイルを受信する場合、元の添付メッセージに IPMSG_UTF8OPT
 	が立っていれば、同じく IPMSG_UTF8OPT を立てた IPMSG_GETFILEDATA
 	コマンドで添付ファイル転送要求を送ることで、ファイル名/ディレク
@@ -377,53 +409,51 @@
 	省略して構いません。上記拡張と従来のフィールドが異なる場合、
 	拡張エントリを正しいものと解釈します。
 
-     6) その他のコマンド
+     6) 其它命令
 
-	他のメンバのバージョンを取得するには、IPMSG_GETINFO コマンド
-	を送ります。受信側は拡張部にバージョン情報の文字列を設定した
-	IPMSG_SENDINFO を送り返します。
-s
-	不在モードメンバの不在通知文を取得するには、IPMSG_GETABSENCEINFO
-	コマンドを送ります。受信側は、不在モード中なら不在通知文を設定
-	した、IPMSG_SENDABSENCEINFO を送り返します。不在モード中でない
-	場合、適当な文字列（"Not absence mode"など）を送り返します。
-
-     7) 確認・リトライ
-
-	一定時間以内に確認パケット（IPMSG_SENDMSG に対する、
-	IPMSG_RECVMSG など）が受け取れなかった場合、同一のパケットを
-	再送出します。リトライの回数・間隔については、実装依存です。
+	通过发送 IPMSG_GETINFO命令，可以取得其它成员的版本信息。
+	接收方应答信息，发送IPMSG_SENDINFO命令，将扩展部分设为版本信息。
+	
+	发送 IPMSG_GETABSENCEINFO命令可以获得处于离开模式成员的状态通知。
+	接收方若如果处于离开模式，则设置离开模式通知，返回 IPMSG_SENDABSENCEINFO，
+	若不处于离开模式，则返回恰当的字符串（例如"Not absence mode"等）。
 
 
-  4. その他
+     7) 确认与重传
 
-     1) 改行について
+	在某一段时间内没有收到确认分组，例如IPMSG_SENDMSG，
+	IPMSG_RECVMSG等，则重传相同的包。
+	重传的次数和间隔是依赖于具体实现的。
+	
+  4. 其它
 
-	送出メッセージ内の改行文字は、UNIX形式に統一します('0x0a')。
-	必要に応じて、変換を行ってください。
+     1) 关于换行
 
-     2) デリミタ
+	发出信息的换行符统一为UNIX系统风格('0x0a')。
+	需要地应对，请进行变换。
+
+     2) 分隔符
 
 	デリミタに':'を使っている関係上、ユーザ名、ホスト名領域には、
 	':'を含む名前は、使えません。万一、自ホスト名が':'を含んでいる
 	場合、他の文字(たとえば';')などに置き換えて使用してください。
 
-     3) 文字コード
+     3) 文字代码
 
-	IPMSG_UTF8OPT を付与した場合、文字コードは UTF-8、そうでない
-	場合は、CP932 の使用を想定しています。
+	如果设置了IPMSG_UTF8OPT位 ，而字符编码不是UTF-8，
+	那么假设这种情况下使用CP932字符集。
 
-	 4) 暗号化の組み合わせ
+	 4) 加密的组合
 
-	 プロトコルではありませんが、リファレンス実装の説明ということで、
-	 Windows版では、以下の３つの組み合わせのみサポートしています。
+	 这不是一种协议，参考具体实现的描述，
+	 Windows 版支持下列三个组合。
 
 	   1. IPMSG_RSA_2048 / IPMSG_AES_256      ... (*1)
 	   2. IPMSG_RSA_1024 / IPMSG_BLOWFISH_128 ... (*2)
 	   3. IPMSG_RSA_512  / IPMSG_RC2_40
 
-	   (*1) オプションで IPMSG_PACKETNO_IV/IPMSG_SIGN_SHA1 をサポート
-	   (*2) オプションで IPMSG_PACKETNO_IV をサポート
+	   (*1) 支持 IPMSG_PACKETNO_IV/IPMSG_SIGN_SHA1选项
+	   (*2) 支持 IPMSG_PACKETNO_IV 选项
 
 
   5. 联系信息
