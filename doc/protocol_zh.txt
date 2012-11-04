@@ -1,10 +1,10 @@
 ----------------------------------------------------------------------
- IP Messenger 协议 (草案版本 10）翻译时间 2012/11/04
+ IP Messenger 协议中文版 (草案版本 10）翻译时间 2012/11/04
 
-                       日文翻译：youjinkin <yangrenqin2011@163.com>
+                       日文翻译：youjinkin    <yangrenqin2011@163.com>
                        翻译整理：admirestator <admirestator$gmail.com>
-                       https://github.com/admirestator/OIPMsg
-                       此文件是OIPMsg项目的一部分
+                                https://github.com/admirestator/OIPMsg
+                                            此文件是OIPMsg项目的一部分
 ----------------------------------------------------------------------
 
 
