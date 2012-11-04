@@ -2,6 +2,8 @@
 #ifndef INIT_H
 #define INIT_H
 
+#include <QString>
+
 namespace init{
     class Init;
 };

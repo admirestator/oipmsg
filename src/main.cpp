@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QMessageBox>
 
 #include <iostream>
 
@@ -9,21 +10,26 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    //initial here
 
+
+
+    //setup language here
+
+
+    QApplication app(argc, argv);
+    MainWindow main_win;
+    main_win.show();
+
+
+    //setup system tray
     Systray system_tray;
     system_tray.show();
+    if (!QSystemTrayIcon::isSystemTrayAvailable()) {
+        QMessageBox::critical(0, QObject::tr("Systray"),
+                              QObject::tr("There's no system tray on this system!"));
+        app.quit();
+    }
 
-#ifdef Q_WS_WIN
-   cout << "Win32 Platform"  << endl;
-#endif
-#ifdef Q_WS_X11
-   cout << "Linux/Unix Platform"  << endl;
-#endif
-#ifdef  Q_WS_MAC
-   cout << "Mac OS Platform"  << endl;
-#endif
-    return a.exec();
+    return app.exec();
 }

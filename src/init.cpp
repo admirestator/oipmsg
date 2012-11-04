@@ -1,16 +1,18 @@
+
+#include <QDebug>
 #include "init.h"
 
 Init::Init()
 {
 
 #ifdef Q_WS_WIN
-   cout << "Win32 Platform"  << endl;
+   qDebug() << "Win32";
 #endif
 #ifdef Q_WS_X11
-   cout << "Linux/Unix Platform"  << endl;
+   qDebug() << "Linux/Unix";
 #endif
 #ifdef  Q_WS_MAC
-   cout << "Mac OS Platform"  << endl;
+   qDebug() << "Mac OS X";;
 #endif
 }
 

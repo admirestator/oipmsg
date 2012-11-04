@@ -9,7 +9,8 @@ namespace log{
 class Log
 {
 public:
-    ~Log();
+    Log();
+    virtual ~Log();
 };
 
 #endif // LOG_H

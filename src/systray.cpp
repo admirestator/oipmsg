@@ -73,9 +73,6 @@ void Systray::updateToolTip()
 
 void Systray::createActions()
 {
-    //showTransferFileAction
-    //    = new QAction(tr("Show file transfer monitor (%1)").arg(0), 0);
-    //delAckWindowAction = new QAction(tr("Delete all acknowledge windows"), 0);
     topWindowAction = new QAction(tr("Top all windows"), 0);
     setupAction = new QAction(tr("Setup"), 0);
     aboutQtAction = new QAction(tr("About Qt"), 0);
