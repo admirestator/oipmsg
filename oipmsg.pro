@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network translation
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,7 +17,6 @@ SOURCES += src/main.cpp\
     src/log.cpp \
     src/systray.cpp \
     src/protocol.cpp \
-    src/comm.cpp \
     src/version.cpp \
     src/whiteboard.cpp \
     src/main_window.cpp \
@@ -25,13 +24,16 @@ SOURCES += src/main.cpp\
     src/about_dialog.cpp \
     src/init.cpp \
     src/screenshot.cpp \
+    src/oipmsg.cpp \
+    src/tcpcomm.cpp \
+    src/udpserver.cpp \
+    src/udpclient.cpp
 
 HEADERS  += \
     src/config.h \
     src/log.h \
     src/systray.h \
     src/protocol.h \
-    src/comm.h \
     src/version.h \
     src/whiteboard.h \
     src/main_window.h \
@@ -40,6 +42,10 @@ HEADERS  += \
     src/ipmsg.h \
     src/init.h \
     src/screenshot.h \
+    src/oipmsg.h \
+    src/tcpcomm.h \
+    src/udpserver.h \
+    src/udpclient.h
 
 FORMS    += \
     src/about_dialog.ui \
