@@ -27,7 +27,6 @@ SOURCES += src/main.cpp\
     src/oipmsg.cpp \
     src/tcpcomm.cpp \
     src/udpserver.cpp \
-    src/udpclient.cpp \
     src/encrypt.cpp \
     src/host.cpp
 
@@ -47,7 +46,6 @@ HEADERS  += \
     src/oipmsg.h \
     src/tcpcomm.h \
     src/udpserver.h \
-    src/udpclient.h \
     src/ipmsgcmn.h \
     src/encrypt.h \
     src/host.h

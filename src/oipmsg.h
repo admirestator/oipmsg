@@ -6,7 +6,6 @@
 #include <QObject>
 
 #include "udpserver.h"
-#include "udpclient.h"
 #include "host.h"
 
 class Oipmsg : public QThread
@@ -15,7 +14,6 @@ public:
     Oipmsg();
     virtual ~Oipmsg();
 
-    Udpclient *udpClient;
     Udpserver *udpServer;
 
     void run();
