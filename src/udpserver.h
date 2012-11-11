@@ -2,6 +2,7 @@
 #define UDPCOMM_H
 
 #include <QUdpSocket>
+#include <QObject>
 #include "protocol.h"
 
 namespace udpserver {
@@ -9,17 +10,23 @@ namespace udpserver {
 };
 
 
-class Udpserver : public QThread
+class Udpserver : QObject
 {
+    Q_OBJECT
 public:
-    Udpserver();
+    Udpserver(quint16 &udpport);
     virtual ~Udpserver();
 
-private:
     QUdpSocket *udpSocket;
-    quint16 defaultUdpPort;
-    quint16 udpPort;
     Protocol *protocolObj;
+
+    bool bindPort();
+
+private:
+    quint16 port;
+
+private slots:
+    void processPendingDatagrams();
 };
 
 #endif // UDPCOMM_H

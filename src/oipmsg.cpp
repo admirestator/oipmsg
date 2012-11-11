@@ -1,9 +1,14 @@
+#include <QThread>
 #include "oipmsg.h"
 
 Oipmsg::Oipmsg()
 {
-    udpClient = new Udpclient();
-    udpServer = new Udpserver();
+    defaultUdpPort = IPMSG_DEFAULT_PORT;
+    // choose default port or customered port to use
+    udpPort = defaultUdpPort;
+
+    udpClient = new Udpclient(udpPort);
+    udpServer = new Udpserver(udpPort);
 }
 
 Oipmsg::~Oipmsg()
@@ -12,3 +17,13 @@ Oipmsg::~Oipmsg()
     delete udpServer;
 }
 
+
+void Oipmsg::run()
+{
+
+    // set udp server
+    udpServer->bindPort ();
+    // broadcast entry
+    udpClient->sendcmdBrEntry();
+
+}

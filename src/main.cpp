@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     //}
 
 
-    Oipmsg oipmsg();
-
+    Oipmsg oipmsg;
+    oipmsg.run();
     return app.exec();
 }

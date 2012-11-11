@@ -1,5 +1,13 @@
+#include <QDebug>
+#include <QStringList>
+#include <QProcess>
+#include <QHostInfo>
+#include <iostream>
+#include <QNetworkInterface>
 #include "ipmsg.h"
 #include "protocol.h"
+
+
 
 Protocol::Protocol()
 {
@@ -21,8 +29,79 @@ QByteArray Protocol::buildcmdNooperation()
 
 QByteArray Protocol::buildcmdBrEntry()
 {
-    QByteArray cmd_br_entry;
+    QString username;
+    QString hostname;
+    //QByteArray cmd_br_entry;
 
+    QStringList envVariables;
+    //将后面5个string存到envVariables环境变量中
+    //envVariables << "USERNAME.*" << "USER.*" << "USERDOMAIN.*"
+     //            << "HOSTNAME.*" << "DOMAINNAME.*";
+
+    envVariables << "USER.*" << "HOSTNAME.*";
+
+
+    //系统中关于环境变量的信息存在environment中
+    // can use new code for QProcessEnvironment
+    QStringList environment = QProcess::systemEnvironment();
+    /*
+    foreach (QString string, envVariables) {
+        //indexOf为返回第一个匹配list的索引,QRegExp类是用规则表达式进行模式匹配的类
+        int index = environment.indexOf(QRegExp(string));
+        if (index != -1) {
+            //stringList中存的是environment.at(index)中出现'='号前的字符串
+            QStringList stringList = environment.at(index).split('=');
+            if (stringList.size() == 2) {
+                qDebug() << stringList.at(1);
+                //exit(1);
+                //return stringList.at(1); //at(0)为文字"USERNAME."，at(1)为用户名
+                //break;
+            }
+        }
+    }
+    */
+
+    int index = environment.indexOf(QRegExp("USER.*"));
+    if (index != -1) {
+        QStringList stringList = environment.at(index).split('=');
+        if (stringList.size() == 2) {
+            qDebug() << stringList.at(1);
+            username = stringList.at(1);
+        }
+    }
+
+    index = environment.indexOf(QRegExp("HOSTNAME.*"));
+    if (index != -1) {
+        QStringList stringList = environment.at(index).split('=');
+        if (stringList.size() == 2) {
+            qDebug() << stringList.at(1);
+            hostname = stringList.at(1);
+        }
+    }
+
+    /*
+    QNetworkInterface networkInterface;
+    QString hardwareAddress = networkInterface.hardwareAddress();
+    qDebug() << hardwareAddress;
+    */
+
+    QList<QNetworkInterface> list=QNetworkInterface::allInterfaces ();
+    //for(int i=0;i<list.count();i++)
+    //{
+        QNetworkInterface interface=list.at(1);
+        QString hardwareAddress=interface.hardwareAddress();
+        qDebug() << hardwareAddress;
+    //}
+
+/*
+    cmd_br_entry << IPMSG_VERSION << ":"
+                 << 271828 << ":"
+                 << username << ":"
+                 << hostname << ":"
+                 << IPMSG_BR_ENTRY << ":"
+                 << hardwareAddress;
+*/
+    QByteArray cmd_br_entry = "1:271828:admire:Fiona.Matrix:1:8C:89:A5:BE:1E:F5";
     return cmd_br_entry;
 }
 
