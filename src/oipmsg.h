@@ -2,8 +2,11 @@
 #define OIPMSG_H
 
 #include <QThread>
+#include <QList>
+
 #include "udpserver.h"
 #include "udpclient.h"
+#include "host.h"
 
 class Oipmsg : public QThread
 {
@@ -19,6 +22,8 @@ public:
 private:
     quint16 defaultUdpPort;
     quint16 udpPort;
+
+    QList<Host> userList;
 
 };
 
