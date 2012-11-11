@@ -4,6 +4,7 @@
 #define PROTOCOL_H
 
 #include <QByteArray>
+#include <QString>
 #include "ipmsg.h"
 
 namespace protocol{
@@ -43,6 +44,10 @@ public:
     QByteArray buildcmdGetpubkey();
     QByteArray buildcmdAnspubkey();
 
+private:
+    QString version;
+    QString username;
+    QString hostname;
 };
 
 #endif // PROTOCOL_H

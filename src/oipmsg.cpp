@@ -1,4 +1,3 @@
-#include <QThread>
 #include "oipmsg.h"
 
 Oipmsg::Oipmsg()
@@ -9,6 +8,7 @@ Oipmsg::Oipmsg()
 
     udpClient = new Udpclient(udpPort);
     udpServer = new Udpserver(udpPort);
+
 }
 
 Oipmsg::~Oipmsg()
@@ -22,8 +22,9 @@ void Oipmsg::run()
 {
 
     // set udp server
-    udpServer->bindPort ();
+    //udpServer->bindPort ();
+    udpServer->run ();
     // broadcast entry
-    udpClient->sendcmdBrEntry();
+    //udpClient->sendcmdBrEntry();
 
 }

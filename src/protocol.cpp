@@ -2,8 +2,12 @@
 #include <QStringList>
 #include <QProcess>
 #include <QHostInfo>
-#include <iostream>
+#include <QTime>
 #include <QNetworkInterface>
+
+#include <iostream>
+#include <string>
+#include <sstream>
 #include "ipmsg.h"
 #include "protocol.h"
 
@@ -11,6 +15,45 @@
 
 Protocol::Protocol()
 {
+    //QString version;
+    //QString username;
+    //QString hostname;
+
+    version = QString::number(IPMSG_VERSION, 10);
+
+    QStringList envVariables;
+
+    envVariables << "USER.*" << "HOSTNAME.*";
+
+    //系统中关于环境变量的信息存在environment中
+    // can use new code for QProcessEnvironment
+    QStringList environment = QProcess::systemEnvironment();
+
+    int index = environment.indexOf(QRegExp("USER.*"));
+    if (index != -1) {
+        QStringList stringList = environment.at(index).split('=');
+        if (stringList.size() == 2) {
+            //qDebug() << stringList.at(1);
+            username = stringList.at(1);
+        }
+    }
+
+    index = environment.indexOf(QRegExp("HOSTNAME.*"));
+    if (index != -1) {
+        QStringList stringList = environment.at(index).split('=');
+        if (stringList.size() == 2) {
+            //qDebug() << stringList.at(1);
+            hostname = stringList.at(1);
+        }
+    }
+
+    QList<QNetworkInterface> list=QNetworkInterface::allInterfaces ();
+    //for(int i=0;i<list.count();i++)
+    //{
+        QNetworkInterface interface=list.at(1);
+        QString hardwareAddress=interface.hardwareAddress();
+        //qDebug() << hardwareAddress;
+    //}
 
 }
 
@@ -29,79 +72,32 @@ QByteArray Protocol::buildcmdNooperation()
 
 QByteArray Protocol::buildcmdBrEntry()
 {
-    QString username;
-    QString hostname;
-    //QByteArray cmd_br_entry;
 
-    QStringList envVariables;
-    //将后面5个string存到envVariables环境变量中
-    //envVariables << "USERNAME.*" << "USER.*" << "USERDOMAIN.*"
-     //            << "HOSTNAME.*" << "DOMAINNAME.*";
+    // Set seed value.
+    qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
 
-    envVariables << "USER.*" << "HOSTNAME.*";
+    // Set init package number as random.
+    quint32 packetno;
+    packetno = qrand() % 1024;
+    //qDebug () << packetno;
 
+    quint64 cmd = 0;
+    cmd = cmd | IPMSG_BR_ENTRY;
+    //QString cmd = QString::number()
 
-    //系统中关于环境变量的信息存在environment中
-    // can use new code for QProcessEnvironment
-    QStringList environment = QProcess::systemEnvironment();
-    /*
-    foreach (QString string, envVariables) {
-        //indexOf为返回第一个匹配list的索引,QRegExp类是用规则表达式进行模式匹配的类
-        int index = environment.indexOf(QRegExp(string));
-        if (index != -1) {
-            //stringList中存的是environment.at(index)中出现'='号前的字符串
-            QStringList stringList = environment.at(index).split('=');
-            if (stringList.size() == 2) {
-                qDebug() << stringList.at(1);
-                //exit(1);
-                //return stringList.at(1); //at(0)为文字"USERNAME."，at(1)为用户名
-                //break;
-            }
-        }
-    }
-    */
-
-    int index = environment.indexOf(QRegExp("USER.*"));
-    if (index != -1) {
-        QStringList stringList = environment.at(index).split('=');
-        if (stringList.size() == 2) {
-            qDebug() << stringList.at(1);
-            username = stringList.at(1);
-        }
-    }
-
-    index = environment.indexOf(QRegExp("HOSTNAME.*"));
-    if (index != -1) {
-        QStringList stringList = environment.at(index).split('=');
-        if (stringList.size() == 2) {
-            qDebug() << stringList.at(1);
-            hostname = stringList.at(1);
-        }
-    }
-
-    /*
-    QNetworkInterface networkInterface;
-    QString hardwareAddress = networkInterface.hardwareAddress();
-    qDebug() << hardwareAddress;
-    */
-
-    QList<QNetworkInterface> list=QNetworkInterface::allInterfaces ();
-    //for(int i=0;i<list.count();i++)
-    //{
-        QNetworkInterface interface=list.at(1);
-        QString hardwareAddress=interface.hardwareAddress();
-        qDebug() << hardwareAddress;
-    //}
-
-/*
-    cmd_br_entry << IPMSG_VERSION << ":"
-                 << 271828 << ":"
-                 << username << ":"
-                 << hostname << ":"
-                 << IPMSG_BR_ENTRY << ":"
-                 << hardwareAddress;
-*/
-    QByteArray cmd_br_entry = "1:271828:admire:Fiona.Matrix:1:8C:89:A5:BE:1E:F5";
+    QByteArray cmd_br_entry;
+    cmd_br_entry.append (QString::number(IPMSG_VERSION, 16));
+    cmd_br_entry.append (":");
+    cmd_br_entry.append (QString::number(packetno, 10));
+    cmd_br_entry.append (":");
+    cmd_br_entry.append (username);
+    cmd_br_entry.append (":");
+    cmd_br_entry.append (hostname);
+    cmd_br_entry.append (":");
+    cmd_br_entry.append (QString::number(cmd, 16));
+    cmd_br_entry.append (":");
+    cmd_br_entry.append ("8C:89:A5:BE:1E:F5");
+    //qDebug () << cmd_br_entry;
     return cmd_br_entry;
 }
 

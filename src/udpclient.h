@@ -2,7 +2,6 @@
 #define UDPCLIENT_H
 
 #include <QUdpSocket>
-#include <QThread>
 
 #include "protocol.h"
 
@@ -11,7 +10,7 @@ namespace udpclient {
 };
 
 
-class Udpclient : public QThread
+class Udpclient
 {
 public:
     Udpclient(quint16 &udpport);

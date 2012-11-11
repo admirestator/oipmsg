@@ -1,4 +1,5 @@
 #include "udpclient.h"
+#include <unistd.h>
 
 Udpclient::Udpclient(quint16 &udpport)
 {
@@ -23,12 +24,11 @@ bool Udpclient::sendcmdBrEntry()
 {
     qDebug() << "broad entry";
     QByteArray datagram = protocolObj->buildcmdBrEntry();
-    qDebug() << datagram;
     while (1) {
     udpSocket->writeDatagram(datagram.data(), datagram.size(),
                              QHostAddress::Broadcast, port);
-    qDebug () << "send udp" << port;
-    sleep(10);
+    qDebug() << datagram << port;
+    sleep(60);
     }
 
     return true;
