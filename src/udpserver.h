@@ -30,8 +30,10 @@ private:
     bool bindPort();
     Udpclient *udpClient;
 
+    bool sendcmdBrEntry();
 
-private slots:
+//private slots:
+public slots:
     void dataReceived();
 };
 

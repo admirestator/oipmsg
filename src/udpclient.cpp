@@ -25,8 +25,13 @@ bool Udpclient::sendcmdBrEntry()
     qDebug() << "broad entry";
     QByteArray datagram = protocolObj->buildcmdBrEntry();
     while (1) {
-    udpSocket->writeDatagram(datagram.data(), datagram.size(),
-                             QHostAddress::Broadcast, port);
+    if (udpSocket->writeDatagram(datagram.data(),
+                                 datagram.size(),
+                                 QHostAddress::Broadcast,
+                                 port) != datagram.size()) {
+        qDebug() << "Broad Entry Error!";
+    }
+
     qDebug() << datagram << port;
     sleep(60);
     }

@@ -26,12 +26,13 @@ void Udpserver::run()
     }
 
     // broadcast entry
-    udpClient->sendcmdBrEntry();
+    //udpClient->sendcmdBrEntry();
+    sendcmdBrEntry();
 }
 
-bool Udpserver::bindPort ()
+bool Udpserver::bindPort()
 {
-    if (!udpSocket->bind(QHostAddress::LocalHost, port)) {
+    if (!udpSocket->bind(port)) {
         qDebug() << (QObject::tr("Bind UDP Port Error!"));
 
         // connect to the main windows and have a choice to
@@ -41,6 +42,26 @@ bool Udpserver::bindPort ()
 
     return true;
 }
+
+bool Udpserver::sendcmdBrEntry()
+{
+    qDebug() << "broad entry";
+    QByteArray datagram = protocolObj->buildcmdBrEntry();
+    //while (1) {
+    if (udpSocket->writeDatagram(datagram.data(),
+                                 datagram.size(),
+                                 QHostAddress::Broadcast,
+                                 port) != datagram.size()) {
+        qDebug() << "Broad Entry Error!";
+    }
+
+    //qDebug() << datagram << port;
+    //sleep(3);
+   // }
+
+    return true;
+}
+
 
 void Udpserver::dataReceived()
 {
