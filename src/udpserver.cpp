@@ -20,11 +20,12 @@ void Udpserver::run()
 {
     if (!bindPort()) {
         qDebug("Can't bind port!");
+
+        // change to new port or exit
         exit(-2);
     }
 
     // broadcast entry
-    //Udpserver->sendcmdBrEntry();
     sendcmdBrEntry();
 }
 
@@ -41,16 +42,93 @@ bool Udpserver::bindPort()
     return true;
 }
 
-bool Udpserver::sendcmdNooperation()
+void Udpserver::dataReceived()
 {
+    while (udpSocket->hasPendingDatagrams())
+     {
+         QByteArray datagram;
+         datagram.resize(udpSocket->pendingDatagramSize());
+         //udpSocket->readDatagram(datagram.data(), datagram.size());
+         QHostAddress senderAddress;
+         udpSocket->readDatagram(datagram.data(), datagram.size(), &senderAddress, &port);
+         qDebug () << "Recv:" << senderAddress << datagram.data();
+         handleCmd (datagram);
+     }
+}
+
+// the main function the handle different packet
+bool Udpserver::handleCmd (const QByteArray &packet)
+{
+    QList<QByteArray> argumentList = packet.split (':');
+    qDebug () << argumentList << argumentList.at(0) << argumentList.at(1)
+              << argumentList.at(2) << argumentList.at(3) << argumentList.at(4)
+              << argumentList.at(5);
+
+
+    //QByteArray cmd(argumentList.at (4));
+    quint32 cmd = argumentList.at(4).toInt();
+
+    switch (cmd) {
+        case IPMSG_BR_ENTRY:
+            qDebug () << "hd-br-entry";
+            break;
+        case IPMSG_BR_EXIT:
+            break;
+        case IPMSG_ANSENTRY:
+        break;
+        case IPMSG_BR_ABSENCE:
+        break;
+        case IPMSG_BR_ISGETLIST:
+        break;
+        case IPMSG_OKGETLIST:
+        break;
+        case IPMSG_GETLIST:
+        break;
+        case IPMSG_ANSLIST:
+        break;
+        case IPMSG_BR_ISGETLIST2:
+        break;
+        case IPMSG_SENDMSG:
+        break;
+        case IPMSG_RECVMSG:
+        break;
+        case IPMSG_READMSG:
+        break;
+        case IPMSG_DELMSG:
+        break;
+        case IPMSG_ANSREADMSG:
+        break;
+        case IPMSG_GETINFO:
+        break;
+        case IPMSG_SENDINFO:
+        break;
+        case IPMSG_GETABSENCEINFO:
+        break;
+        case IPMSG_SENDABSENCEINFO:
+        break;
+        case IPMSG_GETFILEDATA:
+        break;
+        case IPMSG_RELEASEFILES:
+        break;
+        case IPMSG_GETDIRFILES:
+        break;
+        case IPMSG_GETPUBKEY:
+        break;
+        case IPMSG_ANSPUBKEY:
+        break;
+        case IPMSG_NOOPERATION:
+        break;
+        default:
+        break;
+
+    }
     return true;
 }
 
-bool Udpserver::sendcmdBrEntry()
+bool Udpserver::sendcmdNooperation()
 {
-    qDebug() << "broad entry";
+    qDebug() << "broad Nooperation";
     QByteArray datagram = protocolObj->buildcmdBrEntry();
-    //while (1) {
     if (udpSocket->writeDatagram(datagram.data(),
                                  datagram.size(),
                                  QHostAddress::Broadcast,
@@ -58,9 +136,19 @@ bool Udpserver::sendcmdBrEntry()
         qDebug() << "Broad Entry Error!";
     }
 
-    //qDebug() << datagram << port;
-    //sleep(3);
-   // }
+    return true;
+}
+
+bool Udpserver::sendcmdBrEntry()
+{
+    qDebug() << "broad entry";
+    QByteArray datagram = protocolObj->buildcmdBrEntry();
+    if (udpSocket->writeDatagram(datagram.data(),
+                                 datagram.size(),
+                                 QHostAddress::Broadcast,
+                                 port) != datagram.size()) {
+        qDebug() << "Broad Entry Error!";
+    }
 
     return true;
 }
@@ -199,15 +287,3 @@ bool Udpserver::sendcmdAnspubkey()
 }
 
 
-void Udpserver::dataReceived()
-{
-    qDebug() << "hello google";
-    while (udpSocket->hasPendingDatagrams())
-     {
-         QByteArray datagram;
-         datagram.resize(udpSocket->pendingDatagramSize());
-         udpSocket->readDatagram(datagram.data(), datagram.size());
-
-         qDebug () << datagram.data();
-     }
-}

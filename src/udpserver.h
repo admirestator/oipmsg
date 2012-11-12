@@ -6,6 +6,7 @@
 #include <QObject>
 
 #include "protocol.h"
+#include "host.h"
 
 namespace udpserver {
     class Udpserver;
@@ -19,15 +20,18 @@ public:
     Udpserver(quint16 &udpport);
     virtual ~Udpserver();
 
-    QUdpSocket *udpSocket;
-    Protocol *protocolObj;
 
     void run();
 
 private:
     quint16 port;
-    bool bindPort();
+    QUdpSocket *udpSocket;
+    Protocol *protocolObj;
 
+    bool bindPort();
+    bool handleCmd(const QByteArray &packet);
+
+    // send all cmd
     bool sendcmdNooperation();
     bool sendcmdBrEntry();
     bool sendcmdBrExit();
