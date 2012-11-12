@@ -8,6 +8,10 @@
 #include "udpserver.h"
 //#include "host.h"
 
+namespace oipmsg {
+    class Oipmsg;
+};
+
 class Oipmsg : public QThread
 {
 public:

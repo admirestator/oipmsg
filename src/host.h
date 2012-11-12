@@ -19,6 +19,12 @@ typedef struct host_t {
     bool 	     pubKeyUpdated;
 } HostInfo;
 
+
+namespace host {
+    class Host;
+};
+
+
 class Host
 {
 public:

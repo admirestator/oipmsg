@@ -4,7 +4,7 @@
 #include <QMainWindow>
 
 namespace Ui {
-class SetupWindow;
+    class SetupWindow;
 }
 
 class SetupWindow : public QMainWindow

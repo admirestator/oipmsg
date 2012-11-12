@@ -22,7 +22,7 @@
 #include <QList>
 #include <QSystemTrayIcon>
 
-namespace systray{
+namespace Ui{
     class SysTray;
 };
 
