@@ -6,7 +6,7 @@
 #include <QByteArray>
 
 #include "udpserver.h"
-//#include "host.h"
+#include "host.h"
 
 namespace oipmsg {
     class Oipmsg;
@@ -14,9 +14,10 @@ namespace oipmsg {
 
 class Oipmsg : public QThread
 {
+    Q_OBJECT
 public:
     Oipmsg();
-    virtual ~Oipmsg();
+    ~Oipmsg();
 
     Udpserver *udpServer;
     Host *hosts;
@@ -29,6 +30,8 @@ private:
 
     void buildConnection();
 
+public slots:
+    bool addNewUser(const QByteArray &packet);
 };
 
 #endif // OIPMSG_H

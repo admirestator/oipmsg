@@ -29,6 +29,13 @@ void Oipmsg::run()
 
 void Oipmsg::buildConnection()
 {
-
+    // br_entry with new user
+    connect(udpServer, SIGNAL(signalBrEntry(const QByteArray&)),
+          this, SLOT(addNewUser(const QByteArray&)));
 }
 
+bool Oipmsg::addNewUser(const QByteArray &packet)
+{
+    hosts->addHost(packet);
+    return true;
+}

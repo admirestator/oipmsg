@@ -11,6 +11,7 @@ class Config
 {
 public:
     Config();
+    virtual ~Config();
 };
 
 #endif // CONFIG_H

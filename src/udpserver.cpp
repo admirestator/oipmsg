@@ -6,8 +6,7 @@ Udpserver::Udpserver(quint16 &udpport)
     udpSocket = new QUdpSocket();
     protocolObj = new Protocol();
 
-    connect(udpSocket, SIGNAL(readyRead()),
-            this, SLOT(dataReceived()));
+    buildConnection();
 }
 
 Udpserver::~Udpserver()
@@ -60,8 +59,12 @@ void Udpserver::dataReceived()
 bool Udpserver::buildConnection()
 {
 
+    // socket ready to read
+    connect(udpSocket, SIGNAL(readyRead()), this, SLOT(dataReceived()));
+    // no operation
     connect(this, SIGNAL(signalNooperation()), this, SLOT(processNooperation()));
-    connect(this, SIGNAL(signalBrEntry()), this, SLOT(processBrEntry()));
+    // broadcast new user online
+    connect(this, SIGNAL(signalBrEntry(const QByteArray&)), this, SLOT(processBrEntry()));
     /*
     connect(this, SIGNAL(), this, SLOT());
     connect(this, SIGNAL(), this, SLOT());
@@ -96,7 +99,7 @@ bool Udpserver::handleCmd (const QByteArray &packet)
     switch (cmd) {
         case IPMSG_BR_ENTRY:
             qDebug () << "hd-br-entry";
-            emit signalBrEntry();
+            emit signalBrEntry(packet);
             break;
         case IPMSG_BR_EXIT:
             emit signalBrExit();

@@ -3,7 +3,6 @@
 
 #include <QUdpSocket>
 #include <QThread>
-#include <QObject>
 
 #include "protocol.h"
 #include "host.h"
@@ -18,8 +17,7 @@ class Udpserver : public QThread
     Q_OBJECT
 public:
     Udpserver(quint16 &udpport);
-    virtual ~Udpserver();
-
+    ~Udpserver();
 
     void run();
 
@@ -58,11 +56,9 @@ private:
     bool sendcmdGetpubkey();
     bool sendcmdAnspubkey();
 
-//private slots:
-public slots:
+private slots:
     void dataReceived();
 
-private slots:
     bool processNooperation();
     bool processBrEntry();
     bool processBrExit();
@@ -90,7 +86,7 @@ private slots:
 
 signals:
     void signalNooperation();
-    void signalBrEntry();
+    void signalBrEntry(const QByteArray&);
     void signalBrExit();
     void signalAnsentry();
     void signalBrAbsence();

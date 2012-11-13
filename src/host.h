@@ -29,9 +29,12 @@ class Host
 {
 public:
     Host();
+    ~Host();
 
     QList<Host> hostList;
-    bool addHost(const HostInfo &hostInfo);
+
+public slots:
+    bool addHost(const QByteArray &packet);
     bool modifyHost(const HostInfo &hostInfo);
     bool searchHost(const HostInfo &hostInfo);
 

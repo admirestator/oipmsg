@@ -3,3 +3,8 @@
 Config::Config()
 {
 }
+
+Config::~Config()
+{
+
+}
