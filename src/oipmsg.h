@@ -31,7 +31,7 @@ private:
     void buildConnection();
 
 public slots:
-    bool addNewUser(const QByteArray &packet);
+    bool addNewUser(const QHostAddress& ipaddr, const QByteArray &packet);
 };
 
 #endif // OIPMSG_H

@@ -27,14 +27,14 @@ private:
     Protocol *protocolObj;
 
     bool bindPort();
-    bool handleCmd(const QByteArray &packet);
+    bool handleCmd(const QHostAddress& ipaddr, const QByteArray &newPacket);
     bool buildConnection();
 
     // send all cmd
-    bool sendcmdNooperation();
+    bool sendcmdNooperation(const QHostAddress &ipaddr);
     bool sendcmdBrEntry();
     bool sendcmdBrExit();
-    bool sendcmdAnsentry();
+    bool sendcmdAnsentry(const QHostAddress &ipaddr);
     bool sendcmdBrAbsence();
     bool sendcmdBrIsgetlist();
     bool sendcmdOkgetlist();
@@ -59,10 +59,11 @@ private:
 private slots:
     void dataReceived();
 
-    bool processNooperation();
-    bool processBrEntry();
+    bool processNooperation(const QHostAddress &ipaddr);
+    bool processBrEntry(const QHostAddress &ipaddr,
+                        const QByteArray &packet);
     bool processBrExit();
-    bool processAnsentry();
+    bool processAnsentry(const QHostAddress &ipaddr);
     bool processBrAbsence();
     bool processBrIsgetlist();
     bool processOkgetlist();
@@ -85,10 +86,11 @@ private slots:
     bool processAnspubkey();
 
 signals:
-    void signalNooperation();
-    void signalBrEntry(const QByteArray&);
+    void signalNooperation(const QHostAddress &ipaddr);
+    void signalBrEntry(const QHostAddress &ipaddr,
+                       const QByteArray &packet);
     void signalBrExit();
-    void signalAnsentry();
+    void signalAnsentry(const QHostAddress &ipaddr);
     void signalBrAbsence();
     void signalOkgetlist();
     void signalBrIsgetlist();

@@ -2,6 +2,7 @@
 #define HOST_H
 
 #include <QTime>
+#include <QList>
 #include <QHostAddress>
 
 typedef struct host_t {
@@ -31,11 +32,14 @@ public:
     Host();
     ~Host();
 
-    QList<Host> hostList;
+    QList<HostInfo> hostList;
 
 public slots:
-    bool addHost(const QByteArray &packet);
+    bool addHost(const QHostAddress &ipaddr, const QByteArray &packet);
+    void displayHostInfo(const HostInfo &hostInifo);
     bool modifyHost(const HostInfo &hostInfo);
+    bool setPriority(const int &prioity);
+    bool setPubkey(const QString &pubkey);
     bool searchHost(const HostInfo &hostInfo);
 
 };

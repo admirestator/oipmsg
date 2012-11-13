@@ -51,7 +51,7 @@ void Udpserver::dataReceived()
          QHostAddress senderAddress;
          udpSocket->readDatagram(datagram.data(), datagram.size(), &senderAddress, &port);
          qDebug () << "Recv:" << senderAddress << datagram.data();
-         handleCmd (datagram);
+         handleCmd (senderAddress, datagram);
      }
 }
 
@@ -61,13 +61,18 @@ bool Udpserver::buildConnection()
 
     // socket ready to read
     connect(udpSocket, SIGNAL(readyRead()), this, SLOT(dataReceived()));
+
     // no operation
-    connect(this, SIGNAL(signalNooperation()), this, SLOT(processNooperation()));
+    connect(this, SIGNAL(signalNooperation(const QHostAddress&)),
+            this, SLOT(processNooperation(const QHostAddress&)));
     // broadcast new user online
-    connect(this, SIGNAL(signalBrEntry(const QByteArray&)), this, SLOT(processBrEntry()));
+    connect(this, SIGNAL(signalBrEntry(const QHostAddress&, const QByteArray&)),
+            this, SLOT(processBrEntry(const QHostAddress&, const QByteArray&)));
+    connect(this, SIGNAL(signalBrExit()),
+            this, SLOT(processBrExit()));
+    connect(this, SIGNAL(signalAnsentry(const QHostAddress&)),
+            this, SLOT(processAnsentry(const QHostAddress&)));
     /*
-    connect(this, SIGNAL(), this, SLOT());
-    connect(this, SIGNAL(), this, SLOT());
     connect(this, SIGNAL(), this, SLOT());
     connect(this, SIGNAL(), this, SLOT());
     connect(this, SIGNAL(), this, SLOT());
@@ -85,9 +90,9 @@ bool Udpserver::buildConnection()
 }
 
 // the main function the handle different packet
-bool Udpserver::handleCmd (const QByteArray &packet)
+bool Udpserver::handleCmd (const QHostAddress &ipaddr, const QByteArray &newPacket)
 {
-    QList<QByteArray> argumentList = packet.split (':');
+    QList<QByteArray> argumentList = newPacket.split (':');
     qDebug () << argumentList << argumentList.at(0) << argumentList.at(1)
               << argumentList.at(2) << argumentList.at(3) << argumentList.at(4)
               << argumentList.at(5);
@@ -99,13 +104,13 @@ bool Udpserver::handleCmd (const QByteArray &packet)
     switch (cmd) {
         case IPMSG_BR_ENTRY:
             qDebug () << "hd-br-entry";
-            emit signalBrEntry(packet);
+            emit signalBrEntry(ipaddr, newPacket);
             break;
         case IPMSG_BR_EXIT:
             emit signalBrExit();
             break;
         case IPMSG_ANSENTRY:
-            emit signalAnsentry();
+            emit signalAnsentry(ipaddr);
             break;
         case IPMSG_BR_ABSENCE:
             emit signalBrAbsence();
@@ -169,7 +174,7 @@ bool Udpserver::handleCmd (const QByteArray &packet)
             break;
         case IPMSG_NOOPERATION:
         default:
-            emit signalNooperation();
+            emit signalNooperation(ipaddr);
             break;
 
     }
@@ -177,9 +182,16 @@ bool Udpserver::handleCmd (const QByteArray &packet)
 }
 
 //-------------------- process slots ------------------------
-bool Udpserver::processBrEntry()
+bool Udpserver::processNooperation(const QHostAddress &ipaddr)
 {
+    qDebug() << "Process nooperation" << ipaddr;
+    return true;
+}
 
+bool Udpserver::processBrEntry(const QHostAddress &ipaddr,
+                               const QByteArray &packet)
+{
+    qDebug() << "Process br entry" << ipaddr << packet;
     return true;
 }
 
@@ -189,9 +201,10 @@ bool Udpserver::processBrExit()
     return true;
 }
 
-bool Udpserver::processAnsentry()
+bool Udpserver::processAnsentry(const QHostAddress &ipaddr)
 {
 
+    qDebug() << "Process ans entry" << ipaddr;
     return true;
 }
 
@@ -316,22 +329,17 @@ bool Udpserver::processAnspubkey()
     return true;
 }
 
-bool Udpserver::processNooperation()
-{
-
-    return true;
-}
 
 
 
 //-------------------- sokcet communication ------------------------
-bool Udpserver::sendcmdNooperation()
+bool Udpserver::sendcmdNooperation(const QHostAddress &ipaddr)
 {
     qDebug() << "broad Nooperation";
-    QByteArray datagram = protocolObj->buildcmdBrEntry();
+    QByteArray datagram = protocolObj->buildcmdNooperation();
     if (udpSocket->writeDatagram(datagram.data(),
                                  datagram.size(),
-                                 QHostAddress::Broadcast,
+                                 ipaddr,
                                  port) != datagram.size()) {
         qDebug() << "Broad Entry Error!";
     }
@@ -358,12 +366,30 @@ bool Udpserver::sendcmdBrEntry()
 bool Udpserver::sendcmdBrExit()
 {
     QByteArray cmdBrExit;
+    qDebug() << "broad exit";
+    QByteArray datagram = protocolObj->buildcmdBrExit();
+    if (udpSocket->writeDatagram(datagram.data(),
+                                 datagram.size(),
+                                 QHostAddress::Broadcast,
+                                 port) != datagram.size()) {
+        qDebug() << "Broad Exit Error!";
+    }
+
     return true;
 }
 
-bool Udpserver::sendcmdAnsentry()
+bool Udpserver::sendcmdAnsentry(const QHostAddress& ipaddr)
 {
     QByteArray cmdAnsentry;
+    qDebug() << "ans entry";
+    QByteArray datagram = protocolObj->buildcmdAnsentry();
+    if (udpSocket->writeDatagram(datagram.data(),
+                                 datagram.size(),
+                                 ipaddr,
+                                 port) != datagram.size()) {
+        qDebug() << "Answer Entry Error!";
+    }
+
     return true;
 }
 
