@@ -30,6 +30,7 @@ private:
 
     bool bindPort();
     bool handleCmd(const QByteArray &packet);
+    bool buildConnection();
 
     // send all cmd
     bool sendcmdNooperation();
@@ -60,6 +61,37 @@ private:
 //private slots:
 public slots:
     void dataReceived();
+
+private slots:
+    bool process_br_entry();
+    bool process_br_exit();
+    bool process_ansentry();
+    bool process_br_absence();
+    bool process_okgetlist();
+    bool process_getlist();
+    bool process_anslist();
+    bool process_br_isgetlist2();
+    bool process_sendmsg();
+    bool process_recvmsg();
+    bool process_readmsg();
+    bool process_delmsg();
+    bool process_ansreadmsg();
+    bool process_getinfo();
+    bool process_sendinfo();
+    bool process_getabsenceinfo();
+    bool process_sendabsenceinfo();
+    bool process_getfiledata();
+    bool process_releasefiles();
+    bool process_getdirfiles();
+    bool process_getpubkey();
+    bool process_anspubkey();
+    bool process_nooperation();
+
+signals:
+    void br_entry(const QByteArray &packet);
+    void br_entry();
+
+
 };
 
 #endif // UDPCOMM_H

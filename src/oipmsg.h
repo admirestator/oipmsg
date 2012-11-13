@@ -3,7 +3,7 @@
 
 #include <QThread>
 #include <QList>
-#include <QObject>
+#include <QByteArray>
 
 #include "udpserver.h"
 //#include "host.h"
@@ -26,7 +26,6 @@ public:
 private:
     quint16 defaultUdpPort;
     quint16 udpPort;
-
 
     void buildConnection();
 

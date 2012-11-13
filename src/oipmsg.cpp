@@ -30,5 +30,5 @@ void Oipmsg::run()
 void Oipmsg::buildConnection()
 {
 
-    // connect the ui display info and network info
 }
+

@@ -56,6 +56,13 @@ void Udpserver::dataReceived()
      }
 }
 
+
+bool Udpserver::buildConnection()
+{
+
+    return true;
+}
+
 // the main function the handle different packet
 bool Udpserver::handleCmd (const QByteArray &packet)
 {
@@ -71,6 +78,7 @@ bool Udpserver::handleCmd (const QByteArray &packet)
     switch (cmd) {
         case IPMSG_BR_ENTRY:
             qDebug () << "hd-br-entry";
+            emit br_entry();
             break;
         case IPMSG_BR_EXIT:
             break;
@@ -122,6 +130,146 @@ bool Udpserver::handleCmd (const QByteArray &packet)
         break;
 
     }
+    return true;
+}
+
+bool Udpserver::process_br_entry()
+{
+
+    return true;
+}
+
+bool Udpserver::process_br_exit()
+{
+
+    return true;
+}
+
+bool Udpserver::process_ansentry()
+{
+
+    return true;
+}
+
+bool Udpserver::process_br_absence()
+{
+
+    return true;
+
+}
+
+bool Udpserver::process_okgetlist()
+{
+
+    return true;
+}
+
+bool Udpserver::process_getlist()
+{
+
+    return true;
+}
+
+bool Udpserver::process_anslist()
+{
+
+    return true;
+}
+
+bool Udpserver::process_br_isgetlist2()
+{
+
+    return true;
+}
+
+bool Udpserver::process_sendmsg()
+{
+
+    return true;
+}
+
+bool Udpserver::process_recvmsg()
+{
+
+    return true;
+}
+
+bool Udpserver::process_readmsg()
+{
+
+    return true;
+}
+
+
+bool Udpserver::process_delmsg()
+{
+
+    return true;
+}
+
+bool Udpserver::process_ansreadmsg()
+{
+
+    return true;
+}
+
+bool Udpserver::process_getinfo()
+{
+
+    return true;
+}
+
+bool Udpserver::process_sendinfo()
+{
+
+    return true;
+}
+
+bool Udpserver::process_getabsenceinfo()
+{
+
+    return true;
+}
+
+bool Udpserver::process_sendabsenceinfo()
+{
+
+    return true;
+}
+
+bool Udpserver::process_getfiledata()
+{
+
+    return true;
+}
+
+bool Udpserver::process_releasefiles()
+{
+
+    return true;
+}
+
+bool Udpserver::process_getdirfiles()
+{
+
+    return true;
+}
+
+bool Udpserver::process_getpubkey()
+{
+
+    return true;
+}
+
+bool Udpserver::process_anspubkey()
+{
+
+    return true;
+}
+
+bool Udpserver::process_nooperation()
+{
+
     return true;
 }
 
@@ -285,5 +433,3 @@ bool Udpserver::sendcmdAnspubkey()
     QByteArray cmdAspubkey();
     return true;
 }
-
-
