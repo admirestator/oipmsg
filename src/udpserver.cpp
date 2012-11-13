@@ -60,6 +60,24 @@ void Udpserver::dataReceived()
 bool Udpserver::buildConnection()
 {
 
+    connect(this, SIGNAL(signalNooperation()), this, SLOT(processNooperation()));
+    connect(this, SIGNAL(signalBrEntry()), this, SLOT(processBrEntry()));
+    /*
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(), this, SLOT());
+    */
+
     return true;
 }
 
@@ -78,201 +96,232 @@ bool Udpserver::handleCmd (const QByteArray &packet)
     switch (cmd) {
         case IPMSG_BR_ENTRY:
             qDebug () << "hd-br-entry";
-            emit br_entry();
+            emit signalBrEntry();
             break;
         case IPMSG_BR_EXIT:
+            emit signalBrExit();
             break;
         case IPMSG_ANSENTRY:
-        break;
+            emit signalAnsentry();
+            break;
         case IPMSG_BR_ABSENCE:
-        break;
+            emit signalBrAbsence();
+            break;
         case IPMSG_BR_ISGETLIST:
-        break;
+            emit signalBrIsgetlist();
+            break;
         case IPMSG_OKGETLIST:
-        break;
+            emit signalOkgetlist();
+            break;
         case IPMSG_GETLIST:
-        break;
+            emit signalGetlist();
+            break;
         case IPMSG_ANSLIST:
-        break;
+            emit signalAnslist();
+            break;
         case IPMSG_BR_ISGETLIST2:
-        break;
+            emit signalBrIsgetlist2();
+            break;
         case IPMSG_SENDMSG:
-        break;
+            emit signalSendmsg();
+            break;
         case IPMSG_RECVMSG:
-        break;
+            emit signalRecvmsg();
+            break;
         case IPMSG_READMSG:
-        break;
+            emit signalReadmsg();
+            break;
         case IPMSG_DELMSG:
-        break;
+            emit signalDelmsg();
+            break;
         case IPMSG_ANSREADMSG:
-        break;
+            emit signalAnsreadmsg();
+            break;
         case IPMSG_GETINFO:
-        break;
+            emit signalGetinfo();
+            break;
         case IPMSG_SENDINFO:
-        break;
+            emit signalSendinfo();
+            break;
         case IPMSG_GETABSENCEINFO:
-        break;
+            emit signalGetabsenceinfo();
+            break;
         case IPMSG_SENDABSENCEINFO:
-        break;
+            emit signalSendinfo();
+            break;
         case IPMSG_GETFILEDATA:
-        break;
+            emit signalGetfiledata();
+            break;
         case IPMSG_RELEASEFILES:
-        break;
+            emit signalReleasefiles();
+            break;
         case IPMSG_GETDIRFILES:
-        break;
+            emit signalGetdirfiles();
+            break;
         case IPMSG_GETPUBKEY:
-        break;
+            emit signalGetpubkey();
+            break;
         case IPMSG_ANSPUBKEY:
-        break;
+            emit signalAnspubkey();
+            break;
         case IPMSG_NOOPERATION:
-        break;
         default:
-        break;
+            emit signalNooperation();
+            break;
 
     }
     return true;
 }
 
-bool Udpserver::process_br_entry()
+//-------------------- process slots ------------------------
+bool Udpserver::processBrEntry()
 {
 
     return true;
 }
 
-bool Udpserver::process_br_exit()
+bool Udpserver::processBrExit()
 {
 
     return true;
 }
 
-bool Udpserver::process_ansentry()
+bool Udpserver::processAnsentry()
 {
 
     return true;
 }
 
-bool Udpserver::process_br_absence()
+bool Udpserver::processBrAbsence()
 {
 
     return true;
 
 }
 
-bool Udpserver::process_okgetlist()
+bool Udpserver::processBrIsgetlist()
+{
+    return true;
+}
+
+bool Udpserver::processOkgetlist()
 {
 
     return true;
 }
 
-bool Udpserver::process_getlist()
+bool Udpserver::processGetlist()
 {
 
     return true;
 }
 
-bool Udpserver::process_anslist()
+bool Udpserver::processAnslist()
 {
 
     return true;
 }
 
-bool Udpserver::process_br_isgetlist2()
+bool Udpserver::processBrIsgetlist2()
 {
 
     return true;
 }
 
-bool Udpserver::process_sendmsg()
+bool Udpserver::processSendmsg()
 {
 
     return true;
 }
 
-bool Udpserver::process_recvmsg()
+bool Udpserver::processRecvmsg()
 {
 
     return true;
 }
 
-bool Udpserver::process_readmsg()
+bool Udpserver::processReadmsg()
 {
 
     return true;
 }
 
 
-bool Udpserver::process_delmsg()
+bool Udpserver::processDelmsg()
 {
 
     return true;
 }
 
-bool Udpserver::process_ansreadmsg()
+bool Udpserver::processAnsreadmsg()
 {
 
     return true;
 }
 
-bool Udpserver::process_getinfo()
+bool Udpserver::processGetinfo()
 {
 
     return true;
 }
 
-bool Udpserver::process_sendinfo()
+bool Udpserver::processSendinfo()
 {
 
     return true;
 }
 
-bool Udpserver::process_getabsenceinfo()
+bool Udpserver::processGetabsenceinfo()
 {
 
     return true;
 }
 
-bool Udpserver::process_sendabsenceinfo()
+bool Udpserver::processSendabsenceinfo()
 {
 
     return true;
 }
 
-bool Udpserver::process_getfiledata()
+bool Udpserver::processGetfiledata()
 {
 
     return true;
 }
 
-bool Udpserver::process_releasefiles()
+bool Udpserver::processReleasefiles()
 {
 
     return true;
 }
 
-bool Udpserver::process_getdirfiles()
+bool Udpserver::processGetdirfiles()
 {
 
     return true;
 }
 
-bool Udpserver::process_getpubkey()
+bool Udpserver::processGetpubkey()
 {
 
     return true;
 }
 
-bool Udpserver::process_anspubkey()
+bool Udpserver::processAnspubkey()
 {
 
     return true;
 }
 
-bool Udpserver::process_nooperation()
+bool Udpserver::processNooperation()
 {
 
     return true;
 }
 
+
+
+//-------------------- sokcet communication ------------------------
 bool Udpserver::sendcmdNooperation()
 {
     qDebug() << "broad Nooperation";
