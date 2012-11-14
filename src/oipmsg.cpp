@@ -8,6 +8,7 @@ Oipmsg::Oipmsg()
     udpPort = defaultUdpPort;
 
     udpServer = new Udpserver(udpPort);
+    hosts = new Host();
 
     buildConnection();
 }

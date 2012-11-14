@@ -93,9 +93,11 @@ bool Udpserver::buildConnection()
 bool Udpserver::handleCmd (const QHostAddress &ipaddr, const QByteArray &newPacket)
 {
     QList<QByteArray> argumentList = newPacket.split (':');
+    /*
     qDebug () << argumentList << argumentList.at(0) << argumentList.at(1)
               << argumentList.at(2) << argumentList.at(3) << argumentList.at(4)
               << argumentList.at(5);
+    */
 
 
     //QByteArray cmd(argumentList.at (4));

@@ -2,7 +2,9 @@
 
 Host::Host()
 {
+    total_client = 0;
     hostList.clear();
+    max_client = 256;
 }
 
 
@@ -11,9 +13,18 @@ Host::~Host()
 
 }
 
+
+quint16 Host::count() const
+{
+    return total_client;
+}
+
+
+
 bool Host::addHost(const QHostAddress& ipaddr, const QByteArray &packet)
 {
-    qDebug () << "add host";
+    qDebug () << "add host" << total_client;
+    total_client++;
     QList<QByteArray> argumentList = packet.split (':');
     HostInfo tmp;
 
@@ -25,13 +36,20 @@ bool Host::addHost(const QHostAddress& ipaddr, const QByteArray &packet)
     tmp.groupName = "";
     tmp.alterName = "";
     tmp.hostStatus = 0;
-    tmp.updateTime = QTime::currentTime();
+    tmp.updateTime = QDate::currentDate();
     tmp.priority = 0;
     tmp.pubKey = "";
     tmp.pubKeyUpdated = false;
 
     displayHostInfo(tmp);
-    hostList.append(tmp);
+    hostList.insert(tmp.userName, tmp);
+
+    return true;
+}
+
+bool Host::delHost(const QString &username)
+{
+    hostList.remove(username);
     return true;
 }
 
@@ -52,30 +70,52 @@ void Host::displayHostInfo(const HostInfo &hostInfo)
               << hostInfo.pubKeyUpdated;
 }
 
-bool Host::modifyHost(const HostInfo &hostInfo)
+
+bool Host::setPort(const QString &username, const quint16 &port)
 {
-    const HostInfo tmp = hostInfo;
+    qDebug() << "port" << port;
+    hostList[username].portNo = port;
     return true;
 }
 
-bool Host::setPriority(const int &prioity)
+bool Host::setGroup(const QString &username, const QString &group)
 {
-    qDebug () << prioity;
+    qDebug() << "group" << group;
+    hostList[username].groupName = group;
     return true;
 }
 
-bool Host::setPubkey(const QString &pubkey)
+bool Host::setAlterName(const QString &username, const QString &alterName)
 {
-    qDebug () << pubkey;
+    qDebug() << "alterName" << alterName;
+    hostList[username].alterName = alterName;
     return true;
 }
 
-
-bool Host::searchHost(const HostInfo &hostInfo)
+bool Host::setHostStatus(const QString &username, const quint32 &status)
 {
-
-    const HostInfo tmp = hostInfo;
+    qDebug() << "status" << status;
+    hostList[username].hostStatus = status;
     return true;
 }
 
+bool Host::setUpdateTime(const QString &username)
+{
+    hostList[username].updateTime = QDate::currentDate();
+    qDebug() << "updateTime" << hostList[username].updateTime;
+    return true;
+}
 
+bool Host::setPriority(const QString &user, const int &prioity)
+{
+    qDebug () << "prioty" << prioity;
+    hostList[user].priority = prioity;
+    return true;
+}
+
+bool Host::setPubkey(const QString &user, const QString &pubkey)
+{
+    qDebug () << "pubkey" << pubkey;
+    hostList[user].pubKey = pubkey;
+    return true;
+}

@@ -1,7 +1,8 @@
 #ifndef HOST_H
 #define HOST_H
 
-#include <QTime>
+#include <QDate>
+#include <QHash>
 #include <QList>
 #include <QHostAddress>
 
@@ -14,7 +15,7 @@ typedef struct host_t {
     QString     	 groupName;
     QString 	     alterName;
     quint32 	     hostStatus;
-    QTime	     updateTime;
+    QDate	     updateTime;
     int		     priority;
     QString	     pubKey;
     bool 	     pubKeyUpdated;
@@ -30,17 +31,28 @@ class Host
 {
 public:
     Host();
-    ~Host();
+    virtual ~Host();
 
-    QList<HostInfo> hostList;
+    QHash <QString, HostInfo> hostList;
+
+private:
+    quint16 max_client;
+    quint16 total_client;
 
 public slots:
-    bool addHost(const QHostAddress &ipaddr, const QByteArray &packet);
+    quint16 count() const;
     void displayHostInfo(const HostInfo &hostInifo);
-    bool modifyHost(const HostInfo &hostInfo);
-    bool setPriority(const int &prioity);
-    bool setPubkey(const QString &pubkey);
-    bool searchHost(const HostInfo &hostInfo);
+
+    bool addHost(const QHostAddress &ipaddr, const QByteArray &packet);
+    bool delHost(const QString &username);
+
+    bool setPort(const QString &username, const quint16 &port);
+    bool setGroup(const QString &username, const QString &group);
+    bool setAlterName(const QString &username, const QString &alterName);
+    bool setHostStatus(const QString &username, const quint32 &status);
+    bool setUpdateTime(const QString &username);
+    bool setPriority(const QString &username, const int &prioity);
+    bool setPubkey(const QString &username, const QString &pubkey);
 
 };
 
