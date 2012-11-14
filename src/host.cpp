@@ -4,7 +4,7 @@ Host::Host()
 {
     total_client = 0;
     hostList.clear();
-    max_client = 256;
+    max_client = 512;
 }
 
 
@@ -23,9 +23,16 @@ quint16 Host::count() const
 
 bool Host::addHost(const QHostAddress& ipaddr, const QByteArray &packet)
 {
-    qDebug () << "add host" << total_client;
-    total_client++;
+
     QList<QByteArray> argumentList = packet.split (':');
+
+    // if the user exists
+    if (hostList.find(argumentList.at(2).data()) != hostList.end()) {
+        qDebug () << "User Exists!";
+        return false;
+    }
+
+    total_client++;
     HostInfo tmp;
 
     tmp.userName = argumentList.at(2).data();
@@ -44,14 +51,28 @@ bool Host::addHost(const QHostAddress& ipaddr, const QByteArray &packet)
     displayHostInfo(tmp);
     hostList.insert(tmp.userName, tmp);
 
+    qDebug () << "addHost" << total_client;
     return true;
 }
 
 bool Host::delHost(const QString &username)
 {
+    if (hostList.find(username) != hostList.end()) {
+        qDebug () << "No User Exists!";
+        return false;
+    }
+
     hostList.remove(username);
+    total_client--;
+    qDebug() << "delHost" << total_client;
     return true;
 }
+
+void Host::displayHostInfo()
+{
+
+}
+
 
 void Host::displayHostInfo(const HostInfo &hostInfo)
 {

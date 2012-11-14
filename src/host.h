@@ -36,12 +36,14 @@ public:
     QHash <QString, HostInfo> hostList;
 
 private:
+    // default max client
     quint16 max_client;
     quint16 total_client;
 
 public slots:
     quint16 count() const;
-    void displayHostInfo(const HostInfo &hostInifo);
+    void displayHostInfo();
+    void displayHostInfo(const HostInfo &hostInfo);
 
     bool addHost(const QHostAddress &ipaddr, const QByteArray &packet);
     bool delHost(const QString &username);
