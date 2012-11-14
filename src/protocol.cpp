@@ -19,6 +19,15 @@ Protocol::Protocol()
     //QString username;
     //QString hostname;
 
+    absence_absence = "absence";
+    absence_meal = "meal";
+    absence_meeing = "meeting";
+    absence_visitor = "visitor";
+    absence_out = "out";
+    absence_home = "home";
+    absence_edo = "edo";
+    absence_priest = "priest";
+
     version = QString::number(IPMSG_VERSION, 10);
 
     QStringList envVariables;
@@ -170,11 +179,11 @@ QByteArray Protocol::buildcmdAnsentry()
     cmd_ansentry.append (":");
     cmd_ansentry.append (username);
 
-    qDebug () << cmd_ansentry;
+    qDebug () << "Ansentry" << cmd_ansentry;
     return cmd_ansentry;
 }
 
-QByteArray Protocol::buildcmdBrAbsence()
+QByteArray Protocol::buildcmdBrAbsence(const QString &absenceStatus)
 {
     // Set init package number as random.
     quint32 packetno;
@@ -195,6 +204,7 @@ QByteArray Protocol::buildcmdBrAbsence()
     cmd_absence.append (QString::number(cmd, 16));
     cmd_absence.append (":");
     cmd_absence.append (username);
+    cmd_absence.append (absenceStatus);
 
     qDebug () << cmd_absence;
     return cmd_absence;

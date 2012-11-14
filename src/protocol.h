@@ -23,7 +23,7 @@ public:
     QByteArray buildcmdBrEntry();
     QByteArray buildcmdBrExit();
     QByteArray buildcmdAnsentry();
-    QByteArray buildcmdBrAbsence();
+    QByteArray buildcmdBrAbsence(const QString &absencdStatus);
     QByteArray buildcmdBrIsgetlist();
     QByteArray buildcmdOkgetlist();
     QByteArray buildcmdGetlist();
@@ -44,10 +44,25 @@ public:
     QByteArray buildcmdGetpubkey();
     QByteArray buildcmdAnspubkey();
 
+    // absence info
+    QString absence_absence;
+    QString absence_meal;
+    QString absence_meeing;
+    QString absence_visitor;
+    QString absence_out;
+    QString absence_home;
+    QString absence_edo;
+    QString absence_priest;
+
 private:
     QString version;
     QString username;
     QString hostname;
+
+
+
+
+
 };
 
 #endif // PROTOCOL_H
