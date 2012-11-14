@@ -68,10 +68,10 @@ bool Udpserver::buildConnection()
     // broadcast new user online
     connect(this, SIGNAL(signalBrEntry(const QHostAddress&, const QByteArray&)),
             this, SLOT(processBrEntry(const QHostAddress&, const QByteArray&)));
-    connect(this, SIGNAL(signalBrExit()),
-            this, SLOT(processBrExit()));
-    connect(this, SIGNAL(signalAnsentry(const QHostAddress&)),
-            this, SLOT(processAnsentry(const QHostAddress&)));
+    connect(this, SIGNAL(signalBrExit(const QString&)),
+            this, SLOT(processBrExit(const QString&)));
+    connect(this, SIGNAL(signalAnsentry(const QHostAddress&, const QByteArray&)),
+            this, SLOT(processAnsentry(const QHostAddress&, const QByteArray&)));
     /*
     connect(this, SIGNAL(), this, SLOT());
     connect(this, SIGNAL(), this, SLOT());
@@ -101,18 +101,20 @@ bool Udpserver::handleCmd (const QHostAddress &ipaddr, const QByteArray &newPack
 
 
     //QByteArray cmd(argumentList.at (4));
-    quint32 cmd = argumentList.at(4).toInt();
+    //quint32 cmd = argumentList.at(4).toInt() & 0xFFFFFFFF;
+    quint32 cmd = argumentList.at(4).toInt() & 0x000000FF;
+    qDebug () << "CMD:" << cmd;
 
     switch (cmd) {
         case IPMSG_BR_ENTRY:
-            qDebug () << "hd-br-entry";
             emit signalBrEntry(ipaddr, newPacket);
             break;
         case IPMSG_BR_EXIT:
-            emit signalBrExit();
+            //qDebug() << "br_exit";
+            emit signalBrExit(argumentList.at(2).data());
             break;
         case IPMSG_ANSENTRY:
-            emit signalAnsentry(ipaddr);
+            emit signalAnsentry(ipaddr, newPacket);
             break;
         case IPMSG_BR_ABSENCE:
             emit signalBrAbsence();
@@ -194,16 +196,19 @@ bool Udpserver::processBrEntry(const QHostAddress &ipaddr,
                                const QByteArray &packet)
 {
     qDebug() << "Process br entry" << ipaddr << packet;
+    sendcmdAnsentry (ipaddr);
     return true;
 }
 
-bool Udpserver::processBrExit()
+bool Udpserver::processBrExit(const QString &username)
 {
 
+    qDebug() << "Process br exit" << username;
     return true;
 }
 
-bool Udpserver::processAnsentry(const QHostAddress &ipaddr)
+bool Udpserver::processAnsentry(const QHostAddress &ipaddr,
+                                const QByteArray &packet)
 {
 
     qDebug() << "Process ans entry" << ipaddr;
@@ -367,6 +372,8 @@ bool Udpserver::sendcmdBrEntry()
 
 bool Udpserver::sendcmdBrExit()
 {
+    //sendcmdNooperation(protocolObj->absence_absence);
+    sendcmdNooperation(QHostAddress::Broadcast);
     QByteArray cmdBrExit;
     qDebug() << "broad exit";
     QByteArray datagram = protocolObj->buildcmdBrExit();

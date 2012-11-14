@@ -62,8 +62,9 @@ private slots:
     bool processNooperation(const QHostAddress &ipaddr);
     bool processBrEntry(const QHostAddress &ipaddr,
                         const QByteArray &packet);
-    bool processBrExit();
-    bool processAnsentry(const QHostAddress &ipaddr);
+    bool processBrExit(const QString &username);
+    bool processAnsentry(const QHostAddress &ipaddr,
+                         const QByteArray &packet);
     bool processBrAbsence();
     bool processBrIsgetlist();
     bool processOkgetlist();
@@ -89,8 +90,9 @@ signals:
     void signalNooperation(const QHostAddress &ipaddr);
     void signalBrEntry(const QHostAddress &ipaddr,
                        const QByteArray &packet);
-    void signalBrExit();
-    void signalAnsentry(const QHostAddress &ipaddr);
+    void signalBrExit(const QString &username);
+    void signalAnsentry(const QHostAddress &ipaddr,
+                        const QByteArray &packet);
     void signalBrAbsence();
     void signalOkgetlist();
     void signalBrIsgetlist();

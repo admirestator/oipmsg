@@ -32,6 +32,7 @@ private:
 
 public slots:
     bool addNewUser(const QHostAddress& ipaddr, const QByteArray &packet);
+    bool delUser(const QString &username);
 };
 
 #endif // OIPMSG_H

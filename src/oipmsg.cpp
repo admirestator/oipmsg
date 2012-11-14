@@ -35,11 +35,26 @@ void Oipmsg::buildConnection()
                                             const QByteArray&)),
           this, SLOT(addNewUser(const QHostAddress&,
                                 const QByteArray&)));
+
+    // br_exit
+    connect(udpServer, SIGNAL(signalBrExit(const QString&)),
+          this, SLOT(delUser(const QString&)));
+
+    // br_ansentry with new user
+    connect(udpServer, SIGNAL(signalAnsentry(const QHostAddress&,
+                                            const QByteArray&)),
+          this, SLOT(addNewUser(const QHostAddress&,
+                                const QByteArray&)));
 }
 
 bool Oipmsg::addNewUser(const QHostAddress &ipaddr, const QByteArray &packet)
 {
-    qDebug () << packet;
     hosts->addHost(ipaddr, packet);
+    return true;
+}
+
+bool Oipmsg::delUser(const QString& username)
+{
+    hosts->delHost(username);
     return true;
 }
