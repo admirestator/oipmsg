@@ -2,7 +2,23 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-static QString GetVersionStr(void);
+#include<QString>
+
+class Version
+{
+private:
+    QString version;
+    QString copyright;
+    QString versionInfo;
+
+public:
+    Version();
+    virtual ~Version();
+
+    QString getVersion() const;
+    QString getCopyright() const;
+    QString getVersionInfo() const;
+};
 
 #endif
 
