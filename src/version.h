@@ -8,6 +8,7 @@ class Version
 {
 private:
     QString version;
+	QString author;
     QString copyright;
     QString versionInfo;
 
@@ -16,6 +17,7 @@ public:
     virtual ~Version();
 
     QString getVersion() const;
+    QString getAuthor() const;
     QString getCopyright() const;
     QString getVersionInfo() const;
 };

@@ -2,9 +2,10 @@
 
 Version::Version()
 {
-    QString version = "0.01";
-    QString copyright = "Copyright (C) admirestator 2012\n";
-    QString versionInfo = copyright + "\tVersion\t" + version;
+    version = "0.01";
+	author = "@admirestator";
+    copyright = "Copyright (C) admirestator 2012\n";
+    versionInfo = copyright + "\tVersion\t" + version;
 }
 
 Version::~Version()
@@ -17,6 +18,11 @@ QString Version::getVersion () const
     return version;
 }
 
+
+QString Version::getAuthor () const
+{
+    return author;
+}
 
 QString Version::getCopyright() const
 {
