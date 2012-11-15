@@ -1,6 +1,6 @@
 Open IP Messenger
 =================
-An open source client using ipmsg protocol with Qt.  
+An open source, portable client using ipmsg protocol with pure Qt.  
 Create at 2012-10-26.
 
 Author
@@ -9,12 +9,12 @@ Author
 
 Requirements
 ------------
-Qt4.8 or later(The older version may work but not assured).
+Qt4.8 or later(The older version may work but not guaranteed).
 
 License (GPLv3)
 ---------------
 <Open IP Messenger -An open source client using ipmsg protocol with Qt>
-Copyright (C) <2012>  admirestator<admirestator$gmail.com>
+Copyright (C) 2012  admirestator<admirestator$gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -5,7 +5,6 @@ Udpserver::Udpserver(quint16 &udpport)
     port = udpport;
     udpSocket = new QUdpSocket();
     protocolObj = new Protocol();
-
     buildConnection();
 }
 
@@ -100,11 +99,8 @@ bool Udpserver::handleCmd (const QHostAddress &ipaddr, const QByteArray &newPack
     */
 
 
-    //QByteArray cmd(argumentList.at (4));
-    //quint32 cmd = argumentList.at(4).toInt() & 0xFFFFFFFF;
     quint32 cmd = argumentList.at(4).toInt() & 0x000000FF;
     qDebug () << "CMD:" << cmd;
-
     switch (cmd) {
         case IPMSG_BR_ENTRY:
             emit signalBrEntry(ipaddr, newPacket);

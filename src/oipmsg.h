@@ -7,6 +7,7 @@
 
 #include "udpserver.h"
 #include "host.h"
+#include "screenshot.h"
 
 namespace oipmsg {
     class Oipmsg;

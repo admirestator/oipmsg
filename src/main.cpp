@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "main_window.h"
+//#include "screenshot.h"
 #include "systray.h"
 #include "oipmsg.h"
 
@@ -33,7 +34,13 @@ int main(int argc, char *argv[])
     //}
 
 
+    /*
+    Screenshot screenshot;
+    screenshot.show();
+    */
+
     Oipmsg oipmsg;
+
     oipmsg.run();
     return app.exec();
 }
