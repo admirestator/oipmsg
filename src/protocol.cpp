@@ -15,19 +15,6 @@
 
 Protocol::Protocol()
 {
-    //QString version;
-    //QString username;
-    //QString hostname;
-
-    absence_absence = "absence";
-    absence_meal = "meal";
-    absence_meeing = "meeting";
-    absence_visitor = "visitor";
-    absence_out = "out";
-    absence_home = "home";
-    absence_edo = "edo";
-    absence_priest = "priest";
-
     version = QString::number(IPMSG_VERSION, 10);
 
     QStringList envVariables;
@@ -42,7 +29,6 @@ Protocol::Protocol()
     if (index != -1) {
         QStringList stringList = environment.at(index).split('=');
         if (stringList.size() == 2) {
-            //qDebug() << stringList.at(1);
             username = stringList.at(1);
         }
     }
@@ -51,7 +37,6 @@ Protocol::Protocol()
     if (index != -1) {
         QStringList stringList = environment.at(index).split('=');
         if (stringList.size() == 2) {
-            //qDebug() << stringList.at(1);
             hostname = stringList.at(1);
         }
     }
@@ -69,6 +54,12 @@ Protocol::Protocol()
 Protocol::~Protocol()
 {
 
+}
+
+void Protocol::setAbsenceStatus(const quint32 &status)
+{
+    absenceStatus = status;
+    //absenceStatus = status;
 }
 
 QByteArray Protocol::buildcmdNooperation()
@@ -112,6 +103,18 @@ QByteArray Protocol::buildcmdBrEntry()
 
     quint64 cmd = 0;
     cmd = cmd | IPMSG_BR_ENTRY;
+
+    // set IPMSG_ABSENCEOPT option
+    if (absenceStatus == ABSENCEABSENCE ||
+        absenceStatus == ABSENCEMEAL ||
+        absenceStatus == ABSENCEMEETING ||
+        absenceStatus == ABSENCEVISITOR ||
+        absenceStatus == ABSENCEOUT ||
+        absenceStatus == ABSENCEHOME ||
+        absenceStatus == ABSENCEEDO ||
+        absenceStatus == ABSENCEPRIEST) {
+        cmd = cmd | IPMSG_ABSENCEOPT;
+    }
 
     QByteArray cmd_br_entry;
     cmd_br_entry.append (QString::number(IPMSG_VERSION, 16));
@@ -165,6 +168,17 @@ QByteArray Protocol::buildcmdAnsentry()
 
     quint64 cmd = 0;
     cmd = cmd | IPMSG_ANSENTRY;
+    // set IPMSG_ABSENCEOPT option
+    if (absenceStatus == ABSENCEABSENCE ||
+        absenceStatus == ABSENCEMEAL ||
+        absenceStatus == ABSENCEMEETING ||
+        absenceStatus == ABSENCEVISITOR ||
+        absenceStatus == ABSENCEOUT ||
+        absenceStatus == ABSENCEHOME ||
+        absenceStatus == ABSENCEEDO ||
+        absenceStatus == ABSENCEPRIEST) {
+        cmd = cmd | IPMSG_ABSENCEOPT;
+    }
 
     QByteArray cmd_ansentry;
     cmd_ansentry.append (QString::number(IPMSG_VERSION, 16));
@@ -183,7 +197,7 @@ QByteArray Protocol::buildcmdAnsentry()
     return cmd_ansentry;
 }
 
-QByteArray Protocol::buildcmdBrAbsence(const QString &absenceStatus)
+QByteArray Protocol::buildcmdBrAbsence(const quint32 &absenceStatus)
 {
     // Set init package number as random.
     quint32 packetno;
@@ -204,8 +218,33 @@ QByteArray Protocol::buildcmdBrAbsence(const QString &absenceStatus)
     cmd_absence.append (QString::number(cmd, 16));
     cmd_absence.append (":");
     cmd_absence.append (username);
-    cmd_absence.append (absenceStatus);
 
+    switch (absenceStatus) {
+        case ABSENCEMEAL:
+            cmd_absence.append("[meal]");
+            break;
+        case ABSENCEMEETING:
+            cmd_absence.append("[meeting]");
+            break;
+        case ABSENCEVISITOR:
+            cmd_absence.append("[visitor]");
+            break;
+        case ABSENCEOUT:
+            cmd_absence.append("[out]");
+            break;
+        case ABSENCEHOME:
+            cmd_absence.append("[home]");
+            break;
+        case ABSENCEEDO:
+            cmd_absence.append("[edo]");
+            break;
+        case ABSENCEPRIEST:
+            cmd_absence.append("[priest]");
+            break;
+        default:
+            cmd_absence.append("[absence]");
+            break;
+    }
     qDebug () << cmd_absence;
     return cmd_absence;
 }

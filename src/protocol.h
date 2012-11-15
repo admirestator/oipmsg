@@ -7,6 +7,15 @@
 #include <QString>
 #include "ipmsg.h"
 
+#define ABSENCEABSENCE 1
+#define ABSENCEMEAL    2
+#define ABSENCEMEETING 3
+#define ABSENCEVISITOR 4
+#define ABSENCEOUT     5
+#define ABSENCEHOME    6
+#define ABSENCEEDO     7
+#define ABSENCEPRIEST  8
+
 namespace protocol{
     class Protocal;
 };
@@ -23,7 +32,7 @@ public:
     QByteArray buildcmdBrEntry();
     QByteArray buildcmdBrExit();
     QByteArray buildcmdAnsentry();
-    QByteArray buildcmdBrAbsence(const QString &absencdStatus);
+    QByteArray buildcmdBrAbsence(const quint32 &absenceStatus);
     QByteArray buildcmdBrIsgetlist();
     QByteArray buildcmdOkgetlist();
     QByteArray buildcmdGetlist();
@@ -44,24 +53,15 @@ public:
     QByteArray buildcmdGetpubkey();
     QByteArray buildcmdAnspubkey();
 
-    // absence info
-    QString absence_absence;
-    QString absence_meal;
-    QString absence_meeing;
-    QString absence_visitor;
-    QString absence_out;
-    QString absence_home;
-    QString absence_edo;
-    QString absence_priest;
-
 private:
     QString version;
     QString username;
     QString hostname;
 
+    // absence status flag
+    quint32 absenceStatus;
 
-
-
+    void setAbsenceStatus(const quint32 &status);
 
 };
 
