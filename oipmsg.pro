@@ -25,10 +25,11 @@ SOURCES += src/main.cpp\
     src/init.cpp \
     src/screenshot.cpp \
     src/oipmsg.cpp \
-    src/tcpcomm.cpp \
     src/udpserver.cpp \
     src/encrypt.cpp \
-    src/host.cpp
+    src/host.cpp \
+    src/tcpserver.cpp \
+    src/tcpclient.cpp
 
 HEADERS  += \
     src/config.h \
@@ -44,11 +45,12 @@ HEADERS  += \
     src/init.h \
     src/screenshot.h \
     src/oipmsg.h \
-    src/tcpcomm.h \
     src/udpserver.h \
     src/ipmsgcmn.h \
     src/encrypt.h \
-    src/host.h
+    src/host.h \
+    src/tcpserver.h \
+    src/tcpclient.h
 
 FORMS    += \
     src/about_dialog.ui \

@@ -26,7 +26,8 @@ public:
     Protocol();
     virtual ~Protocol();
 
- //QByteArray datagram
+    quint16 port;
+
     //build 24 commands of ipmsg protocol version3
     QByteArray buildcmdNooperation();
     QByteArray buildcmdBrEntry();

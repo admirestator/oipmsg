@@ -1,0 +1,39 @@
+#ifndef TCPCLIENT_H
+#define TCPCLIENT_H
+
+#include <QThread>
+#include <QTcpSocket>
+#include <QHostAddress>
+#include <QFile>
+#include <QDataStream>
+#include <QIODevice>
+#include "protocol.h"
+
+class Tcpclient : QThread
+{
+    Q_OBJECT
+public:
+    Tcpclient(const QHostAddress &dstip, const QString &filename);
+    virtual ~Tcpclient();
+
+    void run();
+
+private:
+    bool buildConnection();
+    bool startTransfer();
+
+    QTcpSocket *tcpClient;
+    QHostAddress destIP;
+    quint16 port;
+    QString fileName;
+    QFile *localFile;
+
+    QByteArray outBlock;
+    qint64 TotalBytes;
+    qint64 bytesWritten;
+    qint64 bytesToWrite;
+    qint64 loadSize;
+
+};
+
+#endif // TCPCLIENT_H

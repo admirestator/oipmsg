@@ -15,6 +15,7 @@
 
 Protocol::Protocol()
 {
+    port = IPMSG_DEFAULT_PORT;
     version = QString::number(IPMSG_VERSION, 10);
 
     QStringList envVariables;
