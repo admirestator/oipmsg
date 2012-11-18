@@ -31,9 +31,14 @@ private:
 
     void buildConnection();
 
+signals:
+    void newuser(const User &userinfo);
+    void alluser(const QHash<QString, User> &allusers);
+
 public slots:
-    bool addNewUser(const QHostAddress& ipaddr, const QByteArray &packet);
+    bool addUser(const QHostAddress& ipaddr, const QByteArray &packet);
     bool delUser(const QString &username);
+
 };
 
 #endif // OIPMSG_H

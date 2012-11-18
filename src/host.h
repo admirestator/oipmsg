@@ -19,7 +19,7 @@ public:
     Host();
     virtual ~Host();
 
-    QHash <QString, User> hostList;
+    QHash <QString, User> userList;
 
 private:
     // default max client
@@ -29,7 +29,9 @@ private:
 public slots:
     quint16 count() const;
 
-    bool addHost(const QHostAddress &ipaddr, const QByteArray &packet);
+    bool addHost(const QHostAddress &ipaddr,
+                 const QByteArray &packet,
+                 User &usernew);
     bool delHost(const QString &username);
 
 
