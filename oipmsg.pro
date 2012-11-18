@@ -29,7 +29,8 @@ SOURCES += src/main.cpp\
     src/encrypt.cpp \
     src/host.cpp \
     src/tcpserver.cpp \
-    src/tcpclient.cpp
+    src/tcpclient.cpp \
+    src/user.cpp
 
 HEADERS  += \
     src/config.h \
@@ -50,7 +51,8 @@ HEADERS  += \
     src/encrypt.h \
     src/host.h \
     src/tcpserver.h \
-    src/tcpclient.h
+    src/tcpclient.h \
+    src/user.h
 
 FORMS    += \
     src/about_dialog.ui \
