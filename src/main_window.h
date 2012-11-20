@@ -24,17 +24,15 @@ public:
 
 public slots:
     void buildItems(const QHash <QString, User> &hostlist);
-    //void buildItems(QHash <QString, User> &hostlist);
-    void addItem(const User &useritem);
-    void delItem(const User &useritem);
 
 private:
     Ui::MainWindow *ui;
+    bool buildConnection();
 
     // for qtreeview
     QStandardItemModel *stdModel;
     quint32 treeModelRow;
-
+    void clicked(const QModelIndex &index);
 };
 
 #endif // MAINWINDOW_H

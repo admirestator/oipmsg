@@ -42,6 +42,9 @@
         <height>431</height>
        </rect>
       </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tabMainGroups">
@@ -75,13 +78,13 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>450</y>
       <width>251</width>
-      <height>21</height>
+      <height>24</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">

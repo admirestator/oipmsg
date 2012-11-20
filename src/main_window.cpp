@@ -6,13 +6,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     stdModel = new QStandardItemModel();
-    treeModelRow = 0;
+    //treeModelRow = 0;
 
     //stdModel->setHorizontalHeaderItem( 0, new QStandardItem( "Username" ) );
-    //stdModel->setHorizontalHeaderItem( 1, new QStandardItem( "Bar-Baz" ) );
+    //stdModel->setHorizontalHeaderItem( 1, new QStandardItem( "Mac" ) );
     ui->setupUi(this);
 
-    ui->treeViewUser->setModel(stdModel);
+    //ui->treeViewUser->setModel(stdModel);
 
 }
 
@@ -22,33 +22,37 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+bool MainWindow::buildConnection()
+{
+    connect(ui->treeViewUser, SIGNAL(clicked(QModelIndex)),
+            this, SLOT(clicked(QModelIndex)));
+    return true;
+}
+
 
 void MainWindow::buildItems(const QHash <QString, User> &hostlist)
 //void MainWindow::buildItems(QHash <QString, User> &hostlist)
 {
-    //QStandardItemModel stdModel
+    // reset treeview
+    ui->treeViewUser->reset();
+
+    treeModelRow = 0;
+    stdModel->clear();
     QString key;
     foreach (key, hostlist.keys()) {
-        treeModelRow++;
         QStandardItem *userItem = new QStandardItem((QString("%0").arg(hostlist[key].getNickName())));
         stdModel->setItem(treeModelRow, userItem);
+        treeModelRow++;
     }
 
-    //ui->treeViewUser->setModel(stdModel);
+    stdModel->setHorizontalHeaderItem( 0, new QStandardItem( "Username" ) );
+    //stdModel->setHorizontalHeaderItem( 1, new QStandardItem( "Mac" ) );
+    ui->treeViewUser->setModel(stdModel);
 }
 
-
-void MainWindow::addItem(const User &useritem)
-{
-    qDebug () << ">>>>>    add new user to treeview"
-                 << useritem.getUserName ();
-    // need to handle repeat item
-    QStandardItem *userItem = new QStandardItem((QString("%0").arg(useritem.getNickName())));
-    stdModel->setItem(treeModelRow, userItem);
-}
-
-
-void MainWindow::delItem(const User &useritem)
-{
-    treeModelRow--;
-}
+void MainWindow::clicked(const QModelIndex &index)
+ {
+    qDebug() << "________clicked!";
+    QStandardItem *item = stdModel->itemFromIndex(index);
+    // Do stuff with the item ...
+ }
