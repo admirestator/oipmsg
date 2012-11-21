@@ -16,7 +16,7 @@ UserDialog::~UserDialog()
 
 bool UserDialog::buildConnection()
 {
-    connect(ui->pushButtonFIle, SIGNAL(), this, SLOT(on_pushButtonFIle_clicked()));
+    connect(ui->pushButtonFile, SIGNAL(), this, SLOT(on_pushButtonFIle_clicked()));
     connect(ui->pushButtonDir, SIGNAL(), this, SLOT(on_pushButtonDir_clicked()));
     connect(ui->pushButtonClose, SIGNAL(), this, SLOT(on_pushButtonClose_clicked()));
     connect(ui->pushButtonSend, SIGNAL(), this, SLOT(on_pushButtonSend_clicked()));
@@ -24,10 +24,24 @@ bool UserDialog::buildConnection()
 }
 
 
-void UserDialog::on_pushButtonFIle_clicked()
+void UserDialog::on_pushButtonFile_clicked()
 {
+    QFileDialog *fileDialog = new QFileDialog(this);
+    fileDialog->setWindowTitle(tr("Open Image"));
+    fileDialog->setDirectory(".");
+    fileDialog->setFileMode(QFileDialog::AnyFile);
 
+    if(fileDialog->exec() == QDialog::Accepted) {
+        QString file = fileDialog->selectedFiles()[0];
+        qDebug () << file;
+        emit gotFile(file);
+
+        //QMessageBox::information(NULL, tr("File"), tr("You selected ") + path);
+    } else {
+        QMessageBox::information(NULL, tr("File"), tr("You didn't select any files."));
+    }
 }
+
 
 void UserDialog::on_pushButtonDir_clicked()
 {

@@ -206,7 +206,7 @@ bool Udpserver::processAnsentry(const QHostAddress &ipaddr,
                                 const QByteArray &packet)
 {
 
-    qDebug() << "Process ans entry" << ipaddr;
+    qDebug() << "Process ans entry" << ipaddr << packet;
     return true;
 }
 

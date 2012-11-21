@@ -11,21 +11,23 @@
 
 class ChatWin : public QThread
 {
+    Q_OBJECT
 public:
     ChatWin(const User &userinfo);
     ~ChatWin();
 
     void run();
+
+private:
+    User userDataLocal;
+    UserDialog *userDlg;
+    //Tcpclient *tcpSendFile;
+
     bool buildConnection();
 
 private slots:
-    void on_pushButtonFIle_clicked();
-    void on_pushButtonDir_clicked();
-    void on_pushButtonClose_clicked();
-    void on_pushButtonSend_clicked();
-
-private:
-    UserDialog *userDlg;
+    void sendfile(const QString &fliename);
+    void senddir(const QString &filename);
 
 
 };
