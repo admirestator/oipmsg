@@ -42,16 +42,15 @@ bool Udpserver::bindPort()
 
 void Udpserver::dataReceived()
 {
-    while (udpSocket->hasPendingDatagrams())
-     {
-         QByteArray datagram;
+    QByteArray datagram;
+    QHostAddress senderAddress;
+
+    while (udpSocket->hasPendingDatagrams()) {
          datagram.resize(udpSocket->pendingDatagramSize());
-         //udpSocket->readDatagram(datagram.data(), datagram.size());
-         QHostAddress senderAddress;
          udpSocket->readDatagram(datagram.data(), datagram.size(), &senderAddress, &port);
          qDebug () << "Recv:" << senderAddress << datagram.data();
          handleCmd (senderAddress, datagram);
-     }
+    }
 }
 
 
@@ -354,6 +353,7 @@ bool Udpserver::sendcmdBrEntry()
 {
     qDebug() << "broad entry";
     QByteArray datagram = protocolObj->buildcmdBrEntry();
+    qDebug () << datagram;
     if (udpSocket->writeDatagram(datagram.data(),
                                  datagram.size(),
                                  QHostAddress::Broadcast,

@@ -67,5 +67,5 @@ bool buildConnection(const Oipmsg *oipmsgobj, const MainWindow *mainwinobj)
     QObject::connect (oipmsgobj, SIGNAL(alluser(const QHash <QString, User> &)),
                       mainwinobj, SLOT(buildItems(const QHash <QString,User> &)));
 
-
+    return true;
 }

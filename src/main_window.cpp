@@ -5,15 +5,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    stdModel = new QStandardItemModel();
-    //treeModelRow = 0;
-
-    //stdModel->setHorizontalHeaderItem( 0, new QStandardItem( "Username" ) );
-    //stdModel->setHorizontalHeaderItem( 1, new QStandardItem( "Mac" ) );
     ui->setupUi(this);
+    stdModel = new QStandardItemModel();
 
-    //ui->treeViewUser->setModel(stdModel);
-
+    buildConnection();
 }
 
 MainWindow::~MainWindow()
@@ -24,35 +19,62 @@ MainWindow::~MainWindow()
 
 bool MainWindow::buildConnection()
 {
-    connect(ui->treeViewUser, SIGNAL(clicked(QModelIndex)),
-            this, SLOT(clicked(QModelIndex)));
+    connect(ui->treeViewUser, SIGNAL(doubleClicked(const QModelIndex&)),
+            this, SLOT(userItemClicked(const QModelIndex&)));
     return true;
 }
 
 
 void MainWindow::buildItems(const QHash <QString, User> &hostlist)
-//void MainWindow::buildItems(QHash <QString, User> &hostlist)
 {
     // reset treeview
     ui->treeViewUser->reset();
+
+    // hold a copy of userlist
+    copyHostlist.empty();
+    copyHostlist = hostlist;
 
     treeModelRow = 0;
     stdModel->clear();
     QString key;
     foreach (key, hostlist.keys()) {
-        QStandardItem *userItem = new QStandardItem((QString("%0").arg(hostlist[key].getNickName())));
+        QStandardItem *userItem = new QStandardItem((QString("%0     %1").arg(hostlist[key].getNickName())).arg (hostlist[key].getHostAddress().toString()));
+        //QStandardItem *userItem = new QStandardItem((QString("%0").arg(hostlist[key].getNickName())));
         stdModel->setItem(treeModelRow, userItem);
         treeModelRow++;
     }
 
-    stdModel->setHorizontalHeaderItem( 0, new QStandardItem( "Username" ) );
-    //stdModel->setHorizontalHeaderItem( 1, new QStandardItem( "Mac" ) );
+    stdModel->setHorizontalHeaderItem( 0, new QStandardItem("Username         IP") );
     ui->treeViewUser->setModel(stdModel);
 }
 
-void MainWindow::clicked(const QModelIndex &index)
+void MainWindow::userItemClicked(const QModelIndex &index)
  {
-    qDebug() << "________clicked!";
-    QStandardItem *item = stdModel->itemFromIndex(index);
-    // Do stuff with the item ...
- }
+    //QString itemInfo = itemindex.toString();
+    QStringList infolist = index.data().toString().split(' ');
+
+    User tmpuser;
+    findUser(infolist.at(0), infolist.at(1), tmpuser);
+
+    // new user windows...
+    ChatWin *chatWin = new ChatWin(tmpuser);
+    chatWin->run();
+}
+
+
+bool MainWindow::findUser(const QString &nickname,
+                          const QString &ipaddr,
+                          User &user)
+{
+    QString key;
+
+    foreach (key, copyHostlist.keys()) {
+        if ( nickname == copyHostlist[key].getNickName() &&
+            ipaddr == copyHostlist[key].getHostAddress().toString() ) {
+                user = copyHostlist[key];
+                return true;
+        }
+    }
+
+    return false;
+}

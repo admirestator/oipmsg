@@ -5,10 +5,12 @@
 #include <QTreeView>
 #include <QStandardItemModel>
 #include <QStandardItem>
+#include <QModelIndex>
 #include <QHash>
 #include <QString>
 
 #include "host.h"
+#include "chatwin.h"
 
 namespace Ui {
     class MainWindow;
@@ -25,14 +27,23 @@ public:
 public slots:
     void buildItems(const QHash <QString, User> &hostlist);
 
+private slots:
+    void userItemClicked(const QModelIndex &index);
+    bool findUser(const QString &nickname,
+                  const QString &ipaddr,
+                  User &user);
+
 private:
     Ui::MainWindow *ui;
-    bool buildConnection();
+
+    // a copy of Hostlist
+    QHash <QString, User> copyHostlist;
 
     // for qtreeview
     QStandardItemModel *stdModel;
     quint32 treeModelRow;
-    void clicked(const QModelIndex &index);
+
+    bool buildConnection();
 };
 
 #endif // MAINWINDOW_H
