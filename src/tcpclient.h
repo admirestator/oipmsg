@@ -7,15 +7,13 @@
 #include <QFile>
 #include <QDataStream>
 #include <QIODevice>
-
 #include "protocol.h"
-#include "user.h"
 
 class Tcpclient : QThread
 {
     Q_OBJECT
 public:
-    Tcpclient(const User &userinfo, const QString &filename);
+    Tcpclient(const QHostAddress &dstip, const QString &filename);
     virtual ~Tcpclient();
 
     void run();
