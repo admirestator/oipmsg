@@ -1,5 +1,6 @@
 #include "main_window.h"
 #include "ui_main_window.h"
+#include <unistd.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -50,15 +51,16 @@ void MainWindow::buildItems(const QHash <QString, User> &hostlist)
 
 void MainWindow::userItemClicked(const QModelIndex &index)
  {
-    //QString itemInfo = itemindex.toString();
     QStringList infolist = index.data().toString().split(' ');
 
     User tmpuser;
     findUser(infolist.at(0), infolist.at(1), tmpuser);
 
     // new user windows...
+    //const QScopedPointer<ChatWin> chatWin(new ChatWin(tmpuser));
     ChatWin *chatWin = new ChatWin(tmpuser);
     chatWin->run();
+    qDebug () << "New User Dlg";
 }
 
 

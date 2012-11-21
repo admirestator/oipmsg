@@ -3,8 +3,9 @@
 
 #include <QDialog>
 
+
 namespace Ui {
-class UserDialog;
+    class UserDialog;
 }
 
 class UserDialog : public QDialog
@@ -14,8 +15,21 @@ class UserDialog : public QDialog
 public:
     explicit UserDialog(QWidget *parent = 0);
     ~UserDialog();
-    
-private:
+
+
+
+    /*
+private slots:
+    void on_pushButtonFIle_clicked();
+
+    void on_pushButtonDir_clicked();
+
+    void on_pushButtonClose_clicked();
+
+    void on_pushButtonSend_clicked();
+    */
+
+//private:
     Ui::UserDialog *ui;
 };
 
