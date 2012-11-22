@@ -1,10 +1,11 @@
 #include "tcpclient.h"
 
-Tcpclient::Tcpclient(const QHostAddress &dstip, const QString &filename)
+//Tcpclient::Tcpclient(const QHostAddress &dstip, const QString &filename)
+Tcpclient::Tcpclient(const User &userinfo, const QString &filename)
 {
     port = IPMSG_DEFAULT_PORT;
     fileName = filename;
-    destIP = dstip;
+    destIP = userinfo.getHostAddress();
     loadSize = 4*1024;
     TotalBytes = 0;
     bytesWritten = 0;

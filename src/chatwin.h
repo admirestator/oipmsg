@@ -11,6 +11,7 @@
 
 class ChatWin : public QThread
 {
+    Q_OBJECT
 public:
     ChatWin(const User &userinfo);
     ~ChatWin();
@@ -19,7 +20,12 @@ public:
 
 private:
     UserDialog *userDlg;
+    User userDataLocal;
 
+    void buildConnection();
+
+private slots:
+    void sendFile(const QString &filename);
 
 };
 

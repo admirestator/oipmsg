@@ -26,7 +26,18 @@ bool UserDialog::buildConnection()
 
 void UserDialog::on_pushButtonFIle_clicked()
 {
+    QFileDialog *fileDialog = new QFileDialog(this);
+    fileDialog->setWindowTitle(tr("Open Image"));
+    fileDialog->setDirectory(".");
+    fileDialog->setFileMode(QFileDialog::AnyFile);
+    if(fileDialog->exec() == QDialog::Accepted) {
+        QString file = fileDialog->selectedFiles()[0];
+        emit gotFile(file);
 
+        //QMessageBox::information(NULL, tr("File"), tr("You selected ") + file);
+    } else {
+        QMessageBox::information(NULL, tr("File"), tr("You didn't select any files."));
+    }
 }
 
 void UserDialog::on_pushButtonDir_clicked()

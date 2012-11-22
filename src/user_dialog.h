@@ -2,6 +2,9 @@
 #define USER_DIALOG_H
 
 #include <QDialog>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QDebug>
 
 namespace Ui {
     class UserDialog;
@@ -15,6 +18,9 @@ public:
     ~UserDialog();
 
     bool buildConnection();
+
+signals:
+    void gotFile(const QString &filename);
 
 private slots:
     void on_pushButtonFIle_clicked();
