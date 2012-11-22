@@ -30,6 +30,7 @@ private:
     bool handleCmd(const QHostAddress& ipaddr, const QByteArray &newPacket);
     bool buildConnection();
 
+private slots:
     // send all cmd
     bool sendcmdNooperation(const QHostAddress &ipaddr);
     bool sendcmdBrEntry();
@@ -41,8 +42,8 @@ private:
     bool sendcmdGetlist();
     bool sendcmdAnslist();
     bool sendcmdBrIsgetlist2();
-    bool sendcmdSendmsg();
-    bool sendcmdRecvmsg();
+    bool sendcmdSendmsg(const QHostAddress &ipaddr, const QString &msg);
+    bool sendcmdRecvmsg(const QHostAddress &ipaddr, const QString &packet);
     bool sendcmdReadmsg();
     bool sendcmdDelmsg();
     bool sendcmdAnsreadmsg();
@@ -57,6 +58,7 @@ private:
     bool sendcmdAnspubkey();
 
 private slots:
+//public slots:
     void dataReceived();
 
     bool processNooperation(const QHostAddress &ipaddr);
@@ -71,8 +73,11 @@ private slots:
     bool processGetlist();
     bool processAnslist();
     bool processBrIsgetlist2();
-    bool processSendmsg();
-    bool processRecvmsg();
+    //bool processSendmsg(const QHostAddress& ipaddr,
+    bool processSendmsg(const QHostAddress &ipaddr,
+                        const QByteArray &packet);
+    bool processRecvmsg(const QHostAddress &ipaddr,
+                        const QByteArray &packet);
     bool processReadmsg();
     bool processDelmsg();
     bool processAnsreadmsg();
@@ -99,8 +104,10 @@ signals:
     void signalGetlist();
     void signalAnslist();
     void signalBrIsgetlist2();
-    void signalSendmsg();
-    void signalRecvmsg();
+    void signalSendmsg(const QHostAddress &ipaddr,
+                       const QByteArray &packet);
+    void signalRecvmsg(const QHostAddress &ipaddr,
+                       const QByteArray &packet);
     void signalReadmsg();
     void signalDelmsg();
     void signalAnsreadmsg();
@@ -114,7 +121,7 @@ signals:
     void signalGetpubkey();
     void signalAnspubkey();
 
-
+    void gotMsg(const QByteArray &packet);
 };
 
 #endif // UDPCOMM_H

@@ -32,6 +32,7 @@ User::~User()
 
 }
 
+//operator = ()
 void User::displayHostInfo() const
 {
     qDebug() << userName;
@@ -134,7 +135,7 @@ QString User::getUserName() const
     return userName;
 }
 
-QString User::getHostname() const
+QString User::getHostName() const
 {
     return hostName;
 }

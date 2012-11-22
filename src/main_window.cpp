@@ -9,19 +9,45 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     stdModel = new QStandardItemModel();
 
+    winList.empty();
     buildConnection();
 }
 
 MainWindow::~MainWindow()
 {
+
     delete stdModel;
+    //delete all chatWin
     delete ui;
+}
+
+ChatWin *MainWindow::singleton(const User &userinfo)
+//QScopedPointer<ChatWin>& MainWindow::singleton(const User &userinfo)
+{
+    //userinfo.displayHostInfo ();
+    // regard hostname as the userid
+    QString userid = userinfo.getHostName();
+    if (winList.find(userid) != winList.end()) {
+        qDebug () << "HasWin" << userinfo.getHostName();
+        return winList[userid];
+    } else {
+        qDebug () << "NoWin"<< userinfo.getHostName();
+        ChatWin *tmpWin = new ChatWin(userinfo);
+        //QScopedPointer<ChatWin> tmpWin(new ChatWin(userinfo));
+
+        winList.insert(userid, tmpWin);
+        connect(winList[userid], SIGNAL(sendInfo(const User&, const QString&)),
+                this, SLOT(sendMsg(const User&, const QString&)));
+        return winList[userid];
+    }
 }
 
 bool MainWindow::buildConnection()
 {
     connect(ui->treeViewUser, SIGNAL(doubleClicked(const QModelIndex&)),
             this, SLOT(userItemClicked(const QModelIndex&)));
+
+    // on chat window closed
     return true;
 }
 
@@ -39,44 +65,60 @@ void MainWindow::buildItems(const QHash <QString, User> &hostlist)
     stdModel->clear();
     QString key;
     foreach (key, hostlist.keys()) {
-        QStandardItem *userItem = new QStandardItem((QString("%0     %1").arg(hostlist[key].getNickName())).arg (hostlist[key].getHostAddress().toString()));
-        //QStandardItem *userItem = new QStandardItem((QString("%0").arg(hostlist[key].getNickName())));
+        QStandardItem *userItem = new QStandardItem((QString("%0  %1  %2").
+                                                    arg(hostlist[key].getNickName())).
+                                                    arg(hostlist[key].getHostName()).
+                                                    arg(hostlist[key].getHostAddress().toString ()));
         stdModel->setItem(treeModelRow, userItem);
         treeModelRow++;
     }
 
-    stdModel->setHorizontalHeaderItem( 0, new QStandardItem("Username         IP") );
+    stdModel->setHorizontalHeaderItem( 0, new QStandardItem("Username  Hostname    IP") );
     ui->treeViewUser->setModel(stdModel);
 }
 
 void MainWindow::userItemClicked(const QModelIndex &index)
  {
     QStringList infolist = index.data().toString().split(' ');
-
+    qDebug () << infolist;
     User tmpuser;
-    findUser(infolist.at(0), infolist.at(1), tmpuser);
+    findUser(infolist.at(2), tmpuser);
 
     // new user windows...
-    //const QScopedPointer<ChatWin> chatWin(new ChatWin(tmpuser));
-    ChatWin *chatWin = new ChatWin(tmpuser);
+    ChatWin *chatWin = singleton(tmpuser);
     chatWin->run();
-    qDebug () << "New User Dlg";
 }
 
 
-bool MainWindow::findUser(const QString &nickname,
-                          const QString &ipaddr,
-                          User &user)
+bool MainWindow::findUser(const QString &hostname, User &user)
 {
     QString key;
-
     foreach (key, copyHostlist.keys()) {
-        if ( nickname == copyHostlist[key].getNickName() &&
-            ipaddr == copyHostlist[key].getHostAddress().toString() ) {
-                user = copyHostlist[key];
-                return true;
+        if (!key.isEmpty() && hostname == copyHostlist[key].getHostName()) {
+            user = copyHostlist[key];
+            return true;
         }
     }
-
     return false;
+}
+
+void MainWindow::sendMsg(const User &userinfo, const QString &msg)
+{
+    emit sendInfo(userinfo.getHostAddress(), msg);
+    User tmpuser;
+    findUser(userinfo.getHostName(), tmpuser);
+
+    ChatWin *chatWin = singleton(tmpuser);
+    chatWin->userDlg->showMsg(msg);
+}
+
+void MainWindow::recvMsg(const QByteArray &packet)
+{
+    QList<QByteArray> argumentList = packet.split (':');
+    User tmpuser;
+    findUser(argumentList.at(3), tmpuser);
+
+    ChatWin *chatWin = singleton(tmpuser);
+    chatWin->userDlg->showMsg(argumentList.at(5));
+    chatWin->run();
 }

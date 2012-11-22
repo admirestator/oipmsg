@@ -384,15 +384,16 @@ QByteArray Protocol::buildcmdBrIsgetlist2()
     return cmd_isgetlist2;
 }
 
-QByteArray Protocol::buildcmdSendmsg()
+QByteArray Protocol::buildcmdSendmsg(const QString &msg)
 {
     QByteArray cmd_sendmsg;
     // Set init package number as random.
     quint64 packetno;
-    packetno = qrand() % 10240;
+    //packetno = qrand() % 10240;
+    packetno = qrand();
 
     quint32 cmd = 0;
-    cmd = cmd | IPMSG_BR_ISGETLIST;
+    cmd = cmd | IPMSG_SENDMSG;
 
     QByteArray cmd_isgetlist;
     cmd_isgetlist.append (QString::number(IPMSG_VERSION, 16));
@@ -403,40 +404,38 @@ QByteArray Protocol::buildcmdSendmsg()
     cmd_isgetlist.append (":");
     cmd_isgetlist.append (hostname);
     cmd_isgetlist.append (":");
-    cmd_isgetlist.append (QString::number(cmd, 16));
+    cmd_isgetlist.append (QString::number(cmd, 10));
     cmd_isgetlist.append (":");
-    cmd_isgetlist.append (username);
+    cmd_isgetlist.append (msg);
 
     qDebug () << cmd_isgetlist;
     return cmd_isgetlist;
     return cmd_sendmsg;
 }
 
-QByteArray Protocol::buildcmdRecvmsg()
+QByteArray Protocol::buildcmdRecvmsg(const QString &packetno)
 {
-    QByteArray cmd_recvmsg;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 pktno;
+    pktno = qrand() % 10240;
 
     quint32 cmd = 0;
-    cmd = cmd | IPMSG_BR_ISGETLIST;
+    cmd = cmd | IPMSG_RECVMSG;
 
-    QByteArray cmd_isgetlist;
-    cmd_isgetlist.append (QString::number(IPMSG_VERSION, 16));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (QString::number(packetno, 10));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (username);
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (hostname);
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (QString::number(cmd, 16));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (username);
+    QByteArray cmd_recvmsg;
+    cmd_recvmsg.append (QString::number(IPMSG_VERSION, 16));
+    cmd_recvmsg.append (":");
+    cmd_recvmsg.append (QString::number(pktno, 10));
+    cmd_recvmsg.append (":");
+    cmd_recvmsg.append (username);
+    cmd_recvmsg.append (":");
+    cmd_recvmsg.append (hostname);
+    cmd_recvmsg.append (":");
+    cmd_recvmsg.append (QString::number(cmd, 10));
+    cmd_recvmsg.append (":");
+    cmd_recvmsg.append (packetno);
 
-    qDebug () << cmd_isgetlist;
-    return cmd_isgetlist;
+    qDebug () << cmd_recvmsg;
     return cmd_recvmsg;
 }
 

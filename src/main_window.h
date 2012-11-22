@@ -17,7 +17,6 @@ namespace Ui {
 }
 
 class MainWindow : public QMainWindow
-//class MainWindow : public MainWindow
 {
     Q_OBJECT
 public:
@@ -27,14 +26,27 @@ public:
 public slots:
     void buildItems(const QHash <QString, User> &hostlist);
 
+
+signals:
+    //void sendInfo(const User &userinfo, const QString &msg);
+    void sendInfo(const QHostAddress &ipddr, const QString &msg);
+
 private slots:
     void userItemClicked(const QModelIndex &index);
     bool findUser(const QString &nickname,
-                  const QString &ipaddr,
                   User &user);
+
+    // handle msg
+    void sendMsg(const User &userinfo, const QString &msg);
+    void recvMsg(const QByteArray &packet);
 
 private:
     Ui::MainWindow *ui;
+    QHash <QString, ChatWin*> winList;
+    ChatWin* singleton(const User &userinfo);
+
+    //QHash < QString, QScopedPointer<ChatWin> > winList;
+    //QScopedPointer<ChatWin>& singleton(const User &userinfo);
 
     // a copy of Hostlist
     QHash <QString, User> copyHostlist;

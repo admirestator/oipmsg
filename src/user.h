@@ -35,7 +35,7 @@ public:
     bool setPubkeyUpdated(bool &status);
 
     QString getUserName() const;
-    QString getHostname() const;
+    QString getHostName() const;
     QHostAddress getHostAddress() const;
     quint16 getPort()const;
     QString getNickName() const;

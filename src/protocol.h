@@ -39,8 +39,8 @@ public:
     QByteArray buildcmdGetlist();
     QByteArray buildcmdAnslist();
     QByteArray buildcmdBrIsgetlist2();
-    QByteArray buildcmdSendmsg();
-    QByteArray buildcmdRecvmsg();
+    QByteArray buildcmdSendmsg(const QString &msg);
+    QByteArray buildcmdRecvmsg(const QString &packetno);
     QByteArray buildcmdReadmsg();
     QByteArray buildcmdDelmsg();
     QByteArray buildcmdAnsreadmsg();

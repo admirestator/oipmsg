@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QTextEdit" name="textEdit">
+  <widget class="QTextEdit" name="textEditUserEnter">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -23,7 +23,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QTextBrowser" name="textBrowser">
+  <widget class="QTextBrowser" name="textBrowserUserGot">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -46,7 +46,7 @@
     <string>UserInfo&amp;IP</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>

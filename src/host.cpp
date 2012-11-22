@@ -22,15 +22,17 @@ quint16 Host::count() const
 
 
 bool Host::addHost(const QHostAddress& ipaddr,
-                   const QByteArray &packet,
-                   User &usernew)
+                   const QByteArray &packet)
 {
+
+    //if (!usernew.getUserName().isEmpty())
+    //    return false;
 
     QList<QByteArray> argumentList = packet.split (':');
 
     // if the user exists
     if (userList.find(argumentList.at(2).data()) != userList.end()) {
-        qDebug () << "User Exists!";
+        //qDebug () << "User Exists!";
         return false;
     }
 
@@ -39,8 +41,8 @@ bool Host::addHost(const QHostAddress& ipaddr,
              ipaddr, argumentList.at(5));
 
     userList.insert(tmp.getUserName(), tmp);
-    usernew = tmp;
-    qDebug () << "Total Host" << total_client;
+    //usernew = tmp;
+    //qDebug () << "Total Host" << total_client;
 
     return true;
 }

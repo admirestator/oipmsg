@@ -53,4 +53,5 @@ bool Tcpclient::startTransfer()
     qDebug()<<currentFile<<TotalBytes;
     outBlock.resize(0);
 
+    return true;
 }

@@ -21,6 +21,11 @@ public:
 
 signals:
     void gotFile(const QString &filename);
+    void sendMsg(const QString &content);
+
+public slots:
+    //void showMsg(const QByteArray &packet);
+    void showMsg(const QString &msg);
 
 private slots:
     void on_pushButtonFIle_clicked();

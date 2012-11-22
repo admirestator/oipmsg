@@ -30,8 +30,8 @@ public slots:
     quint16 count() const;
 
     bool addHost(const QHostAddress &ipaddr,
-                 const QByteArray &packet,
-                 User &usernew);
+                 const QByteArray &packet);
+
     bool delHost(const QString &username);
 
 

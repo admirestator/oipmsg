@@ -18,15 +18,22 @@ public:
 
     void run();
 
-private:
     UserDialog *userDlg;
+
+signals:
+    void sendInfo(const User &userinfo, const QString &msg);
+
+private slots:
+    void sendMsg(const QString &msg);
+
+private:
     User userDataLocal;
 
     void buildConnection();
 
 private slots:
     void sendFile(const QString &filename);
-
+    void recvMsg (const QByteArray &packet);
 };
 
 #endif // CHATWIN_H

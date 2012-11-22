@@ -23,6 +23,13 @@ bool UserDialog::buildConnection()
     return true;
 }
 
+void UserDialog::showMsg(const QString &msg)
+//void UserDialog::showMsg(const QByteArray &packet)
+{
+    //QList<QByteArray> argumentList = packet.split (':');
+    //ui->textBrowserUserGot->setPlainText(argumentList.at(5));
+    ui->textBrowserUserGot->setPlainText(msg);
+}
 
 void UserDialog::on_pushButtonFIle_clicked()
 {
@@ -54,5 +61,6 @@ void UserDialog::on_pushButtonClose_clicked()
 
 void UserDialog::on_pushButtonSend_clicked()
 {
-
+    emit sendMsg(ui->textEditUserEnter->toPlainText());
+    ui->textEditUserEnter->clear();
 }

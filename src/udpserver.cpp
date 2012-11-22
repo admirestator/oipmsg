@@ -75,7 +75,13 @@ bool Udpserver::buildConnection()
     connect(this, SIGNAL(), this, SLOT());
     connect(this, SIGNAL(), this, SLOT());
     connect(this, SIGNAL(), this, SLOT());
-    connect(this, SIGNAL(), this, SLOT());
+    */
+    connect(this, SIGNAL(signalSendmsg(const QHostAddress&,
+                                       const QByteArray&)),
+            this, SLOT(processSendmsg(const QHostAddress&,
+                                      const QByteArray&)));
+
+    /*
     connect(this, SIGNAL(), this, SLOT());
     connect(this, SIGNAL(), this, SLOT());
     connect(this, SIGNAL(), this, SLOT());
@@ -92,14 +98,13 @@ bool Udpserver::handleCmd (const QHostAddress &ipaddr, const QByteArray &newPack
 {
     QList<QByteArray> argumentList = newPacket.split (':');
     /*
-    qDebug () << argumentList << argumentList.at(0) << argumentList.at(1)
-              << argumentList.at(2) << argumentList.at(3) << argumentList.at(4)
+    qDebug () << "Server:" << argumentList << argumentList.at(0) << argumentList.at(1)
+              << argumentList.at(2) << argumentList.at(3) << argumentList.at(4).toHex()
               << argumentList.at(5);
     */
 
-
     quint32 cmd = argumentList.at(4).toInt() & 0x000000FF;
-    qDebug () << "CMD:" << cmd;
+
     switch (cmd) {
         case IPMSG_BR_ENTRY:
             emit signalBrEntry(ipaddr, newPacket);
@@ -130,10 +135,10 @@ bool Udpserver::handleCmd (const QHostAddress &ipaddr, const QByteArray &newPack
             emit signalBrIsgetlist2();
             break;
         case IPMSG_SENDMSG:
-            emit signalSendmsg();
+            emit signalSendmsg(ipaddr, newPacket);
             break;
         case IPMSG_RECVMSG:
-            emit signalRecvmsg();
+            emit signalRecvmsg(ipaddr, newPacket);
             break;
         case IPMSG_READMSG:
             emit signalReadmsg();
@@ -206,7 +211,8 @@ bool Udpserver::processAnsentry(const QHostAddress &ipaddr,
                                 const QByteArray &packet)
 {
 
-    qDebug() << "Process ans entry" << ipaddr;
+    qDebug() << "Process ans entry" << ipaddr
+             << packet;
     return true;
 }
 
@@ -246,15 +252,22 @@ bool Udpserver::processBrIsgetlist2()
     return true;
 }
 
-bool Udpserver::processSendmsg()
+bool Udpserver::processSendmsg(const QHostAddress &ipaddr,
+                               const QByteArray &packet)
 {
+    QList<QByteArray> argumentList = packet.split(':');
+    sendcmdRecvmsg(ipaddr, argumentList.at(1));
 
+    //emit a signal
+    emit gotMsg (packet);
     return true;
 }
 
-bool Udpserver::processRecvmsg()
+bool Udpserver::processRecvmsg(const QHostAddress &ipaddr,
+                               const QByteArray &packet)
 {
 
+    //sendcmdRecvmsg(ipaddr, packet);
     return true;
 }
 
@@ -364,13 +377,10 @@ bool Udpserver::sendcmdBrEntry()
     return true;
 }
 
-
-
 bool Udpserver::sendcmdBrExit()
 {
     //sendcmdNooperation(protocolObj->absence_absence);
     sendcmdNooperation(QHostAddress::Broadcast);
-    QByteArray cmdBrExit;
     qDebug() << "broad exit";
     QByteArray datagram = protocolObj->buildcmdBrExit();
     if (udpSocket->writeDatagram(datagram.data(),
@@ -385,7 +395,6 @@ bool Udpserver::sendcmdBrExit()
 
 bool Udpserver::sendcmdAnsentry(const QHostAddress& ipaddr)
 {
-    QByteArray cmdAnsentry;
     qDebug() << "ans entry";
     QByteArray datagram = protocolObj->buildcmdAnsentry();
     if (udpSocket->writeDatagram(datagram.data(),
@@ -411,6 +420,7 @@ bool Udpserver::sendcmdBrIsgetlist()
 }
 
 bool Udpserver::sendcmdOkgetlist()
+
 {
     QByteArray cmdOkgetlist;
     return true;
@@ -433,15 +443,35 @@ bool Udpserver::sendcmdBrIsgetlist2()
     return true;
 }
 
-bool Udpserver::sendcmdSendmsg()
+bool Udpserver::sendcmdSendmsg(const QHostAddress &ipaddr,
+                               const QString &msg)
+        //const User &userinfo,
 {
-    QByteArray cmdSendmsg;
+    QByteArray datagram = protocolObj->buildcmdSendmsg(msg);
+    qDebug () << "SendMsg" << datagram;
+
+    if (udpSocket->writeDatagram(datagram.data(),
+                                 datagram.size(),
+                                 ipaddr,
+                                 2425) != datagram.size()) {
+        qDebug() << "Send Msg Error!";
+    }
+
     return true;
 }
 
-bool Udpserver::sendcmdRecvmsg()
+bool Udpserver::sendcmdRecvmsg(const QHostAddress &ipaddr,
+                               const QString &packetno)
 {
-    QByteArray cmdRecvmsg;
+    QByteArray datagram = protocolObj->buildcmdRecvmsg(packetno);
+    qDebug () << "SendRecvMsg" << datagram;
+
+    if (udpSocket->writeDatagram(datagram.data(),
+                                 datagram.size(),
+                                 ipaddr,
+                                 2425) != datagram.size()) {
+
+    }
     return true;
 }
 

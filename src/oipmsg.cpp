@@ -45,14 +45,18 @@ void Oipmsg::buildConnection()
                                             const QByteArray&)),
           this, SLOT(addUser(const QHostAddress&,
                                 const QByteArray&)));
+
 }
 
 bool Oipmsg::addUser(const QHostAddress &ipaddr, const QByteArray &packet)
 {
-    User tmp;
-   // emit newuser(tmp);
+    //QList<QByteArray> argumentList = packet.split (':');
+    /*
+    User tmp(argumentList.at(2), argumentList.at(3),
+             ipaddr, argumentList.at(5));
+             */
 
-    if (hosts->addHost(ipaddr, packet, tmp)) {
+    if (hosts->addHost(ipaddr, packet)) {
         emit alluser(hosts->userList);
         return true;
     }
@@ -62,5 +66,6 @@ bool Oipmsg::addUser(const QHostAddress &ipaddr, const QByteArray &packet)
 bool Oipmsg::delUser(const QString& username)
 {
     hosts->delHost(username);
+    emit alluser(hosts->userList);
     return true;
 }
