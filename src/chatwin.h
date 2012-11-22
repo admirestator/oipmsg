@@ -16,13 +16,6 @@ public:
     ~ChatWin();
 
     void run();
-    bool buildConnection();
-
-private slots:
-    void on_pushButtonFIle_clicked();
-    void on_pushButtonDir_clicked();
-    void on_pushButtonClose_clicked();
-    void on_pushButtonSend_clicked();
 
 private:
     UserDialog *userDlg;
