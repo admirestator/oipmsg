@@ -3,9 +3,15 @@
 //Tcpclient::Tcpclient(const QHostAddress &dstip, const QString &filename)
 Tcpclient::Tcpclient(const User &userinfo, const QString &filename)
 {
-    port = IPMSG_DEFAULT_PORT;
-    fileName = filename;
-    destIP = userinfo.getHostAddress();
+    userDataLocal = userinfo;
+
+    protoobj = new Protocol();
+    port = protoobj->port;
+    destIP = userDataLocal.getHostAddress();
+
+    tcpClient = new QTcpSocket();
+    localFile = new QFile(fileName);
+
     loadSize = 4*1024;
     TotalBytes = 0;
     bytesWritten = 0;
@@ -15,6 +21,7 @@ Tcpclient::Tcpclient(const User &userinfo, const QString &filename)
 
 Tcpclient::~Tcpclient()
 {
+    delete protoobj;
     delete tcpClient;
     delete localFile;
 }

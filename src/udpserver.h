@@ -2,6 +2,7 @@
 #define UDPCOMM_H
 
 #include <QUdpSocket>
+#include <QMessageBox>
 #include <QThread>
 
 #include "protocol.h"

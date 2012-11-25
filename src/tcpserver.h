@@ -23,6 +23,7 @@ public:
 private:
     quint16 port;
     QTcpServer *tcpServer;
+    Protocol *protoobj;
 
     void buildConnection();
 

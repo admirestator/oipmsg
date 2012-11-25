@@ -4,7 +4,8 @@
 
 Tcpserver::Tcpserver()
 {
-    port = IPMSG_DEFAULT_PORT;
+    protoobj = new Protocol();
+    port = protoobj->port;
     tcpServer = new QTcpServer(this);
 
     if (tcpServer->isListening()) {

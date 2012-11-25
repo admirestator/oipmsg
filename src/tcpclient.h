@@ -25,10 +25,12 @@ private:
     bool buildConnection();
     bool startTransfer();
 
+    Protocol *protoobj;
     QTcpSocket *tcpClient;
     QHostAddress destIP;
     quint16 port;
     QString fileName;
+    User userDataLocal;
     QFile *localFile;
 
     QByteArray outBlock;
@@ -36,6 +38,7 @@ private:
     qint64 bytesWritten;
     qint64 bytesToWrite;
     qint64 loadSize;
+
 
 };
 

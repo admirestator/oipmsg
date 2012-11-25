@@ -30,13 +30,13 @@ void Udpserver::run()
 bool Udpserver::bindPort()
 {
     if (!udpSocket->bind(port)) {
-        qDebug() << (QObject::tr("Bind UDP Port Error!"));
-
-        // connect to the main windows and have a choice to
-        // rebind a different port
+        QMessageBox *msgBox = new QMessageBox();
+        connect(msgBox, SIGNAL(buttonClicked ),
+                this, SLOT(exit(-1)));
+        msgBox->setText(QObject::tr("Bind UDP Port Error!"));
+        msgBox->exec();
         return false;
     }
-
     return true;
 }
 
@@ -110,7 +110,6 @@ bool Udpserver::handleCmd (const QHostAddress &ipaddr, const QByteArray &newPack
             emit signalBrEntry(ipaddr, newPacket);
             break;
         case IPMSG_BR_EXIT:
-            //qDebug() << "br_exit";
             emit signalBrExit(argumentList.at(2).data());
             break;
         case IPMSG_ANSENTRY:
