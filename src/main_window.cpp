@@ -56,8 +56,8 @@ bool MainWindow::buildConnection()
 
     //program quit
     connect(ui->toolButtonRefresh, SIGNAL(clicked()), this, SLOT(onToolButtonRefreshClicked()));
-    //connect(ui->toolButtonSetting, SIGNAL(clicked()), this, SLOT(onToolButtonSettingClicked()));
-    //connect(ui->toolButtonAbout, SIGNAL(clicked()), this, SLOT(onToolButtonAboutClicked()));
+    connect(ui->toolButtonSetting, SIGNAL(clicked()), this, SLOT(onToolButtonSettingClicked()));
+    connect(ui->toolButtonAbout, SIGNAL(clicked()), this, SLOT(onToolButtonAboutClicked()));
     connect(ui->toolButtonQuit, SIGNAL(clicked()), this, SLOT(onToolButtonQuitClicked()));
     return true;
 }
@@ -143,6 +143,7 @@ void MainWindow::onToolButtonRefreshClicked()
 
 void MainWindow::onToolButtonSettingClicked()
 {
+    qDebug () << "about";
     //new setting windows
     SetupWindow *setupWin = new SetupWindow();
     setupWin->winDisplay();
@@ -153,6 +154,7 @@ void MainWindow::onToolButtonAboutClicked()
 {
     //new about windows
     AboutDialog *aboutDlg = new AboutDialog();
+    aboutDlg->dlgDisplay();
 }
 
 void MainWindow::onToolButtonQuitClicked()

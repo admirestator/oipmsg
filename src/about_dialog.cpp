@@ -25,3 +25,8 @@ void AboutDialog::dlgClose()
 {
     close();
 }
+
+void AboutDialog::on_buttonBoxOk_clicked(QAbstractButton *button)
+{
+   close();
+}

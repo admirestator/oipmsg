@@ -26,3 +26,8 @@ void SetupWindow::winClose()
 {
     show();
 }
+
+void SetupWindow::on_buttonBox_clicked(QAbstractButton *button)
+{
+   close();
+}

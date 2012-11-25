@@ -2,6 +2,7 @@
 #define ABOUTDIALOG_H
 
 #include <QDialog>
+#include <QAbstractButton>
 #include <QDesktopWidget>
 
 namespace Ui {
@@ -18,6 +19,10 @@ public:
 
     void dlgDisplay();
     void dlgClose();
+
+private slots:
+    void on_buttonBoxOk_clicked(QAbstractButton *button);
+
 private:
     Ui::AboutDialog *ui;
 };

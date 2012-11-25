@@ -63,3 +63,9 @@ FORMS    += \
     src/main_window.ui \
     src/setup_window.ui \
     src/user_dialog.ui
+
+RESOURCES += \
+    src/chatstyle.qrc
+
+OTHER_FILES += \
+    src/chatstyle.qss

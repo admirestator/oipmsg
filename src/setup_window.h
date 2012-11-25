@@ -2,6 +2,7 @@
 #define SETUPWINDOW_H
 
 #include <QMainWindow>
+#include <QAbstractButton>
 #include <QDesktopWidget>
 #include <QThread>
 
@@ -19,6 +20,9 @@ public:
 
     void winDisplay();
     void winClose();
+
+private slots:
+    void on_buttonBox_clicked(QAbstractButton *button);
 
 private:
     Ui::SetupWindow *ui;
