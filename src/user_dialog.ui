@@ -33,17 +33,17 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="labelUserInfo">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>10</y>
-     <width>81</width>
+     <width>261</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>UserInfo&amp;IP</string>
+    <string>UserInfo[IP]</string>
    </property>
   </widget>
   <widget class="QWidget" name="layoutWidget">

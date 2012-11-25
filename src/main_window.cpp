@@ -7,6 +7,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    //set initial position
+    QDesktopWidget *desk=QApplication::desktop();
+    move((desk->width()-width())*6/7,(desk->height()-height())/2);
+
     stdModel = new QStandardItemModel();
 
     winList.empty();
@@ -48,6 +53,12 @@ bool MainWindow::buildConnection()
             this, SLOT(userItemClicked(const QModelIndex&)));
 
     // on chat window closed
+
+    //program quit
+    connect(ui->toolButtonRefresh, SIGNAL(clicked()), this, SLOT(onToolButtonRefreshClicked()));
+    //connect(ui->toolButtonSetting, SIGNAL(clicked()), this, SLOT(onToolButtonSettingClicked()));
+    //connect(ui->toolButtonAbout, SIGNAL(clicked()), this, SLOT(onToolButtonAboutClicked()));
+    connect(ui->toolButtonQuit, SIGNAL(clicked()), this, SLOT(onToolButtonQuitClicked()));
     return true;
 }
 
@@ -65,15 +76,14 @@ void MainWindow::buildItems(const QHash <QString, User> &hostlist)
     stdModel->clear();
     QString key;
     foreach (key, hostlist.keys()) {
-        QStandardItem *userItem = new QStandardItem((QString("%0  %1  %2").
+        QStandardItem *userItem = new QStandardItem((QString("-%0       %1").
                                                     arg(hostlist[key].getNickName())).
-                                                    arg(hostlist[key].getHostName()).
-                                                    arg(hostlist[key].getHostAddress().toString ()));
+                                                    arg(hostlist[key].getHostName()));
         stdModel->setItem(treeModelRow, userItem);
         treeModelRow++;
     }
 
-    stdModel->setHorizontalHeaderItem( 0, new QStandardItem("Username  Hostname    IP") );
+    stdModel->setHorizontalHeaderItem(0, new QStandardItem("Username         Hostname"));
     ui->treeViewUser->setModel(stdModel);
 }
 
@@ -82,7 +92,8 @@ void MainWindow::userItemClicked(const QModelIndex &index)
     QStringList infolist = index.data().toString().split(' ');
     qDebug () << infolist;
     User tmpuser;
-    findUser(infolist.at(2), tmpuser);
+    //findUser(infolist.at(2), tmpuser);
+    findUser(infolist.at(7), tmpuser);
 
     // new user windows...
     ChatWin *chatWin = singleton(tmpuser);
@@ -121,4 +132,30 @@ void MainWindow::recvMsg(const QByteArray &packet)
     ChatWin *chatWin = singleton(tmpuser);
     chatWin->userDlg->showMsg(argumentList.at(5));
     chatWin->run();
+}
+
+void MainWindow::onToolButtonRefreshClicked()
+{
+    //emit fresh
+    qDebug () << "refresh()";
+    emit refreshUser();
+}
+
+void MainWindow::onToolButtonSettingClicked()
+{
+    //new setting windows
+    SetupWindow *setupWin = new SetupWindow();
+    setupWin->winDisplay();
+
+}
+
+void MainWindow::onToolButtonAboutClicked()
+{
+    //new about windows
+    AboutDialog *aboutDlg = new AboutDialog();
+}
+
+void MainWindow::onToolButtonQuitClicked()
+{
+    emit quitApp();
 }

@@ -5,10 +5,24 @@ SetupWindow::SetupWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::SetupWindow)
 {
+
+    //set initial position
+    QDesktopWidget *desk=QApplication::desktop();
+    move((desk->width()-width())/2,(desk->height()-height())/2);
     ui->setupUi(this);
 }
 
 SetupWindow::~SetupWindow()
 {
     delete ui;
+}
+
+void SetupWindow::winDisplay()
+{
+    show();
+}
+
+void SetupWindow::winClose()
+{
+    show();
 }

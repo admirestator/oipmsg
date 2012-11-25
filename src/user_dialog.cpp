@@ -5,6 +5,12 @@ UserDialog::UserDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::UserDialog)
 {
+    /*
+    QFile qss("chatstyle.qss");
+    qss.open(QFile::ReadOnly);
+    ui->setStyleSheet(qss.readAll());
+    qss.close();
+    */
     ui->setupUi(this);
 }
 
@@ -21,6 +27,22 @@ bool UserDialog::buildConnection()
     connect(ui->pushButtonClose, SIGNAL(), this, SLOT(on_pushButtonClose_clicked()));
     connect(ui->pushButtonSend, SIGNAL(), this, SLOT(on_pushButtonSend_clicked()));
     return true;
+}
+
+void UserDialog::setUserInfo(const QString &winTitle,
+                             const QString &info)
+{
+    /*
+    move((QApplication::desktop()->width() - ui->width())/2,
+          QApplication::desktop()->height());
+          */
+    QDesktopWidget *desk=QApplication::desktop();
+     int wd=desk->width();
+     int ht=desk->height();
+     move((wd-width())/2,(ht-height())/2);
+    //ui->setWindowTitle(winTitle);
+    setWindowTitle(winTitle);
+    ui->labelUserInfo->setText(info);
 }
 
 void UserDialog::showMsg(const QString &msg)
@@ -55,7 +77,8 @@ void UserDialog::on_pushButtonDir_clicked()
 
 void UserDialog::on_pushButtonClose_clicked()
 {
-    this->close();
+   qDebug () << "close event:" << this->close();
+
 }
 
 

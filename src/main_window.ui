@@ -89,7 +89,7 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QToolButton" name="toolButton_2">
+      <widget class="QToolButton" name="toolButtonRefresh">
        <property name="text">
         <string>Refresh</string>
        </property>
@@ -109,7 +109,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButton_3">
+      <widget class="QToolButton" name="toolButtonSetting">
        <property name="text">
         <string>Setting</string>
        </property>
@@ -129,7 +129,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButton_5">
+      <widget class="QToolButton" name="toolButtonAbout">
        <property name="text">
         <string>About</string>
        </property>
@@ -149,7 +149,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButton_4">
+      <widget class="QToolButton" name="toolButtonQuit">
        <property name="text">
         <string>Quit</string>
        </property>

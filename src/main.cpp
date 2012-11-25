@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     //setup language here
 
 
-    QApplication app(argc, argv);
+    QApplication *app = new QApplication(argc, argv);
     MainWindow *mainWin = new MainWindow();
     mainWin->show();
 
@@ -47,7 +47,9 @@ int main(int argc, char *argv[])
     oipmsg->run();
 
     buildConnection (oipmsg, mainWin);
-    return app.exec();
+    QObject::connect(mainWin, SIGNAL(quitApp()),
+                     app, SLOT(quit()));
+    return app->exec();
 
     delete oipmsg;
     delete mainWin;
@@ -83,6 +85,13 @@ bool buildConnection(const Oipmsg *oipmsgobj, const MainWindow *mainwinobj)
     /*emit recvMsg (ipaddr, packet);
     QObject::connect(mainwinobj, SIGNAL(sendInfo(const User&, const QString&)),
                      oipmsgobj->udpServer, SLOT(processSendmsg(const User&, const QString&)));
-                     */
+                      */
+
+    // emit refresh
+    QObject::connect(mainwinobj,
+                     SIGNAL(refreshUser()),
+                     oipmsgobj->udpServer,
+                     SLOT(sendcmdBrEntry()));
+
     return true;
 }

@@ -17,6 +17,12 @@ ChatWin::~ChatWin()
 
 void ChatWin::run()
 {
+    QString userinfo = userDataLocal.getHostName ()
+            + "   ["
+            + userDataLocal.getHostAddress ().toString ()
+            + "]";
+    QString title = userDataLocal.getNickName ();
+    userDlg->setUserInfo(title, userinfo);
     userDlg->show();
 }
 
@@ -31,7 +37,7 @@ void ChatWin::buildConnection()
 
 void ChatWin::sendFile(const QString &filename)
 {
-    qDebug () << "send " << filename;
+    // sendfile
     Tcpclient *fileClient = new Tcpclient(userDataLocal, filename);
 }
 

@@ -11,6 +11,8 @@
 
 #include "host.h"
 #include "chatwin.h"
+#include "setup_window.h"
+#include "about_dialog.h"
 
 namespace Ui {
     class MainWindow;
@@ -30,6 +32,8 @@ public slots:
 signals:
     //void sendInfo(const User &userinfo, const QString &msg);
     void sendInfo(const QHostAddress &ipddr, const QString &msg);
+    void refreshUser();
+    void quitApp();
 
 private slots:
     void userItemClicked(const QModelIndex &index);
@@ -39,6 +43,11 @@ private slots:
     // handle msg
     void sendMsg(const User &userinfo, const QString &msg);
     void recvMsg(const QByteArray &packet);
+
+    void onToolButtonRefreshClicked();
+    void onToolButtonSettingClicked();
+    void onToolButtonAboutClicked();
+    void onToolButtonQuitClicked();
 
 private:
     Ui::MainWindow *ui;

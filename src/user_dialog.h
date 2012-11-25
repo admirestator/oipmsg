@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDesktopWidget>
 #include <QDebug>
 
 namespace Ui {
@@ -18,6 +19,7 @@ public:
     ~UserDialog();
 
     bool buildConnection();
+    void setUserInfo(const QString &winTitle, const QString& info);
 
 signals:
     void gotFile(const QString &filename);
@@ -35,6 +37,7 @@ private slots:
 
 private:
     Ui::UserDialog *ui;
+
 };
 
 #endif // USER_DIALOG_H
