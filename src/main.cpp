@@ -56,16 +56,8 @@ int main(int argc, char *argv[])
 }
 
 
-//bool buildConnection(const MainWindow &mainwinobj, const Oipmsg &oipmsgobj)
 bool buildConnection(const Oipmsg *oipmsgobj, const MainWindow *mainwinobj)
 {
-    //QObject::connect (mainwinobj, SIGNAL(), oipmsgobj, SLOT());
-    //QObject::connect (oipmsgobj, SIGNAL(), mainwinobj, SLOT());
-
-    /*
-    QObject::connect (oipmsgobj, SIGNAL(newuser(const User&)),
-                      mainwinobj, SLOT(addItem(const User&)));
-                      */
     QObject::connect (oipmsgobj,
                       SIGNAL(alluser(const QHash <QString, User> &)),
                       mainwinobj,
@@ -82,16 +74,10 @@ bool buildConnection(const Oipmsg *oipmsgobj, const MainWindow *mainwinobj)
                      SIGNAL(gotMsg(const QByteArray&)),
                      mainwinobj,
                      SLOT(recvMsg(const QByteArray&)));
-    /*emit recvMsg (ipaddr, packet);
-    QObject::connect(mainwinobj, SIGNAL(sendInfo(const User&, const QString&)),
-                     oipmsgobj->udpServer, SLOT(processSendmsg(const User&, const QString&)));
-                      */
 
     // emit refresh
-    QObject::connect(mainwinobj,
-                     SIGNAL(refreshUser()),
-                     oipmsgobj->udpServer,
-                     SLOT(sendcmdBrEntry()));
+    QObject::connect(mainwinobj, SIGNAL(refreshUser()),
+                     oipmsgobj->udpServer, SLOT(sendcmdBrEntry()));
 
     return true;
 }

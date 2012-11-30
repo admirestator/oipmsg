@@ -1,41 +1,41 @@
 #include "user_dialog.h"
 #include "ui_user_dialog.h"
 
+
+#include <unistd.h>
+
 UserDialog::UserDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::UserDialog)
 {
-    /*
-    QFile qss("chatstyle.qss");
-    qss.open(QFile::ReadOnly);
-    ui->setStyleSheet(qss.readAll());
-    qss.close();
-    */
     ui->setupUi(this);
+    uiFile = new QFile("chat.html");
+    if (!uiFile->open(QIODevice::ReadOnly)) {
+        exit(1);
+    }
+    ui->webViewChat->settings()->setAttribute(QWebSettings::JavascriptEnabled,true);
+    ui->webViewChat->settings()->setAttribute(QWebSettings::PluginsEnabled,true);
+
+    ui->webViewChat->page()->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+    ui->webViewChat->page()->settings()->setAttribute(QWebSettings::PluginsEnabled, true);
+    QByteArray html = uiFile->readAll();
+    ui->webViewChat->setHtml(html);
+    uiFile->close();
+
+    ui->webViewChat->show();
+    timeWatch = new QDateTime();
 }
 
 UserDialog::~UserDialog()
 {
+    delete timeWatch;
     delete ui;
 }
 
 
-bool UserDialog::buildConnection()
-{
-    connect(ui->pushButtonFIle, SIGNAL(), this, SLOT(on_pushButtonFIle_clicked()));
-    connect(ui->pushButtonDir, SIGNAL(), this, SLOT(on_pushButtonDir_clicked()));
-    connect(ui->pushButtonClose, SIGNAL(), this, SLOT(on_pushButtonClose_clicked()));
-    connect(ui->pushButtonSend, SIGNAL(), this, SLOT(on_pushButtonSend_clicked()));
-    return true;
-}
-
 void UserDialog::setUserInfo(const QString &winTitle,
                              const QString &info)
 {
-    /*
-    move((QApplication::desktop()->width() - ui->width())/2,
-          QApplication::desktop()->height());
-          */
     QDesktopWidget *desk=QApplication::desktop();
      int wd=desk->width();
      int ht=desk->height();
@@ -45,12 +45,20 @@ void UserDialog::setUserInfo(const QString &winTitle,
     ui->labelUserInfo->setText(info);
 }
 
-void UserDialog::showMsg(const QString &msg)
-//void UserDialog::showMsg(const QByteArray &packet)
+void UserDialog::showRecvMsg(const QString &nickname, const QString &msg)
 {
-    //QList<QByteArray> argumentList = packet.split (':');
-    //ui->textBrowserUserGot->setPlainText(argumentList.at(5));
-    ui->textBrowserUserGot->setPlainText(msg);
+    qDebug () << msg;
+    QString formatedMsg = "\"displayMsg('<li class=\"wordbox1\"><div class=\"arrow_box\"><h1 class=\"logo\">"
+        + msg
+        + "</h1></div><span class=\"wordtime\">"
+        + timeWatch->time().currentTime().toString()
+        + "</span><div style=\"clear:both;\"></div></li>')\"";
+    qDebug () << ui->webViewChat->page()->mainFrame()->evaluateJavaScript(formatedMsg);
+
+}
+
+void UserDialog::showSendMsg(const QString &msg)
+{
 }
 
 void UserDialog::on_pushButtonFIle_clicked()
@@ -84,6 +92,9 @@ void UserDialog::on_pushButtonClose_clicked()
 
 void UserDialog::on_pushButtonSend_clicked()
 {
-    emit sendMsg(ui->textEditUserEnter->toPlainText());
+    if (!ui->textEditUserEnter->toPlainText().isEmpty()) {
+        emit sendMsg(ui->textEditUserEnter->toPlainText());
+    }
+
     ui->textEditUserEnter->clear();
 }

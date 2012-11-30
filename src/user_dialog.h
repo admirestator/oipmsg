@@ -5,6 +5,11 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QDesktopWidget>
+#include <QDateTime>
+#include <QWebView>
+#include <QWebFrame>
+#include <QFile>
+
 #include <QDebug>
 
 namespace Ui {
@@ -26,8 +31,9 @@ signals:
     void sendMsg(const QString &content);
 
 public slots:
-    //void showMsg(const QByteArray &packet);
-    void showMsg(const QString &msg);
+    void showRecvMsg(const QString &nickname,
+                     const QString &msg);
+    void showSendMsg(const QString &msg);
 
 private slots:
     void on_pushButtonFIle_clicked();
@@ -37,6 +43,9 @@ private slots:
 
 private:
     Ui::UserDialog *ui;
+    QWebView *webView;
+    QFile *uiFile;
+    QDateTime *timeWatch;
 
 };
 

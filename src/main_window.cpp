@@ -120,7 +120,7 @@ void MainWindow::sendMsg(const User &userinfo, const QString &msg)
     findUser(userinfo.getHostName(), tmpuser);
 
     ChatWin *chatWin = singleton(tmpuser);
-    chatWin->userDlg->showMsg(msg);
+    chatWin->userDlg->showRecvMsg(userinfo.getNickName(), msg);
 }
 
 void MainWindow::recvMsg(const QByteArray &packet)
@@ -130,7 +130,7 @@ void MainWindow::recvMsg(const QByteArray &packet)
     findUser(argumentList.at(3), tmpuser);
 
     ChatWin *chatWin = singleton(tmpuser);
-    chatWin->userDlg->showMsg(argumentList.at(5));
+    chatWin->userDlg->showRecvMsg(tmpuser.getNickName(), argumentList.at(5));
     chatWin->run();
 }
 

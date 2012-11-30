@@ -1,0 +1,98 @@
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+</head>
+
+<style>
+.arrow_box {
+	position: relative;
+	background: #88b7d5;
+	border: 2px solid #c2e1f5;
+}
+.arrow_box:after, .arrow_box:before {
+	top: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.arrow_box {
+float: left;
+width: 280px;
+border-radius: 8px;
+box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.logo {
+color: #ddf8c6;
+text-align: center;
+font-size: 12px;
+line-height: 14px;
+font-weight: bold;
+text-transform: uppercase;
+text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.arrow_box:after {
+	border-color: rgba(136, 183, 213, 0);
+	border-top-color: #88b7d5;
+	border-width: 10px;
+	left: 50%;
+	margin-left: -12px;
+}
+.arrow_box:before {
+	border-color: rgba(194, 225, 245, 0);
+	border-top-color: #c2e1f5;
+	border-width: 12px;
+	left: 50%;
+	margin-left: -12px;
+}
+.f_right{
+  float:right;
+}
+.box{clear:both; width:800px; margin:0 auto;}
+.box ul{}
+.box ul li{ list-style:none; padding:10px 0;}
+.box ul li span{ font-size:14px; padding: 0 10px; color:#666;}
+.wordbox1{}
+.wordbox1 .wordtime{float:left;}
+.wordbox2{}
+.wordbox2 .wordtime{ float:right;}
+.wordbox2 .arrow_box{ float:right;}
+</style>
+
+<script>
+function displayMsg(msg) {
+   $("ul").append(msg);
+}
+$(function(){
+ //$("ul").append("Google");
+});
+
+</script>
+
+</head>
+<body>
+<div  class="msgbox">
+  <ul>
+  <li class="wordbox1">
+    <div class="arrow_box"><h1 class="logo">css arrow please!</h1></div>
+    <span class="wordtime">
+    2012-10-11 23:25:24
+    </span>
+    <div style="clear:both;"></div>
+  </li>
+  <li class="wordbox2">
+    <div class="arrow_box"><h1 class="logo">css arrow please!</h1></div>
+    <span class="wordtime">
+    2012-10-11 23:25:24
+    </span>
+    <div style="clear:both;"></div>
+  </li>
+  </ul>
+</div>
+</body>
+</html>

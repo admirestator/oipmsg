@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network translation
+QT       += core gui network translation webkit
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -64,8 +64,8 @@ FORMS    += \
     src/setup_window.ui \
     src/user_dialog.ui
 
-RESOURCES += \
-    src/chatstyle.qrc
+RESOURCES +=
 
 OTHER_FILES += \
-    src/chatstyle.qss
+    src/jquery-1.8.3.min.js \
+    src/chat.html
