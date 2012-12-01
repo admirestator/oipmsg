@@ -22,18 +22,19 @@ public:
 
 signals:
     void sendInfo(const User &userinfo, const QString &msg);
+    void windowClosed(const QString&);
 
 private slots:
     void sendMsg(const QString &msg);
 
 private:
     User userDataLocal;
-
     void buildConnection();
 
 private slots:
     void sendFile(const QString &filename);
     void recvMsg (const QByteArray &packet);
+    void chatWinClosed();
 };
 
 #endif // CHATWIN_H

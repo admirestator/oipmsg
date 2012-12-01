@@ -33,22 +33,31 @@ void ChatWin::buildConnection()
 
     connect(userDlg, SIGNAL(sendMsg(const QString&)),
             this, SLOT(sendMsg(const QString&)));
+
+    // win closed
+    connect(userDlg, SIGNAL(winClosed()),
+            this, SLOT(chatWinClosed()));
 }
 
 void ChatWin::sendFile(const QString &filename)
 {
-    // sendfile
-    Tcpclient *fileClient = new Tcpclient(userDataLocal, filename);
+    // sendfil-------------------------------e
+    Tcpclient fileClient(userDataLocal, filename);
 }
 
 
 void ChatWin::sendMsg(const QString &msg)
 {
-    qDebug () << "Emit" << userDataLocal.getHostAddress ();
     emit sendInfo(userDataLocal, msg);
 }
 
 void ChatWin::recvMsg(const QByteArray &packet)
 {
 
+}
+
+void ChatWin::chatWinClosed()
+{
+    qDebug () << "closed";
+    emit windowClosed (userDataLocal.getHostName());
 }

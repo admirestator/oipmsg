@@ -9,18 +9,12 @@ UserDialog::UserDialog(QWidget *parent) :
     ui(new Ui::UserDialog)
 {
     ui->setupUi(this);
-    uiFile = new QFile("chat.html");
-    if (!uiFile->open(QIODevice::ReadOnly)) {
-        exit(1);
-    }
     ui->webViewChat->settings()->setAttribute(QWebSettings::JavascriptEnabled,true);
     ui->webViewChat->settings()->setAttribute(QWebSettings::PluginsEnabled,true);
 
     ui->webViewChat->page()->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
     ui->webViewChat->page()->settings()->setAttribute(QWebSettings::PluginsEnabled, true);
-    QByteArray html = uiFile->readAll();
-    ui->webViewChat->setHtml(html);
-    uiFile->close();
+    ui->webViewChat->load (QUrl("chat.html"));
 
     ui->webViewChat->show();
     timeWatch = new QDateTime();
@@ -48,17 +42,23 @@ void UserDialog::setUserInfo(const QString &winTitle,
 void UserDialog::showRecvMsg(const QString &nickname, const QString &msg)
 {
     qDebug () << msg;
-    QString formatedMsg = "\"displayMsg('<li class=\"wordbox1\"><div class=\"arrow_box\"><h1 class=\"logo\">"
+    QString formatedMsg = "displayMsg('<li class=\"wordbox1\"><div class=\"arrow_box\"><h1 class=\"logo\">"
         + msg
         + "</h1></div><span class=\"wordtime\">"
         + timeWatch->time().currentTime().toString()
-        + "</span><div style=\"clear:both;\"></div></li>')\"";
-    qDebug () << ui->webViewChat->page()->mainFrame()->evaluateJavaScript(formatedMsg);
-
+        + "</span><div style=\"clear:both;\"></div></li>')";
+    ui->webViewChat->page()->mainFrame()->evaluateJavaScript(formatedMsg);
 }
 
 void UserDialog::showSendMsg(const QString &msg)
 {
+    qDebug () << msg;
+    QString formatedMsg = "displayMsg('<li class=\"wordbox2\"><div class=\"arrow_box\"><h1 class=\"logo\">"
+        + msg
+        + "</h1></div><span class=\"wordtime\">"
+        + timeWatch->time().currentTime().toString()
+        + "</span><div style=\"clear:both;\"></div></li>')";
+    ui->webViewChat->page()->mainFrame()->evaluateJavaScript(formatedMsg);
 }
 
 void UserDialog::on_pushButtonFIle_clicked()
@@ -85,7 +85,8 @@ void UserDialog::on_pushButtonDir_clicked()
 
 void UserDialog::on_pushButtonClose_clicked()
 {
-   qDebug () << "close event:" << this->close();
+    emit winClosed();
+    qDebug () << "close event:" << this->close();
 
 }
 

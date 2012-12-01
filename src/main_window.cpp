@@ -27,9 +27,7 @@ MainWindow::~MainWindow()
 }
 
 ChatWin *MainWindow::singleton(const User &userinfo)
-//QScopedPointer<ChatWin>& MainWindow::singleton(const User &userinfo)
 {
-    //userinfo.displayHostInfo ();
     // regard hostname as the userid
     QString userid = userinfo.getHostName();
     if (winList.find(userid) != winList.end()) {
@@ -43,8 +41,25 @@ ChatWin *MainWindow::singleton(const User &userinfo)
         winList.insert(userid, tmpWin);
         connect(winList[userid], SIGNAL(sendInfo(const User&, const QString&)),
                 this, SLOT(sendMsg(const User&, const QString&)));
+
+        // on chat window closed
+        connect(winList[userid], SIGNAL(windowClosed(const QString&)),
+                this, SLOT(delWin(const QString&)));
         return winList[userid];
     }
+}
+
+bool MainWindow::delWin(const QString &userid)
+{
+    if (winList.find(userid) != winList.end()) {
+        qDebug () << "DelWin" << userid;
+        //ChatWin* tmpPtr = winList[userid];
+        delete  winList[userid];
+        winList.remove(userid);
+
+        return true;
+    }
+    return false;
 }
 
 bool MainWindow::buildConnection()
@@ -52,7 +67,6 @@ bool MainWindow::buildConnection()
     connect(ui->treeViewUser, SIGNAL(doubleClicked(const QModelIndex&)),
             this, SLOT(userItemClicked(const QModelIndex&)));
 
-    // on chat window closed
 
     //program quit
     connect(ui->toolButtonRefresh, SIGNAL(clicked()), this, SLOT(onToolButtonRefreshClicked()));
@@ -90,9 +104,8 @@ void MainWindow::buildItems(const QHash <QString, User> &hostlist)
 void MainWindow::userItemClicked(const QModelIndex &index)
  {
     QStringList infolist = index.data().toString().split(' ');
-    qDebug () << infolist;
+    //qDebug () << infolist;
     User tmpuser;
-    //findUser(infolist.at(2), tmpuser);
     findUser(infolist.at(7), tmpuser);
 
     // new user windows...
@@ -137,13 +150,11 @@ void MainWindow::recvMsg(const QByteArray &packet)
 void MainWindow::onToolButtonRefreshClicked()
 {
     //emit fresh
-    qDebug () << "refresh()";
     emit refreshUser();
 }
 
 void MainWindow::onToolButtonSettingClicked()
 {
-    qDebug () << "about";
     //new setting windows
     SetupWindow *setupWin = new SetupWindow();
     setupWin->winDisplay();
@@ -159,5 +170,6 @@ void MainWindow::onToolButtonAboutClicked()
 
 void MainWindow::onToolButtonQuitClicked()
 {
+    //quit program
     emit quitApp();
 }

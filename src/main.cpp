@@ -29,13 +29,15 @@ int main(int argc, char *argv[])
 
 
     //setup system tray
-    Systray *system_tray = new Systray();
-    system_tray->show();
+    /*
+    Systray *systemTray = new Systray();
+    systemTray->show();
     if (!QSystemTrayIcon::isSystemTrayAvailable()) {
         QMessageBox::critical(0, QObject::tr("Systray"),
                               QObject::tr("There's no system tray on this system!"));
         app->quit();
     }
+    */
 
 
     /*

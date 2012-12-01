@@ -9,6 +9,7 @@
 #include <QWebView>
 #include <QWebFrame>
 #include <QFile>
+#include <QThread>
 
 #include <QDebug>
 
@@ -29,6 +30,7 @@ public:
 signals:
     void gotFile(const QString &filename);
     void sendMsg(const QString &content);
+    void winClosed();
 
 public slots:
     void showRecvMsg(const QString &nickname,
