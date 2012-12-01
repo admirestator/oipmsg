@@ -38,8 +38,6 @@
 **
 ****************************************************************************/
 
-//#include <QtGui>
-
 #include "screenshot.h"
 
 Screenshot::Screenshot()

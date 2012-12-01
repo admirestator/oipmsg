@@ -1,17 +1,5 @@
-#include <QDebug>
-#include <QStringList>
-#include <QProcess>
-#include <QHostInfo>
-#include <QTime>
-#include <QNetworkInterface>
-
-#include <iostream>
-#include <string>
-#include <sstream>
 #include "ipmsg.h"
 #include "protocol.h"
-
-
 
 Protocol::Protocol()
 {

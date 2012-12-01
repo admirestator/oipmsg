@@ -3,6 +3,7 @@
 #define INIT_H
 
 #include <QString>
+#include <QDebug>
 
 namespace init{
     class Init;

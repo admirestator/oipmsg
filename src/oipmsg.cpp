@@ -9,12 +9,15 @@ Oipmsg::Oipmsg()
 
     udpServer = new Udpserver(udpPort);
     hosts = new Host();
-
+    mainWin = new MainWindow();
+    mainWin->show();
     buildConnection();
 }
 
 Oipmsg::~Oipmsg()
 {
+    delete screenshot;
+    delete mainWin;
     delete udpServer;
     delete hosts;
 }
@@ -48,14 +51,39 @@ void Oipmsg::buildConnection()
 
 }
 
+
+/*
+bool buildConnection(const Oipmsg *oipmsgobj, const MainWindow *mainwinobj)
+{
+    QObject::connect(mainWin, SIGNAL(quitApp()),
+                     app, SLOT(quit()));
+    QObject::connect (oipmsgobj,
+                      SIGNAL(alluser(const QHash <QString, User> &)),
+                      mainwinobj,
+                      SLOT(buildItems(const QHash <QString,User> &)));
+
+    // send user info
+    QObject::connect(mainwinobj,
+                     SIGNAL(sendInfo(const QHostAddress&, const QString&)),
+                     oipmsgobj->udpServer,
+                     SLOT(sendcmdSendmsg(const QHostAddress&, const QString&)));
+
+    // recv user info
+    QObject::connect(oipmsgobj->udpServer,
+                     SIGNAL(gotMsg(const QByteArray&)),
+                     mainwinobj,
+                     SLOT(recvMsg(const QByteArray&)));
+
+    // emit refresh
+    QObject::connect(mainwinobj, SIGNAL(refreshUser()),
+                     oipmsgobj->udpServer, SLOT(sendcmdBrEntry()));
+
+    return true;
+}
+*/
+
 bool Oipmsg::addUser(const QHostAddress &ipaddr, const QByteArray &packet)
 {
-    //QList<QByteArray> argumentList = packet.split (':');
-    /*
-    User tmp(argumentList.at(2), argumentList.at(3),
-             ipaddr, argumentList.at(5));
-             */
-
     if (hosts->addHost(ipaddr, packet)) {
         emit alluser(hosts->userList);
         return true;

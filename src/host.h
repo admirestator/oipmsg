@@ -3,7 +3,6 @@
 
 #include <QDate>
 #include <QHash>
-#include <QList>
 #include <QHostAddress>
 
 #include "user.h"
@@ -29,12 +28,8 @@ private:
 public slots:
     quint16 count() const;
 
-    bool addHost(const QHostAddress &ipaddr,
-                 const QByteArray &packet);
-
+    bool addHost(const QHostAddress &ipaddr, const QByteArray &packet);
     bool delHost(const QString &username);
-
-
 
 };
 

@@ -5,8 +5,9 @@
 #include <QList>
 #include <QByteArray>
 
-#include "udpserver.h"
+#include "main_window.h"
 #include "host.h"
+#include "udpserver.h"
 #include "screenshot.h"
 
 namespace oipmsg {
@@ -20,15 +21,20 @@ public:
     Oipmsg();
     ~Oipmsg();
 
-    Udpserver *udpServer;
-    Host *hosts;
-
     void run();
 
 private:
+    // UI
+    Screenshot *screenshot;
+    MainWindow *mainWin;
+
+    // tcp communication
+    Udpserver *udpServer;
+    Host *hosts;
     quint16 defaultUdpPort;
     quint16 udpPort;
 
+    // build signals and slots
     void buildConnection();
 
 signals:

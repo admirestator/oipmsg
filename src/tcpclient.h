@@ -11,6 +11,10 @@
 #include "protocol.h"
 #include "user.h"
 
+namespace tcpclient {
+    class Tcpclient;
+};
+
 class Tcpclient : QThread
 {
     Q_OBJECT

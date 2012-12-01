@@ -4,6 +4,10 @@
 
 #include<QString>
 
+namespace version {
+    class Version;
+};
+
 class Version
 {
 private:

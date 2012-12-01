@@ -9,6 +9,10 @@
 #include "user_dialog.h"
 #include "tcpclient.h"
 
+namespace chatwin {
+    class ChatWin;
+};
+
 class ChatWin : public QThread
 {
     Q_OBJECT

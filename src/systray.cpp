@@ -26,18 +26,7 @@
 */
 
 #include "systray.h"
-#include "main_window.h"
-#include "setup_window.h"
-#include "about_dialog.h"
 
-#include <QAction>
-#include <QMenu>
-#include <QSystemTrayIcon>
-#include <QApplication>
-#include <QMessageBox>
-#include <QProcess>
-#include <QStandardItemModel>
-#include <QtDebug>
 
 
 Systray::Systray(QObject *parent)

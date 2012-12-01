@@ -1,5 +1,4 @@
-#include <QByteArray>
-#include <QMessageBox>
+
 #include "tcpserver.h"
 
 Tcpserver::Tcpserver()

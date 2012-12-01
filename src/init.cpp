@@ -1,5 +1,5 @@
 
-#include <QDebug>
+
 #include "init.h"
 
 Init::Init()

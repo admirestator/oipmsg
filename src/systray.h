@@ -21,6 +21,18 @@
 #include <QMap>
 #include <QList>
 #include <QSystemTrayIcon>
+#include <QAction>
+#include <QMenu>
+#include <QSystemTrayIcon>
+#include <QApplication>
+#include <QMessageBox>
+#include <QProcess>
+#include <QStandardItemModel>
+#include <QDebug>
+
+#include "main_window.h"
+#include "setup_window.h"
+#include "about_dialog.h"
 
 namespace Ui{
     class SysTray;

@@ -10,7 +10,6 @@
 #include <QWebFrame>
 #include <QFile>
 #include <QThread>
-
 #include <QDebug>
 
 namespace Ui {

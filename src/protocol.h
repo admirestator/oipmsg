@@ -3,8 +3,15 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
-#include <QByteArray>
 #include <QString>
+#include <QStringList>
+#include <QByteArray>
+#include <QProcess>
+#include <QNetworkInterface>
+#include <QHostInfo>
+#include <QTime>
+#include <QDebug>
+
 #include "ipmsg.h"
 
 #define ABSENCEABSENCE 1

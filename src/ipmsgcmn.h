@@ -14,6 +14,7 @@
 
 #include <QString>
 #include <QTime>
+
 #include "version.h"
 
 /*  IP Messenger for Windows  internal define  */

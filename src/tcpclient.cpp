@@ -1,6 +1,5 @@
 #include "tcpclient.h"
 
-//Tcpclient::Tcpclient(const QHostAddress &dstip, const QString &filename)
 Tcpclient::Tcpclient(const User &userinfo, const QString &filename)
 {
     userDataLocal = userinfo;

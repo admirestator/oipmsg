@@ -6,6 +6,9 @@
 #include <QThread>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QByteArray>
+#include <QMessageBox>
+
 #include "protocol.h"
 
 namespace tcpserver{

@@ -2,8 +2,6 @@
 #include "ui_user_dialog.h"
 
 
-#include <unistd.h>
-
 UserDialog::UserDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::UserDialog)
