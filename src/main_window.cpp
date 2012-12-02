@@ -36,11 +36,18 @@ UserDialog *MainWindow::singleton(const User &userinfo)
         UserDialog *tmpWin = new UserDialog(userinfo);
 
         winList.insert(userid, tmpWin);
-        connect(winList[userid], SIGNAL(sendInfo(const User&, const QString&)),
-                this, SLOT(sendMsg(const User&, const QString&)));
+
+        connect(winList[userid], SIGNAL(sendMsg(const QHostAddress&, const QString&)),
+                this, SLOT(sendMsg(const QHostAddress&, const QString&)));
+        //connect(winList[userid], SIGNAL(recvMsg(const User&, const QString&)),
+        //        this, SLOT(sendMsg(const User&, const QString&)));
+        connect(winList[userid], SIGNAL(sendFile(const QHostAddress&, const QString&)),
+                this, SLOT(sendMsg(const QHostAddress&, const QString&)));
+        //connect(winList[userid], SIGNAL(recvFile(const User&, const QString&)),
+        //        this, SLOT(sendMsg(const User&, const QString&)));
 
         // on chat window closed
-        connect(winList[userid], SIGNAL(windowClosed(const QString&)),
+        connect(winList[userid], SIGNAL(winClosed(const QString&)),
                 this, SLOT(delWin(const QString&)));
         return winList[userid];
     }
@@ -122,14 +129,9 @@ bool MainWindow::findUser(const QString &hostname, User &user)
     return false;
 }
 
-void MainWindow::sendMsg(const User &userinfo, const QString &msg)
+void MainWindow::sendMsg(const QHostAddress &hostip, const QString &msg)
 {
-    emit sendInfo(userinfo.getHostAddress(), msg);
-    User tmpuser;
-    findUser(userinfo.getHostName(), tmpuser);
-
-    UserDialog *userDlg = singleton(tmpuser);
-    //display
+    emit sendMsgInfo(hostip, msg);
 }
 
 void MainWindow::recvMsg(const QByteArray &packet)
@@ -141,6 +143,16 @@ void MainWindow::recvMsg(const QByteArray &packet)
     UserDialog *userDlg = singleton(tmpuser);
     //chatWin->userDlg->showRecvMsg(tmpuser.getNickName(), argumentList.at(5));
     userDlg->show();
+}
+
+void MainWindow::sendFile(const User &userinfo, const QString &filename)
+{
+
+}
+
+void MainWindow::recvFile(const User &userinfo, const QByteArray &packet)
+{
+
 }
 
 void MainWindow::onToolButtonRefreshClicked()
@@ -167,5 +179,6 @@ void MainWindow::onToolButtonAboutClicked()
 void MainWindow::onToolButtonQuitClicked()
 {
     //quit program
+    QApplication::quit();
     emit quitApp();
 }

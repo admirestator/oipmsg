@@ -37,7 +37,48 @@ void UserDialog::setUserInfo(const QString &winTitle,
     ui->labelUserInfo->setText(info);
 }
 
-void UserDialog::showRecvMsg(const QString &nickname, const QString &msg)
+void UserDialog::toSendMsg(const QHostAddress &hostip, const QString &msg)
+{
+    emit sendMsg(userDataLocal.getHostAddress(), msg);
+}
+
+void UserDialog::toRecvMsg(const User &userinfo, const QString &packet)
+{
+
+
+}
+
+void UserDialog::toSendFile(const QHostAddress &hostip, const QString &filename)
+{
+    emit sendFile(hostip, filename);
+}
+
+void UserDialog::toRecvFile(const QString &filename, const QByteArray &packet)
+{
+
+}
+
+void UserDialog::toSendDir(const User &userinfo, const QString &dirname)
+{
+
+
+}
+
+void UserDialog::toRecvDir(const QString &dirname, const QByteArray &packet)
+{
+
+
+}
+
+
+
+void UserDialog::updateLocalUserData(const User &userinfo)
+{
+    userDataLocal = userinfo;
+}
+
+
+void UserDialog::showRecvMsg(const QString &msg)
 {
     qDebug () << msg;
     QString formatedMsg = "displayMsg('<li class=\"wordbox1\"><div class=\"arrow_box\"><h1 class=\"logo\">"
@@ -67,7 +108,7 @@ void UserDialog::on_pushButtonFIle_clicked()
     fileDialog->setFileMode(QFileDialog::AnyFile);
     if(fileDialog->exec() == QDialog::Accepted) {
         QString file = fileDialog->selectedFiles()[0];
-        emit gotFile(file);
+        emit sendFile(userDataLocal.getHostAddress(), file);
 
         //QMessageBox::information(NULL, tr("File"), tr("You selected ") + file);
     } else {
@@ -83,18 +124,17 @@ void UserDialog::on_pushButtonDir_clicked()
 
 void UserDialog::on_pushButtonClose_clicked()
 {
-    qDebug () << "close event:" << this->close();
-    emit winClosed();
-
+    emit winClosed(userDataLocal.getHostName());
+    close();
 }
 
 
 void UserDialog::on_pushButtonSend_clicked()
 {
-    if (!ui->textEditUserEnter->toPlainText().isEmpty()) {
-        //displaly msg
-        emit sendMsg(ui->textEditUserEnter->toPlainText());
-
+    QString msg = ui->textEditUserEnter->toPlainText();
+    if (!msg.isEmpty()) {
+        toSendMsg(userDataLocal.getHostAddress(), msg);
+        showSendMsg(msg);
     }
 
     ui->textEditUserEnter->clear();

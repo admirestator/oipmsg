@@ -5,6 +5,7 @@
 #include <QAbstractButton>
 #include <QDesktopWidget>
 #include <QThread>
+#include "user.h"
 
 namespace Ui {
     class SetupWindow;

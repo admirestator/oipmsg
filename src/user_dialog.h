@@ -9,7 +9,6 @@
 #include <QWebView>
 #include <QWebFrame>
 #include <QFile>
-#include <QThread>
 #include <QDebug>
 
 #include "user.h"
@@ -27,22 +26,22 @@ public:
 
 public slots:
     //Slots for msg and file operation
-    void toSendMsg(const QByteArray &packet);
-    void toSendFile(const QString &filename);
+    void toSendMsg(const QHostAddress &hostip, const QString &packet);
+    void toRecvMsg(const User &userinfo, const QString &packet);
+    void toSendFile(const QHostAddress &hostip, const QString &filename);
     void toRecvFile(const QString &filename, const QByteArray &packet);
-
-    //For UI display
-    void showRecvMsg(const QString &nickname, const QString &msg);
-    void showSendMsg(const QString &msg);
+    void toSendDir(const User &userinfo, const QString &dirname);
+    void toRecvDir(const QString &dirname, const QByteArray &packet);
+    void updateLocalUserData(const User &userinfo);
 
 signals:
-    //Signal for msg and file operation
-    void sendMsg(const User &userinfo, const QString &msg);
-    void sendFile(const QString &filename);
-    void winClosed();
+     //Signal for msg and file operation
+     void sendMsg(const QHostAddress &hostip, const QString &msg);
+     void sendFile(const QHostAddress &hostip, const QString &filename);
+     void sendDir(const User &userinfo, const QString &dirname);
+     void winClosed(const QString &hostname);
 
 private:
-    //Userinfo in local
     User userDataLocal;
 
     //UI Widget
@@ -56,6 +55,11 @@ private:
     void setUserInfo(const QString &winTitle, const QString& info);
 
 private slots:
+    //For UI display
+    void showRecvMsg(const QString &msg);
+    void showSendMsg(const QString &msg);
+
+    //On buttons clicked
     void on_pushButtonFIle_clicked();
     void on_pushButtonDir_clicked();
     void on_pushButtonClose_clicked();

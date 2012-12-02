@@ -16,7 +16,8 @@ class User
 public:
     User();
     User(const QString &username, const QString &hostname,
-         const QHostAddress &hostaddress, const QString &nickname);
+         const QHostAddress &hostaddress, const QString &nickname,
+         const quint16 port = IPMSG_DEFAULT_PORT);
     ~User();
 
     void displayHostInfo() const;

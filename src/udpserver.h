@@ -1,6 +1,7 @@
 #ifndef UDPCOMM_H
 #define UDPCOMM_H
 
+#include <QApplication>
 #include <QUdpSocket>
 #include <QMessageBox>
 #include <QThread>
@@ -36,7 +37,7 @@ private:
     bool handleCmd(const QHostAddress& ipaddr, const QByteArray &newPacket);
     bool buildConnection();
 
-private slots:
+public slots:
     // send all cmd
     bool sendcmdNooperation(const QHostAddress &ipaddr);
     bool sendcmdBrEntry();
@@ -48,8 +49,12 @@ private slots:
     bool sendcmdGetlist();
     bool sendcmdAnslist();
     bool sendcmdBrIsgetlist2();
-    bool sendcmdSendmsg(const QHostAddress &ipaddr, const QString &msg);
-    bool sendcmdRecvmsg(const QHostAddress &ipaddr, const QString &packet);
+    bool sendcmdSendmsg(const QHostAddress &ipaddr,
+                        const QString &msg,
+                        const quint16 &port = IPMSG_DEFAULT_PORT);
+    bool sendcmdRecvmsg(const QHostAddress &ipaddr,
+                        const QString &packetno,
+                        const quint16 &port = IPMSG_DEFAULT_PORT);
     bool sendcmdReadmsg();
     bool sendcmdDelmsg();
     bool sendcmdAnsreadmsg();
@@ -127,7 +132,7 @@ signals:
     void signalGetpubkey();
     void signalAnspubkey();
 
-    void gotMsg(const QByteArray &packet);
+    void recvMsg(const QByteArray &packet);
 };
 
 #endif // UDPCOMM_H

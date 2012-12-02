@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QApplication>
 #include <QMainWindow>
 #include <QTreeView>
 #include <QStandardItemModel>
@@ -30,7 +31,8 @@ public slots:
     void buildItems(const QHash <QString, User> &hostlist);
 
 signals:
-    void sendInfo(const QHostAddress &ipddr, const QString &msg);
+    void sendMsgInfo(const QHostAddress&, const QString &msg);
+    void sendFileInfo(const User &userinfo, const QString &msg);
     void refreshUser();
     void quitApp();
 
@@ -40,8 +42,10 @@ private slots:
     bool delWin(const QString &userid);
 
     // handle msg
-    void sendMsg(const User &userinfo, const QString &msg);
+    void sendMsg(const QHostAddress &hostip, const QString &msg);
     void recvMsg(const QByteArray &packet);
+    void sendFile(const User &userinfo, const QString &filename);
+    void recvFile(const User &userinfo, const QByteArray &packet);
 
     void onToolButtonRefreshClicked();
     void onToolButtonSettingClicked();

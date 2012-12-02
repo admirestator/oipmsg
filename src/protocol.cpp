@@ -91,6 +91,7 @@ QByteArray Protocol::buildcmdBrEntry()
     qDebug() << "bcmd: " << cmd;
 
     // set IPMSG_ABSENCEOPT option
+    /*
     if (absenceStatus == ABSENCEABSENCE ||
         absenceStatus == ABSENCEMEAL ||
         absenceStatus == ABSENCEMEETING ||
@@ -101,6 +102,7 @@ QByteArray Protocol::buildcmdBrEntry()
         absenceStatus == ABSENCEPRIEST) {
         cmd = cmd | IPMSG_ABSENCEOPT;
     }
+    */
 
     QByteArray cmd_br_entry;
     cmd_br_entry.append (QString::number(IPMSG_VERSION, 16));

@@ -29,9 +29,9 @@ void Oipmsg::run()
 
 }
 
-void Oipmsg::getSelfUserInfo (User &user)
+bool Oipmsg::getSelfUserInfo (User &user)
 {
-    StringList envVariables;
+    QStringList envVariables;
     envVariables << "USER.*" << "HOSTNAME.*";
 
     //系统中关于环境变量的信息存在environment中
@@ -42,7 +42,7 @@ void Oipmsg::getSelfUserInfo (User &user)
     if (index != -1) {
         QStringList stringList = environment.at(index).split('=');
         if (stringList.size() == 2) {
-            username = stringList.at(1);
+            selfUserInfo.setUserName (stringList.at(1));
         }
     }
 
@@ -50,7 +50,7 @@ void Oipmsg::getSelfUserInfo (User &user)
     if (index != -1) {
         QStringList stringList = environment.at(index).split('=');
         if (stringList.size() == 2) {
-            hostname = stringList.at(1);
+            selfUserInfo.setUserName (stringList.at(1));
         }
     }
 
@@ -60,59 +60,49 @@ void Oipmsg::getSelfUserInfo (User &user)
 
 }
 
-void Oipmsg::updateSelfUserInfo(const User &user)
+bool Oipmsg::updateSelfUserInfo(const User &userinfo)
 {
-
+    selfUserInfo = userinfo;
 }
 
 
 void Oipmsg::buildConnection()
 {
-    // br_entry with new user
+    // Br_entry with new user
     connect(udpServer, SIGNAL(signalBrEntry(const QHostAddress&,
                                             const QByteArray&)),
             this, SLOT(addUser(const QHostAddress&,
                                const QByteArray&)));
 
-    // br_exit
+    // Br_exit
     connect(udpServer, SIGNAL(signalBrExit(const QString&)),
           this, SLOT(delUser(const QString&)));
 
-    // br_ansentry with new user
+    // Br_ansentry with new user
     connect(udpServer, SIGNAL(signalAnsentry(const QHostAddress&,
                                             const QByteArray&)),
           this, SLOT(addUser(const QHostAddress&,
                              const QByteArray&)));
 
-    // send user info
+    // Send user msg
+    connect(mainWin, SIGNAL(sendMsgInfo(const QHostAddress&, const QString&)),
+            udpServer, SLOT(sendcmdSendmsg(const QHostAddress&, const QString&)));
 
-    /*
-    QObject::connect(mainWin, SIGNAL(quitApp()),
-                     app, SLOT(quit()));
-    QObject::connect(mainwinobj,
-                     SIGNAL(sendInfo(const QHostAddress&, const QString&)),
-                     oipmsgobj->udpServer,
-                     SLOT(sendcmdSendmsg(const QHostAddress&, const QString&)));
+    // Secv user msg
+    connect(udpServer, SIGNAL(recvMsg(const QByteArray&)),
+            mainWin, SLOT(recvMsg(const QByteArray&)));
 
-    // recv user info
-    QObject::connect(oipmsgobj->udpServer,
-                     SIGNAL(gotMsg(const QByteArray&)),
-                     mainwinobj,
-                     SLOT(recvMsg(const QByteArray&)));
     // emit refresh
-    QObject::connect(mainwinobj, SIGNAL(refreshUser()),
-                     oipmsgobj->udpServer, SLOT(sendcmdBrEntry()));
-                     */
+    connect(mainWin, SIGNAL(refreshUser()),
+            udpServer, SLOT(sendcmdBrEntry()));
 }
 
 
 bool Oipmsg::addUser(const QHostAddress &ipaddr, const QByteArray &packet)
 {
     if (hosts->addHost(ipaddr, packet)) {
-        //emit alluser(hosts->userList);
-
         //Refresh ui widget
-        mainWin->buildItems(hosts);
+        mainWin->buildItems(hosts->userList);
         return true;
     }
 
@@ -122,11 +112,10 @@ bool Oipmsg::addUser(const QHostAddress &ipaddr, const QByteArray &packet)
 bool Oipmsg::delUser(const QString& username)
 {
     if (hosts->delHost(username)) {
-        emit alluser(hosts->userList);
         // refresh ui widget
-        mainWin->buildItems(hosts);
+        mainWin->buildItems(hosts->userList);
         return true;
     }
 
-    return flase;
+    return false;
 }

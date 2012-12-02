@@ -25,8 +25,5 @@ int main(int argc, char *argv[])
     Oipmsg *oipmsg = new Oipmsg();
     oipmsg->run();
 
-    //Build slots to quit
-    QObject::connect(oipmsg, SIGNAL(), this, SLOT(app->quit()));
-
     return app->exec();
 }

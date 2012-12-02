@@ -10,12 +10,13 @@ User::User()
 }
 
 User::User(const QString &username, const QString &hostname,
-           const QHostAddress &hostaddr, const QString &nickname)
+           const QHostAddress &hostaddr, const QString &nickname,
+           const quint16 port)
 {
     userName = username;
     hostName = hostname;
     hostAddress = hostaddr;
-    portNo = 2425;
+    portNo = port;
     nickName = nickname;
     //groupName = "";
     //alterName = "";
