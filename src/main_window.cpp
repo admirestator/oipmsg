@@ -58,7 +58,7 @@ UserDialog *MainWindow::singleton(const User &userinfo)
 bool MainWindow::delWin(const QString &userid)
 {
     if (winList.find(userid) != winList.end()) {
-        qDebug () << "DelWin" << userid;
+        //qDebug () << "DelWin" << userid;
         winList.remove(userid);
         return true;
     }

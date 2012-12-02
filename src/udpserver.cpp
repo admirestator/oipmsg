@@ -192,8 +192,16 @@ bool Udpserver::processBrEntry(const QHostAddress &ipaddr,
                                const QByteArray &packet)
 {
     qDebug() << "Process br entry" << ipaddr << packet;
-    sendcmdAnsentry (ipaddr);
-    return true;
+    QList<QByteArray> argumentList = packet.split (':');
+
+    if (argumentList.at(4).toInt() & IPMSG_ABSENCEOPT) {
+        sendcmdAnsentry (ipaddr, true);
+        return true;
+    } else {
+        sendcmdAnsentry (ipaddr);
+        return true;
+    }
+    return false;
 }
 
 bool Udpserver::processBrExit(const QString &username)
@@ -358,9 +366,16 @@ bool Udpserver::sendcmdNooperation(const QHostAddress &ipaddr)
     return true;
 }
 
-bool Udpserver::sendcmdBrEntry()
+bool Udpserver::sendcmdBrEntry(const bool &absenceState)
 {
-    QByteArray datagram = protocolObj->buildcmdBrEntry();
+    QByteArray datagram;
+
+    if (absenceState) {
+        datagram = protocolObj->buildcmdBrEntry(absenceState);
+    } else {
+        datagram = protocolObj->buildcmdBrEntry();
+    }
+
     qDebug () << datagram;
     if (udpSocket->writeDatagram(datagram.data(),
                                  datagram.size(),
@@ -374,7 +389,6 @@ bool Udpserver::sendcmdBrEntry()
 
 bool Udpserver::sendcmdBrExit()
 {
-    //sendcmdNooperation(protocolObj->absence_absence);
     sendcmdNooperation(QHostAddress::Broadcast);
     QByteArray datagram = protocolObj->buildcmdBrExit();
     if (udpSocket->writeDatagram(datagram.data(),
@@ -387,9 +401,17 @@ bool Udpserver::sendcmdBrExit()
     return true;
 }
 
-bool Udpserver::sendcmdAnsentry(const QHostAddress& ipaddr)
+bool Udpserver::sendcmdAnsentry(const QHostAddress& ipaddr,
+                                const bool &absenceState)
 {
-    QByteArray datagram = protocolObj->buildcmdAnsentry();
+    QByteArray datagram;
+
+    if (absenceState) {
+        datagram = protocolObj->buildcmdAnsentry(absenceState);
+    } else {
+        datagram = protocolObj->buildcmdAnsentry();
+    }
+
     if (udpSocket->writeDatagram(datagram.data(),
                                  datagram.size(),
                                  ipaddr,

@@ -40,9 +40,10 @@ private:
 public slots:
     // send all cmd
     bool sendcmdNooperation(const QHostAddress &ipaddr);
-    bool sendcmdBrEntry();
+    bool sendcmdBrEntry(const bool &absenceState = false);
     bool sendcmdBrExit();
-    bool sendcmdAnsentry(const QHostAddress &ipaddr);
+    bool sendcmdAnsentry(const QHostAddress &ipaddr,
+                         const bool &absenceState = false);
     bool sendcmdBrAbsence();
     bool sendcmdBrIsgetlist();
     bool sendcmdOkgetlist();

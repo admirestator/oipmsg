@@ -37,10 +37,10 @@ public:
 
     //build 24 commands of ipmsg protocol version3
     QByteArray buildcmdNooperation();
-    QByteArray buildcmdBrEntry();
+    QByteArray buildcmdBrEntry(const bool &absence = false);
     QByteArray buildcmdBrExit();
-    QByteArray buildcmdAnsentry();
-    QByteArray buildcmdBrAbsence(const quint32 &absenceStatus);
+    QByteArray buildcmdAnsentry(const bool &absence = false);
+    QByteArray buildcmdBrAbsence();
     QByteArray buildcmdBrIsgetlist();
     QByteArray buildcmdOkgetlist();
     QByteArray buildcmdGetlist();

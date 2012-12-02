@@ -76,7 +76,7 @@ QByteArray Protocol::buildcmdNooperation()
 }
 
 
-QByteArray Protocol::buildcmdBrEntry()
+QByteArray Protocol::buildcmdBrEntry(const bool &absence)
 {
 
     // Set seed value.
@@ -89,19 +89,9 @@ QByteArray Protocol::buildcmdBrEntry()
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ENTRY;
 
-    // set IPMSG_ABSENCEOPT option
-    /*
-    if (absenceStatus == ABSENCEABSENCE ||
-        absenceStatus == ABSENCEMEAL ||
-        absenceStatus == ABSENCEMEETING ||
-        absenceStatus == ABSENCEVISITOR ||
-        absenceStatus == ABSENCEOUT ||
-        absenceStatus == ABSENCEHOME ||
-        absenceStatus == ABSENCEEDO ||
-        absenceStatus == ABSENCEPRIEST) {
+    if (absence) {
         cmd = cmd | IPMSG_ABSENCEOPT;
     }
-    */
 
     QByteArray cmd_br_entry;
     cmd_br_entry.append (QString::number(IPMSG_VERSION, 16));
@@ -147,7 +137,7 @@ QByteArray Protocol::buildcmdBrExit()
     return cmd_br_exit;
 }
 
-QByteArray Protocol::buildcmdAnsentry()
+QByteArray Protocol::buildcmdAnsentry(const bool &absence)
 {
     // Set init package number as random.
     quint64 packetno;
@@ -155,15 +145,8 @@ QByteArray Protocol::buildcmdAnsentry()
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_ANSENTRY;
-    // set IPMSG_ABSENCEOPT option
-    if (absenceStatus == ABSENCEABSENCE ||
-        absenceStatus == ABSENCEMEAL ||
-        absenceStatus == ABSENCEMEETING ||
-        absenceStatus == ABSENCEVISITOR ||
-        absenceStatus == ABSENCEOUT ||
-        absenceStatus == ABSENCEHOME ||
-        absenceStatus == ABSENCEEDO ||
-        absenceStatus == ABSENCEPRIEST) {
+
+    if (absence) {
         cmd = cmd | IPMSG_ABSENCEOPT;
     }
 
@@ -183,14 +166,14 @@ QByteArray Protocol::buildcmdAnsentry()
     return cmd_ansentry;
 }
 
-QByteArray Protocol::buildcmdBrAbsence(const quint32 &absenceStatus)
+QByteArray Protocol::buildcmdBrAbsence()
 {
     // Set init package number as random.
     quint64 packetno;
     packetno = qrand() % 10240;
 
     quint32 cmd = 0;
-    cmd = cmd | IPMSG_BR_ABSENCE;
+    cmd = cmd | IPMSG_BR_ABSENCE | IPMSG_ABSENCEOPT;
 
     QByteArray cmd_absence;
     cmd_absence.append (QString::number(IPMSG_VERSION, 16));
@@ -205,32 +188,6 @@ QByteArray Protocol::buildcmdBrAbsence(const quint32 &absenceStatus)
     cmd_absence.append (":");
     cmd_absence.append (username);
 
-    switch (absenceStatus) {
-        case ABSENCEMEAL:
-            cmd_absence.append("[meal]");
-            break;
-        case ABSENCEMEETING:
-            cmd_absence.append("[meeting]");
-            break;
-        case ABSENCEVISITOR:
-            cmd_absence.append("[visitor]");
-            break;
-        case ABSENCEOUT:
-            cmd_absence.append("[out]");
-            break;
-        case ABSENCEHOME:
-            cmd_absence.append("[home]");
-            break;
-        case ABSENCEEDO:
-            cmd_absence.append("[edo]");
-            break;
-        case ABSENCEPRIEST:
-            cmd_absence.append("[priest]");
-            break;
-        default:
-            cmd_absence.append("[absence]");
-            break;
-    }
     return cmd_absence;
 }
 
