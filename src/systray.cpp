@@ -15,19 +15,7 @@
 //
 
 
-/*
-#include "window_manager.h"
-#include "global.h"
-#include "preferences.h"
-#include "user_manager.h"
-#include "helper.h"
-#include "transfer_file_window.h"
-
-*/
-
 #include "systray.h"
-
-
 
 Systray::Systray(QObject *parent)
     : QObject(parent)

@@ -12,6 +12,8 @@
 #include <QDebug>
 
 #include "user.h"
+#include "tcpclient.h"
+#include "tcpserver.h"
 
 namespace Ui {
     class UserDialog;
@@ -26,12 +28,12 @@ public:
 
 public slots:
     //Slots for msg and file operation
-    void toSendMsg(const QHostAddress &hostip, const QString &packet);
-    void toRecvMsg(const User &userinfo, const QString &packet);
-    void toSendFile(const QHostAddress &hostip, const QString &filename);
-    void toRecvFile(const QString &filename, const QByteArray &packet);
-    void toSendDir(const User &userinfo, const QString &dirname);
-    void toRecvDir(const QString &dirname, const QByteArray &packet);
+    void toSendMsg(const QString &packet);
+    void toRecvMsg(const QString &msg);
+    void toSendFile(const QString &filename);
+    void toRecvFile();
+    void toSendDir(const QString &dirname);
+    void toRecvDir();
     void updateLocalUserData(const User &userinfo);
 
 signals:
@@ -46,13 +48,14 @@ private:
 
     //UI Widget
     Ui::UserDialog *ui;
+
     QWebView *webView;
     QFile *uiFile;
     QDateTime *timeWatch;
 
     //Build self signals and slots
     bool buildConnection();
-    void setUserInfo(const QString &winTitle, const QString& info);
+    void setUserInfo();
 
 private slots:
     //For UI display

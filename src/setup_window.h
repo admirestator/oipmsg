@@ -24,10 +24,12 @@ public:
 
     void userInfoUpdated(const User &userDataLocal);
 private slots:
-    void on_buttonBox_clicked(QAbstractButton *button);
+    //void on_buttonBox_clicked(QAbstractButton *button);
+    void on_buttonBox_clicked();
 
 private:
     Ui::SetupWindow *ui;
+    QDesktopWidget *desk;
 };
 
 #endif // SETUPWINDOW_H

@@ -9,7 +9,7 @@ Tcpclient::Tcpclient(const User &userinfo, const QString &filename)
     destIP = userDataLocal.getHostAddress();
 
     tcpClient = new QTcpSocket();
-    localFile = new QFile(fileName);
+    localFile = new QFile(filename);
 
     loadSize = 4*1024;
     TotalBytes = 0;

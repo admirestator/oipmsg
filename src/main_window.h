@@ -44,8 +44,6 @@ private slots:
     // handle msg
     void sendMsg(const QHostAddress &hostip, const QString &msg);
     void recvMsg(const QByteArray &packet);
-    void sendFile(const User &userinfo, const QString &filename);
-    void recvFile(const User &userinfo, const QByteArray &packet);
 
     void onToolButtonRefreshClicked();
     void onToolButtonSettingClicked();

@@ -29,7 +29,7 @@ void Oipmsg::run()
 
 }
 
-bool Oipmsg::getSelfUserInfo (User &user)
+bool Oipmsg::getSelfUserInfo ()
 {
     QStringList envVariables;
     envVariables << "USER.*" << "HOSTNAME.*";
@@ -58,9 +58,11 @@ bool Oipmsg::getSelfUserInfo (User &user)
     QNetworkInterface interface=list.at(1);
     QString hardwareAddress=interface.hardwareAddress();
 
+    return true;
 }
 
-bool Oipmsg::updateSelfUserInfo(const User &userinfo)
+
+void Oipmsg::updateSelfUserInfo(const User &userinfo)
 {
     selfUserInfo = userinfo;
 }
@@ -88,7 +90,7 @@ void Oipmsg::buildConnection()
     connect(mainWin, SIGNAL(sendMsgInfo(const QHostAddress&, const QString&)),
             udpServer, SLOT(sendcmdSendmsg(const QHostAddress&, const QString&)));
 
-    // Secv user msg
+    // Recv user msg
     connect(udpServer, SIGNAL(recvMsg(const QByteArray&)),
             mainWin, SLOT(recvMsg(const QByteArray&)));
 

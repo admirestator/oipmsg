@@ -6,16 +6,18 @@ UserDialog::UserDialog(const User &userinfo, QWidget *parent) :
     ui(new Ui::UserDialog)
 {
     userDataLocal = userinfo;
+    timeWatch = new QDateTime();
+
+    //Set initial position
+    move((QApplication::desktop()->width()-width())/2,
+         (QApplication::desktop()->width()-height())/2);
+
     ui->setupUi(this);
     ui->webViewChat->settings()->setAttribute(QWebSettings::JavascriptEnabled,true);
     ui->webViewChat->settings()->setAttribute(QWebSettings::PluginsEnabled,true);
-
-    ui->webViewChat->page()->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
-    ui->webViewChat->page()->settings()->setAttribute(QWebSettings::PluginsEnabled, true);
     ui->webViewChat->load (QUrl("chat.html"));
-
-    ui->webViewChat->show();
-    timeWatch = new QDateTime();
+    setUserInfo();
+    show();
 }
 
 UserDialog::~UserDialog()
@@ -25,58 +27,52 @@ UserDialog::~UserDialog()
 }
 
 
-void UserDialog::setUserInfo(const QString &winTitle,
-                             const QString &info)
+void UserDialog::setUserInfo()
 {
-    QDesktopWidget *desk=QApplication::desktop();
-     int wd=desk->width();
-     int ht=desk->height();
-     move((wd-width())/2,(ht-height())/2);
-    //ui->setWindowTitle(winTitle);
-    setWindowTitle(winTitle);
-    ui->labelUserInfo->setText(info);
+    //Window title
+    setWindowTitle(userDataLocal.getNickName());
+    ui->labelUserInfo->setText(QString("%0   [%1]")
+                               .arg(userDataLocal.getHostName())
+                               .arg(userDataLocal.getHostAddress().toString()));
 }
 
-void UserDialog::toSendMsg(const QHostAddress &hostip, const QString &msg)
+void UserDialog::toSendMsg(const QString &msg)
 {
     emit sendMsg(userDataLocal.getHostAddress(), msg);
 }
 
-void UserDialog::toRecvMsg(const User &userinfo, const QString &packet)
+void UserDialog::toRecvMsg(const QString &msg)
 {
-
+    showRecvMsg(msg);
 
 }
 
-void UserDialog::toSendFile(const QHostAddress &hostip, const QString &filename)
+void UserDialog::toSendFile(const QString &filename)
 {
-    emit sendFile(hostip, filename);
-}
-
-void UserDialog::toRecvFile(const QString &filename, const QByteArray &packet)
-{
+    Tcpclient tcpClient(userDataLocal,filename);
 
 }
 
-void UserDialog::toSendDir(const User &userinfo, const QString &dirname)
+void UserDialog::toRecvFile()
 {
+    Tcpserver tcpServer;
+}
 
+void UserDialog::toSendDir(const QString &dirname)
+{
+    Tcpclient tcpClient(userDataLocal, dirname);
 
 }
 
-void UserDialog::toRecvDir(const QString &dirname, const QByteArray &packet)
+void UserDialog::toRecvDir()
 {
-
-
+    Tcpserver tcpServer;
 }
-
-
 
 void UserDialog::updateLocalUserData(const User &userinfo)
 {
     userDataLocal = userinfo;
 }
-
 
 void UserDialog::showRecvMsg(const QString &msg)
 {
@@ -124,8 +120,8 @@ void UserDialog::on_pushButtonDir_clicked()
 
 void UserDialog::on_pushButtonClose_clicked()
 {
-    emit winClosed(userDataLocal.getHostName());
     close();
+    emit winClosed(userDataLocal.getHostName());
 }
 
 
@@ -133,7 +129,7 @@ void UserDialog::on_pushButtonSend_clicked()
 {
     QString msg = ui->textEditUserEnter->toPlainText();
     if (!msg.isEmpty()) {
-        toSendMsg(userDataLocal.getHostAddress(), msg);
+        toSendMsg(msg);
         showSendMsg(msg);
     }
 

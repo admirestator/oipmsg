@@ -6,8 +6,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui(new Ui::AboutDialog)
 {
     //set initial position
-    QDesktopWidget *desk=QApplication::desktop();
-    move((desk->width()-width())/2,(desk->height()-height())/2);
+    move((QApplication::desktop()->width()-width())/2,
+         (QApplication::desktop()->width()-height())/2);
+
     ui->setupUi(this);
 }
 
@@ -26,7 +27,8 @@ void AboutDialog::dlgClose()
     close();
 }
 
-void AboutDialog::on_buttonBoxOk_clicked(QAbstractButton *button)
+//void AboutDialog::on_buttonBoxOk_clicked(QAbstractButton *button)
+void AboutDialog::on_buttonBoxOk_clicked()
 {
    close();
 }

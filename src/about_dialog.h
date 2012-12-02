@@ -21,7 +21,8 @@ public:
     void dlgClose();
 
 private slots:
-    void on_buttonBoxOk_clicked(QAbstractButton *button);
+    //void on_buttonBoxOk_clicked(QAbstractButton *button);
+    void on_buttonBoxOk_clicked();
 
 private:
     Ui::AboutDialog *ui;

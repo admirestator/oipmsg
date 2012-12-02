@@ -46,7 +46,6 @@ void Udpserver::dataReceived()
     while (udpSocket->hasPendingDatagrams()) {
          datagram.resize(udpSocket->pendingDatagramSize());
          udpSocket->readDatagram(datagram.data(), datagram.size(), &senderAddress, &port);
-         qDebug () << "Recv:" << senderAddress << datagram.data();
          handleCmd (senderAddress, datagram);
     }
 }
@@ -253,10 +252,11 @@ bool Udpserver::processSendmsg(const QHostAddress &ipaddr,
                                const QByteArray &packet)
 {
     QList<QByteArray> argumentList = packet.split(':');
-    sendcmdRecvmsg(ipaddr, argumentList.at(1));
+    processRecvmsg(ipaddr, argumentList.at(1));
 
     //emit a signal
     emit recvMsg (packet);
+
     return true;
 }
 
@@ -264,7 +264,7 @@ bool Udpserver::processRecvmsg(const QHostAddress &ipaddr,
                                const QByteArray &packet)
 {
 
-    //sendcmdRecvmsg(ipaddr, packet);
+    sendcmdRecvmsg(ipaddr, packet);
     return true;
 }
 
@@ -347,7 +347,6 @@ bool Udpserver::processAnspubkey()
 //-------------------- sokcet communication ------------------------
 bool Udpserver::sendcmdNooperation(const QHostAddress &ipaddr)
 {
-    qDebug() << "broad Nooperation";
     QByteArray datagram = protocolObj->buildcmdNooperation();
     if (udpSocket->writeDatagram(datagram.data(),
                                  datagram.size(),
@@ -361,7 +360,6 @@ bool Udpserver::sendcmdNooperation(const QHostAddress &ipaddr)
 
 bool Udpserver::sendcmdBrEntry()
 {
-    qDebug() << "broad entry";
     QByteArray datagram = protocolObj->buildcmdBrEntry();
     qDebug () << datagram;
     if (udpSocket->writeDatagram(datagram.data(),
@@ -378,7 +376,6 @@ bool Udpserver::sendcmdBrExit()
 {
     //sendcmdNooperation(protocolObj->absence_absence);
     sendcmdNooperation(QHostAddress::Broadcast);
-    qDebug() << "broad exit";
     QByteArray datagram = protocolObj->buildcmdBrExit();
     if (udpSocket->writeDatagram(datagram.data(),
                                  datagram.size(),
@@ -392,7 +389,6 @@ bool Udpserver::sendcmdBrExit()
 
 bool Udpserver::sendcmdAnsentry(const QHostAddress& ipaddr)
 {
-    qDebug() << "ans entry";
     QByteArray datagram = protocolObj->buildcmdAnsentry();
     if (udpSocket->writeDatagram(datagram.data(),
                                  datagram.size(),
@@ -443,10 +439,8 @@ bool Udpserver::sendcmdBrIsgetlist2()
 bool Udpserver::sendcmdSendmsg(const QHostAddress &ipaddr,
                                const QString &msg,
                                const quint16 &port)
-        //const User &userinfo,
 {
     QByteArray datagram = protocolObj->buildcmdSendmsg(msg);
-    qDebug () << "SendMsg" << datagram;
 
     if (udpSocket->writeDatagram(datagram.data(),
                                  datagram.size(),
@@ -463,7 +457,6 @@ bool Udpserver::sendcmdRecvmsg(const QHostAddress &ipaddr,
                                const quint16 &port)
 {
     QByteArray datagram = protocolObj->buildcmdRecvmsg(packetno);
-    qDebug () << "SendRecvMsg" << datagram;
 
     if (udpSocket->writeDatagram(datagram.data(),
                                  datagram.size(),

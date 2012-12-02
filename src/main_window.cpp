@@ -8,20 +8,26 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //set initial position
-    QDesktopWidget *desk=QApplication::desktop();
-    move((desk->width()-width())*6/7,(desk->height()-height())/2);
+    move((QApplication::desktop()->width()-width())/2,
+         (QApplication::desktop()->width()-height())/2);
 
     stdModel = new QStandardItemModel();
-
     winList.empty();
+
     buildConnection();
+    show();
 }
 
 MainWindow::~MainWindow()
 {
-
     delete stdModel;
+    QString key;
+    foreach (key, winList.keys()) {
+        delete winList[key];
+    }
     delete ui;
+
+
 }
 
 UserDialog *MainWindow::singleton(const User &userinfo)
@@ -34,17 +40,12 @@ UserDialog *MainWindow::singleton(const User &userinfo)
     } else {
         qDebug () << "NoWin"<< userinfo.getHostName();
         UserDialog *tmpWin = new UserDialog(userinfo);
-
         winList.insert(userid, tmpWin);
 
         connect(winList[userid], SIGNAL(sendMsg(const QHostAddress&, const QString&)),
                 this, SLOT(sendMsg(const QHostAddress&, const QString&)));
-        //connect(winList[userid], SIGNAL(recvMsg(const User&, const QString&)),
-        //        this, SLOT(sendMsg(const User&, const QString&)));
         connect(winList[userid], SIGNAL(sendFile(const QHostAddress&, const QString&)),
                 this, SLOT(sendMsg(const QHostAddress&, const QString&)));
-        //connect(winList[userid], SIGNAL(recvFile(const User&, const QString&)),
-        //        this, SLOT(sendMsg(const User&, const QString&)));
 
         // on chat window closed
         connect(winList[userid], SIGNAL(winClosed(const QString&)),
@@ -57,10 +58,7 @@ bool MainWindow::delWin(const QString &userid)
 {
     if (winList.find(userid) != winList.end()) {
         qDebug () << "DelWin" << userid;
-        //ChatWin* tmpPtr =inList[userid];
-        //delete  winList[userid];
-        //winList.remove(userid);
-
+        winList.remove(userid);
         return true;
     }
     return false;
@@ -71,12 +69,12 @@ bool MainWindow::buildConnection()
     connect(ui->treeViewUser, SIGNAL(doubleClicked(const QModelIndex&)),
             this, SLOT(userItemClicked(const QModelIndex&)));
 
-
     //program quit
     connect(ui->toolButtonRefresh, SIGNAL(clicked()), this, SLOT(onToolButtonRefreshClicked()));
     connect(ui->toolButtonSetting, SIGNAL(clicked()), this, SLOT(onToolButtonSettingClicked()));
     connect(ui->toolButtonAbout, SIGNAL(clicked()), this, SLOT(onToolButtonAboutClicked()));
     connect(ui->toolButtonQuit, SIGNAL(clicked()), this, SLOT(onToolButtonQuitClicked()));
+
     return true;
 }
 
@@ -141,19 +139,10 @@ void MainWindow::recvMsg(const QByteArray &packet)
     findUser(argumentList.at(3), tmpuser);
 
     UserDialog *userDlg = singleton(tmpuser);
-    //chatWin->userDlg->showRecvMsg(tmpuser.getNickName(), argumentList.at(5));
     userDlg->show();
+    userDlg->toRecvMsg(argumentList.at(5));
 }
 
-void MainWindow::sendFile(const User &userinfo, const QString &filename)
-{
-
-}
-
-void MainWindow::recvFile(const User &userinfo, const QByteArray &packet)
-{
-
-}
 
 void MainWindow::onToolButtonRefreshClicked()
 {

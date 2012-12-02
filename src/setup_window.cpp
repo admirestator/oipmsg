@@ -5,10 +5,10 @@ SetupWindow::SetupWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::SetupWindow)
 {
-
     //set initial position
-    QDesktopWidget *desk=QApplication::desktop();
-    move((desk->width()-width())/2,(desk->height()-height())/2);
+    move((QApplication::desktop()->width()-width())/2,
+         (QApplication::desktop()->width()-height())/2);
+
     ui->setupUi(this);
 }
 
@@ -27,7 +27,7 @@ void SetupWindow::winClose()
     show();
 }
 
-void SetupWindow::on_buttonBox_clicked(QAbstractButton *button)
+void SetupWindow::on_buttonBox_clicked()
 {
    close();
 }

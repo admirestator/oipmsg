@@ -33,8 +33,8 @@ signals:
 
 private slots:
     //Update self user info
-    bool getSelfUserInfo(User &selfUserInfo);
-    bool updateSelfUserInfo(const User &userinfo);
+    bool getSelfUserInfo();
+    void updateSelfUserInfo(const User &userinfo);
 
 private:
     //User info

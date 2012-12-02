@@ -88,7 +88,6 @@ QByteArray Protocol::buildcmdBrEntry()
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ENTRY;
-    qDebug() << "bcmd: " << cmd;
 
     // set IPMSG_ABSENCEOPT option
     /*
@@ -181,7 +180,6 @@ QByteArray Protocol::buildcmdAnsentry()
     cmd_ansentry.append (":");
     cmd_ansentry.append (username);
 
-    qDebug () << "Ansentry" << cmd_ansentry;
     return cmd_ansentry;
 }
 
@@ -233,7 +231,6 @@ QByteArray Protocol::buildcmdBrAbsence(const quint32 &absenceStatus)
             cmd_absence.append("[absence]");
             break;
     }
-    qDebug () << cmd_absence;
     return cmd_absence;
 }
 
