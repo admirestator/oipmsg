@@ -1,7 +1,8 @@
 #include "udpserver.h"
 
-Udpserver::Udpserver(quint16 &udpport)
+Udpserver::Udpserver(const User &userinfo, const quint16 &udpport)
 {
+    selfUesrInfo = userinfo;
     port = udpport;
     udpSocket = new QUdpSocket();
     protocolObj = new Protocol();
@@ -18,9 +19,6 @@ void Udpserver::run()
 {
     if (!bindPort()) {
         qDebug("Can't bind port!");
-
-        // change to new port or exit
-        exit(-2);
     }
 
     // broadcast entry
@@ -31,8 +29,7 @@ bool Udpserver::bindPort()
 {
     if (!udpSocket->bind(port)) {
         QMessageBox *msgBox = new QMessageBox();
-        connect(msgBox, SIGNAL(buttonClicked ),
-                this, SLOT(exit(-1)));
+        connect(msgBox, SIGNAL(buttonClicked ), this, SLOT(exit(-1)));
         msgBox->setText(QObject::tr("Bind UDP Port Error!"));
         msgBox->exec();
         return false;

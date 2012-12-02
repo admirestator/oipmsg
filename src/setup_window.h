@@ -21,6 +21,7 @@ public:
     void winDisplay();
     void winClose();
 
+    void userInfoUpdated(const User &userDataLocal);
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
 

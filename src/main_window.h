@@ -10,7 +10,8 @@
 #include <QString>
 
 #include "host.h"
-#include "chatwin.h"
+//#include "chatwin.h"
+#include "user_dialog.h"
 #include "setup_window.h"
 #include "about_dialog.h"
 
@@ -49,8 +50,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QHash <QString, ChatWin*> winList;
-    ChatWin* singleton(const User &userinfo);
+    QHash <QString, UserDialog*> winList;
+    UserDialog* singleton(const User &userinfo);
 
     // a copy of Hostlist
     QHash <QString, User> copyHostlist;

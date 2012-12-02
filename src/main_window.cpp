@@ -21,11 +21,10 @@ MainWindow::~MainWindow()
 {
 
     delete stdModel;
-    //delete all chatWin
     delete ui;
 }
 
-ChatWin *MainWindow::singleton(const User &userinfo)
+UserDialog *MainWindow::singleton(const User &userinfo)
 {
     // regard hostname as the userid
     QString userid = userinfo.getHostName();
@@ -34,8 +33,7 @@ ChatWin *MainWindow::singleton(const User &userinfo)
         return winList[userid];
     } else {
         qDebug () << "NoWin"<< userinfo.getHostName();
-        ChatWin *tmpWin = new ChatWin(userinfo);
-        //QScopedPointer<ChatWin> tmpWin(new ChatWin(userinfo));
+        UserDialog *tmpWin = new UserDialog(userinfo);
 
         winList.insert(userid, tmpWin);
         connect(winList[userid], SIGNAL(sendInfo(const User&, const QString&)),
@@ -52,9 +50,9 @@ bool MainWindow::delWin(const QString &userid)
 {
     if (winList.find(userid) != winList.end()) {
         qDebug () << "DelWin" << userid;
-        //ChatWin* tmpPtr = winList[userid];
-        delete  winList[userid];
-        winList.remove(userid);
+        //ChatWin* tmpPtr =inList[userid];
+        //delete  winList[userid];
+        //winList.remove(userid);
 
         return true;
     }
@@ -103,13 +101,12 @@ void MainWindow::buildItems(const QHash <QString, User> &hostlist)
 void MainWindow::userItemClicked(const QModelIndex &index)
  {
     QStringList infolist = index.data().toString().split(' ');
-    //qDebug () << infolist;
     User tmpuser;
     findUser(infolist.at(7), tmpuser);
 
     // new user windows...
-    ChatWin *chatWin = singleton(tmpuser);
-    chatWin->run();
+    UserDialog *userDlg = singleton(tmpuser);
+    userDlg->show();
 }
 
 
@@ -131,8 +128,8 @@ void MainWindow::sendMsg(const User &userinfo, const QString &msg)
     User tmpuser;
     findUser(userinfo.getHostName(), tmpuser);
 
-    ChatWin *chatWin = singleton(tmpuser);
-    chatWin->userDlg->showRecvMsg(userinfo.getNickName(), msg);
+    UserDialog *userDlg = singleton(tmpuser);
+    //display
 }
 
 void MainWindow::recvMsg(const QByteArray &packet)
@@ -141,9 +138,9 @@ void MainWindow::recvMsg(const QByteArray &packet)
     User tmpuser;
     findUser(argumentList.at(3), tmpuser);
 
-    ChatWin *chatWin = singleton(tmpuser);
-    chatWin->userDlg->showRecvMsg(tmpuser.getNickName(), argumentList.at(5));
-    chatWin->run();
+    UserDialog *userDlg = singleton(tmpuser);
+    //chatWin->userDlg->showRecvMsg(tmpuser.getNickName(), argumentList.at(5));
+    userDlg->show();
 }
 
 void MainWindow::onToolButtonRefreshClicked()

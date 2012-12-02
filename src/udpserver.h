@@ -7,6 +7,7 @@
 
 #include "protocol.h"
 #include "host.h"
+#include "user.h"
 
 namespace udpserver {
     class Udpserver;
@@ -17,12 +18,16 @@ class Udpserver : public QThread
 {
     Q_OBJECT
 public:
-    Udpserver(quint16 &udpport);
+    Udpserver(const User &userinfo, const quint16 &udpport);
     ~Udpserver();
 
     void run();
 
 private:
+    //Self user info
+    User selfUesrInfo;
+
+    //Udp communication
     quint16 port;
     QUdpSocket *udpSocket;
     Protocol *protocolObj;

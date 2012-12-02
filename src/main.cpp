@@ -1,14 +1,9 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QObject>
-#include <iostream>
+
 #include "systray.h"
 #include "oipmsg.h"
-
-using namespace std;
-
-bool buildConnection(const Oipmsg *oipmsgobj, const MainWindow *mainwinobj);
-
 
 int main(int argc, char *argv[])
 {
@@ -30,7 +25,8 @@ int main(int argc, char *argv[])
     Oipmsg *oipmsg = new Oipmsg();
     oipmsg->run();
 
+    //Build slots to quit
+    QObject::connect(oipmsg, SIGNAL(), this, SLOT(app->quit()));
+
     return app->exec();
 }
-
-

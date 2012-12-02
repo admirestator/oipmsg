@@ -31,8 +31,7 @@ SOURCES += src/main.cpp\
     src/tcpserver.cpp \
     src/tcpclient.cpp \
     src/user.cpp \
-    src/user_dialog.cpp \
-    src/chatwin.cpp
+    src/user_dialog.cpp
 
 HEADERS  += \
     src/config.h \
@@ -55,8 +54,7 @@ HEADERS  += \
     src/tcpserver.h \
     src/tcpclient.h \
     src/user.h \
-    src/user_dialog.h \
-    src/chatwin.h
+    src/user_dialog.h
 
 FORMS    += \
     src/about_dialog.ui \
