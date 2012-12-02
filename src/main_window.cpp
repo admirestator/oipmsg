@@ -35,10 +35,11 @@ UserDialog *MainWindow::singleton(const User &userinfo)
     // regard hostname as the userid
     QString userid = userinfo.getHostName();
     if (winList.find(userid) != winList.end()) {
-        qDebug () << "HasWin" << userinfo.getHostName();
+        //qDebug () << "HasWin" << userinfo.getHostName();
         return winList[userid];
     } else {
-        qDebug () << "NoWin"<< userinfo.getHostName();
+        //qDebug () << "NoWin"<< userinfo.getHostName();
+
         UserDialog *tmpWin = new UserDialog(userinfo);
         winList.insert(userid, tmpWin);
 
