@@ -44,16 +44,14 @@ Protocol::~Protocol()
 void Protocol::setAbsenceStatus(const quint32 &status)
 {
     absenceStatus = status;
-    //absenceStatus = status;
 }
 
 QByteArray Protocol::buildcmdNooperation()
 {
-    quint32 packetno;
 
     // Set seed value.
     qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
-    packetno = qrand() % 10240;
+    quint32 packetno = qrand();
 
     quint64 cmd = 0;
     cmd = cmd | IPMSG_NOOPERATION;
@@ -83,8 +81,7 @@ QByteArray Protocol::buildcmdBrEntry(const bool &absence)
     qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
 
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ENTRY;
@@ -114,8 +111,7 @@ QByteArray Protocol::buildcmdBrExit()
 {
 
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_EXIT;
@@ -140,14 +136,14 @@ QByteArray Protocol::buildcmdBrExit()
 QByteArray Protocol::buildcmdAnsentry(const bool &absence)
 {
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_ANSENTRY;
 
     if (absence) {
-        cmd = cmd | IPMSG_ABSENCEOPT;
+        cmd = cmd | IPMSG_ABSENCEOPT
+                | IPMSG_AUTORETOPT;
     }
 
     QByteArray cmd_ansentry;
@@ -169,8 +165,7 @@ QByteArray Protocol::buildcmdAnsentry(const bool &absence)
 QByteArray Protocol::buildcmdBrAbsence()
 {
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ABSENCE | IPMSG_ABSENCEOPT;
@@ -194,8 +189,7 @@ QByteArray Protocol::buildcmdBrAbsence()
 QByteArray Protocol::buildcmdBrIsgetlist()
 {
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
@@ -219,10 +213,8 @@ QByteArray Protocol::buildcmdBrIsgetlist()
 
 QByteArray Protocol::buildcmdOkgetlist()
 {
-
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_OKGETLIST;
@@ -247,8 +239,7 @@ QByteArray Protocol::buildcmdOkgetlist()
 QByteArray Protocol::buildcmdGetlist()
 {
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_GETLIST;
@@ -273,8 +264,7 @@ QByteArray Protocol::buildcmdGetlist()
 QByteArray Protocol::buildcmdAnslist()
 {
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_ANSLIST;
@@ -298,29 +288,25 @@ QByteArray Protocol::buildcmdAnslist()
 
 QByteArray Protocol::buildcmdBrIsgetlist2()
 {
-    QByteArray cmd_isgetlist2;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
 
-    QByteArray cmd_isgetlist;
-    cmd_isgetlist.append (QString::number(IPMSG_VERSION, 16));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (QString::number(packetno, 10));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (username);
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (hostname);
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (QString::number(cmd, 16));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (username);
+    QByteArray cmd_isgetlist2;
+    cmd_isgetlist2.append (QString::number(IPMSG_VERSION, 16));
+    cmd_isgetlist2.append (":");
+    cmd_isgetlist2.append (QString::number(packetno, 10));
+    cmd_isgetlist2.append (":");
+    cmd_isgetlist2.append (username);
+    cmd_isgetlist2.append (":");
+    cmd_isgetlist2.append (hostname);
+    cmd_isgetlist2.append (":");
+    cmd_isgetlist2.append (QString::number(cmd, 16));
+    cmd_isgetlist2.append (":");
+    cmd_isgetlist2.append (username);
 
-    qDebug () << cmd_isgetlist;
-    return cmd_isgetlist;
     return cmd_isgetlist2;
 }
 
@@ -328,12 +314,11 @@ QByteArray Protocol::buildcmdSendmsg(const QString &msg)
 {
     QByteArray cmd_sendmsg;
     // Set init package number as random.
-    quint64 packetno;
-    //packetno = qrand() % 10240;
-    packetno = qrand();
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
-    cmd = cmd | IPMSG_SENDMSG;
+    cmd = cmd | IPMSG_SENDMSG
+            |IPMSG_SECRETOPT;
 
     QByteArray cmd_isgetlist;
     cmd_isgetlist.append (QString::number(IPMSG_VERSION, 16));
@@ -356,8 +341,7 @@ QByteArray Protocol::buildcmdSendmsg(const QString &msg)
 QByteArray Protocol::buildcmdRecvmsg(const QString &packetno)
 {
     // Set init package number as random.
-    quint64 pktno;
-    pktno = qrand() % 10240;
+    quint64 pktno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_RECVMSG;
@@ -383,8 +367,7 @@ QByteArray Protocol::buildcmdReadmsg()
 {
     QByteArray cmd_readmsg;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
@@ -411,8 +394,7 @@ QByteArray Protocol::buildcmdDelmsg()
 {
     QByteArray cmd_delmsg;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
@@ -439,8 +421,7 @@ QByteArray Protocol::buildcmdAnsreadmsg()
 {
     QByteArray cmd_ansreadmsg;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
@@ -467,8 +448,7 @@ QByteArray Protocol::buildcmdGetinfo()
 {
     QByteArray cmd_getinfo;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
@@ -495,8 +475,7 @@ QByteArray Protocol::buildcmdSendinfo()
 {
     QByteArray cmd_sendinfo;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
@@ -523,8 +502,7 @@ QByteArray Protocol::buildcmdGetabsenceinfo()
 {
     QByteArray cmd_getabsenceinfo;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
@@ -551,8 +529,7 @@ QByteArray Protocol::buildcmdSendabsenceinfo()
 {
     QByteArray cmd_sendabsenceinfo;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
@@ -579,8 +556,7 @@ QByteArray Protocol::buildcmdGetfiledata()
 {
     QByteArray cmd_getfiledata;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
+    quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
@@ -607,9 +583,7 @@ QByteArray Protocol::buildcmdReleasefiles()
 {
     QByteArray cmd_realeasefiles;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
-
+    quint64 packetno = qrand();
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
 
@@ -635,9 +609,7 @@ QByteArray Protocol::buildcmdGetdirfiles()
 {
     QByteArray cmd_getdirfiles;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
-
+    quint64 packetno = qrand();
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
 
@@ -663,9 +635,7 @@ QByteArray Protocol::buildcmdGetpubkey()
 {
     QByteArray cmd_getpubkey;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
-
+    quint64 packetno = qrand();
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
 
@@ -691,9 +661,8 @@ QByteArray Protocol::buildcmdAnspubkey()
 {
     QByteArray cmd_anspubkey;
     // Set init package number as random.
-    quint64 packetno;
-    packetno = qrand() % 10240;
 
+    quint64 packetno = qrand();
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
 

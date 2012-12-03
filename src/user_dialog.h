@@ -10,6 +10,7 @@
 #include <QWebFrame>
 #include <QFile>
 #include <QDebug>
+#include <QKeyEvent>
 
 #include "user.h"
 #include "tcpclient.h"
@@ -67,6 +68,7 @@ private slots:
     void on_pushButtonDir_clicked();
     void on_pushButtonClose_clicked();
     void on_pushButtonSend_clicked();
+    void keyPressEvent(QKeyEvent *e);
 
 };
 

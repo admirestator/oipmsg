@@ -123,7 +123,11 @@ void UserDialog::on_pushButtonClose_clicked()
     close();
     emit winClosed(userDataLocal.getHostName());
 }
-
+void UserDialog::keyPressEvent (QKeyEvent *e)
+{
+    qDebug () << e->key();
+    on_pushButtonSend_clicked();
+}
 
 void UserDialog::on_pushButtonSend_clicked()
 {

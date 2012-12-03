@@ -60,6 +60,7 @@ bool Udpserver::buildConnection()
     // no operation
     connect(this, SIGNAL(signalNooperation(const QHostAddress&)),
             this, SLOT(processNooperation(const QHostAddress&)));
+
     // broadcast new user online
     connect(this, SIGNAL(signalBrEntry(const QHostAddress&, const QByteArray&)),
             this, SLOT(processBrEntry(const QHostAddress&, const QByteArray&)));
@@ -78,8 +79,15 @@ bool Udpserver::buildConnection()
             this, SLOT(processSendmsg(const QHostAddress&,
                                       const QByteArray&)));
 
-    /*
-    connect(this, SIGNAL(), this, SLOT());
+    connect(this, SIGNAL(signalRecvmsg(const QHostAddress&,
+                                       const QByteArray&)),
+            this, SLOT(processRecvmsg(const QHostAddress&,
+                                      const QByteArray&)));
+    connect(this, SIGNAL(signalAnsreadmsg(const QHostAddress&,
+                                          const QByteArray&)),
+            this, SLOT(processAnsreadmsg(const QHostAddress&,
+                                         const QByteArray&)));
+ /*
     connect(this, SIGNAL(), this, SLOT());
     connect(this, SIGNAL(), this, SLOT());
     connect(this, SIGNAL(), this, SLOT());
@@ -102,6 +110,7 @@ bool Udpserver::handleCmd (const QHostAddress &ipaddr, const QByteArray &newPack
 
     quint32 cmd = argumentList.at(4).toInt() & 0x000000FF;
 
+    qDebug () << cmd << "   " << newPacket;
     switch (cmd) {
         case IPMSG_BR_ENTRY:
             emit signalBrEntry(ipaddr, newPacket);
@@ -143,7 +152,7 @@ bool Udpserver::handleCmd (const QHostAddress &ipaddr, const QByteArray &newPack
             emit signalDelmsg();
             break;
         case IPMSG_ANSREADMSG:
-            emit signalAnsreadmsg();
+            emit signalAnsreadmsg(ipaddr, newPacket);
             break;
         case IPMSG_GETINFO:
             emit signalGetinfo();
@@ -289,8 +298,14 @@ bool Udpserver::processDelmsg()
     return true;
 }
 
-bool Udpserver::processAnsreadmsg()
+bool Udpserver::processAnsreadmsg(const QHostAddress &ipaddr,
+                                  const QByteArray &packet)
 {
+    QList<QByteArray> argumentList = packet.split(':');
+    processRecvmsg(ipaddr, argumentList.at(1));
+
+    //emit a signal
+    emit recvMsg (packet);
 
     return true;
 }

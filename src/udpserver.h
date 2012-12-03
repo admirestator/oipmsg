@@ -92,7 +92,8 @@ private slots:
                         const QByteArray &packet);
     bool processReadmsg();
     bool processDelmsg();
-    bool processAnsreadmsg();
+    bool processAnsreadmsg(const QHostAddress &ipaddr,
+                           const QByteArray &packet);
     bool processGetinfo();
     bool processSendinfo();
     bool processGetabsenceinfo();
@@ -122,7 +123,8 @@ signals:
                        const QByteArray &packet);
     void signalReadmsg();
     void signalDelmsg();
-    void signalAnsreadmsg();
+    void signalAnsreadmsg(const QHostAddress &ipaddr,
+                          const QByteArray &packet);
     void signalGetinfo();
     void signalSendinfo();
     void signalGetabsenceinfo();
@@ -133,6 +135,7 @@ signals:
     void signalGetpubkey();
     void signalAnspubkey();
 
+    //For more process
     void recvMsg(const QByteArray &packet);
 };
 
