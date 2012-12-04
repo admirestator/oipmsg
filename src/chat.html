@@ -102,14 +102,20 @@ border-color: rgba(208, 225, 245, 0);
 </style>
 
 <script>
+/*
+function Sroll()
+{
+window.scrollTo(0,document.body.scrollHeight)
+}
+*/
 function displayMsg(msg) {
    $("ul").append(msg);
-}
+    $("html,body").animate({scrollTop:document.body.scrollHeight},1000);}
 </script>
 
 </head>
 <body>
-<div  class="msgbox">
+<div  class="msgbox" id="test">
   <ul>
 
 <!--
@@ -129,6 +135,7 @@ function displayMsg(msg) {
   </li>
   -->
   </ul>
+  <div id="link"></div>
 </div>
 </body>
 </html>
