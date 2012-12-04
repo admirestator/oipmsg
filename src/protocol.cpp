@@ -48,7 +48,6 @@ void Protocol::setAbsenceStatus(const quint32 &status)
 
 QByteArray Protocol::buildcmdNooperation()
 {
-
     // Set seed value.
     qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
     quint32 packetno = qrand();
@@ -168,7 +167,9 @@ QByteArray Protocol::buildcmdBrAbsence()
     quint64 packetno = qrand();
 
     quint32 cmd = 0;
-    cmd = cmd | IPMSG_BR_ABSENCE | IPMSG_ABSENCEOPT;
+    cmd = cmd | IPMSG_BR_ABSENCE
+            | IPMSG_ABSENCEOPT
+            | IPMSG_AUTORETOPT;
 
     QByteArray cmd_absence;
     cmd_absence.append (QString::number(IPMSG_VERSION, 16));
@@ -310,15 +311,17 @@ QByteArray Protocol::buildcmdBrIsgetlist2()
     return cmd_isgetlist2;
 }
 
-QByteArray Protocol::buildcmdSendmsg(const QString &msg)
+QByteArray Protocol::buildcmdSendmsg(const QString &msg, const bool &seal)
 {
     QByteArray cmd_sendmsg;
     // Set init package number as random.
     quint64 packetno = qrand();
 
     quint32 cmd = 0;
-    cmd = cmd | IPMSG_SENDMSG
-            |IPMSG_SECRETOPT;
+    cmd = cmd | IPMSG_SENDMSG;
+    if (seal) {
+    cmd = cmd | IPMSG_SECRETOPT;
+    }
 
     QByteArray cmd_isgetlist;
     cmd_isgetlist.append (QString::number(IPMSG_VERSION, 16));
@@ -338,13 +341,12 @@ QByteArray Protocol::buildcmdSendmsg(const QString &msg)
     return cmd_sendmsg;
 }
 
-QByteArray Protocol::buildcmdRecvmsg(const QString &packetno)
+QByteArray Protocol::buildcmdRecvmsg()
 {
     // Set init package number as random.
     quint64 pktno = qrand();
 
-    quint32 cmd = 0;
-    cmd = cmd | IPMSG_RECVMSG;
+    quint32 cmd = 0 | IPMSG_RECVMSG;
 
     QByteArray cmd_recvmsg;
     cmd_recvmsg.append (QString::number(IPMSG_VERSION, 16));
@@ -357,63 +359,58 @@ QByteArray Protocol::buildcmdRecvmsg(const QString &packetno)
     cmd_recvmsg.append (":");
     cmd_recvmsg.append (QString::number(cmd, 10));
     cmd_recvmsg.append (":");
-    cmd_recvmsg.append (packetno);
+    cmd_recvmsg.append ("");
 
     qDebug () << cmd_recvmsg;
     return cmd_recvmsg;
 }
 
-QByteArray Protocol::buildcmdReadmsg()
+QByteArray Protocol::buildcmdReadmsg(const QString &packet)
 {
-    QByteArray cmd_readmsg;
     // Set init package number as random.
     quint64 packetno = qrand();
 
-    quint32 cmd = 0;
-    cmd = cmd | IPMSG_BR_ISGETLIST;
+    quint32 cmd = 0 | IPMSG_BR_ISGETLIST;
 
-    QByteArray cmd_isgetlist;
-    cmd_isgetlist.append (QString::number(IPMSG_VERSION, 16));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (QString::number(packetno, 10));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (username);
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (hostname);
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (QString::number(cmd, 16));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (username);
+    QByteArray cmd_readmsg;
+    cmd_readmsg.append (QString::number(IPMSG_VERSION, 16));
+    cmd_readmsg.append (":");
+    cmd_readmsg.append (QString::number(packetno, 10));
+    cmd_readmsg.append (":");
+    cmd_readmsg.append (username);
+    cmd_readmsg.append (":");
+    cmd_readmsg.append (hostname);
+    cmd_readmsg.append (":");
+    cmd_readmsg.append (QString::number(cmd, 16));
+    cmd_readmsg.append (":");
+    cmd_readmsg.append (packet);
 
-    qDebug () << cmd_isgetlist;
-    return cmd_isgetlist;
+    qDebug () << cmd_readmsg;
     return cmd_readmsg;
 }
 
 QByteArray Protocol::buildcmdDelmsg()
 {
-    QByteArray cmd_delmsg;
     // Set init package number as random.
     quint64 packetno = qrand();
 
     quint32 cmd = 0;
     cmd = cmd | IPMSG_BR_ISGETLIST;
 
-    QByteArray cmd_isgetlist;
-    cmd_isgetlist.append (QString::number(IPMSG_VERSION, 16));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (QString::number(packetno, 10));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (username);
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (hostname);
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (QString::number(cmd, 16));
-    cmd_isgetlist.append (":");
-    cmd_isgetlist.append (username);
+    QByteArray cmd_delmsg;
+    cmd_delmsg.append (QString::number(IPMSG_VERSION, 16));
+    cmd_delmsg.append (":");
+    cmd_delmsg.append (QString::number(packetno, 10));
+    cmd_delmsg.append (":");
+    cmd_delmsg.append (username);
+    cmd_delmsg.append (":");
+    cmd_delmsg.append (hostname);
+    cmd_delmsg.append (":");
+    cmd_delmsg.append (QString::number(cmd, 16));
+    cmd_delmsg.append (":");
+    cmd_delmsg.append (username);
 
-    qDebug () << cmd_isgetlist;
-    return cmd_isgetlist;
+    qDebug () << cmd_delmsg;
     return cmd_delmsg;
 }
 

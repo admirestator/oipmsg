@@ -54,11 +54,12 @@ public slots:
                         const QString &msg,
                         const quint16 &port = IPMSG_DEFAULT_PORT);
     bool sendcmdRecvmsg(const QHostAddress &ipaddr,
-                        const QString &packetno,
                         const quint16 &port = IPMSG_DEFAULT_PORT);
-    bool sendcmdReadmsg();
+    bool sendcmdReadmsg(const QHostAddress &ipaddr,
+                        const QString &packetno);
     bool sendcmdDelmsg();
-    bool sendcmdAnsreadmsg();
+    bool sendcmdAnsreadmsg(const QHostAddress &ipaddr,
+                           const QString &packetno);
     bool sendcmdGetinfo();
     bool sendcmdSendinfo();
     bool sendcmdGetabsenceinfo();
@@ -85,15 +86,14 @@ private slots:
     bool processGetlist();
     bool processAnslist();
     bool processBrIsgetlist2();
-    //bool processSendmsg(const QHostAddress& ipaddr,
     bool processSendmsg(const QHostAddress &ipaddr,
                         const QByteArray &packet);
     bool processRecvmsg(const QHostAddress &ipaddr,
-                        const QByteArray &packet);
-    bool processReadmsg();
+                        const quint32 &cmd);
+    bool processReadmsg(const QHostAddress &ipaddr,
+                        const QByteArray packet);
     bool processDelmsg();
-    bool processAnsreadmsg(const QHostAddress &ipaddr,
-                           const QByteArray &packet);
+    bool processAnsreadmsg();
     bool processGetinfo();
     bool processSendinfo();
     bool processGetabsenceinfo();
@@ -120,11 +120,10 @@ signals:
     void signalSendmsg(const QHostAddress &ipaddr,
                        const QByteArray &packet);
     void signalRecvmsg(const QHostAddress &ipaddr,
-                       const QByteArray &packet);
+                       const quint32 &cmd);
     void signalReadmsg();
     void signalDelmsg();
-    void signalAnsreadmsg(const QHostAddress &ipaddr,
-                          const QByteArray &packet);
+    void signalAnsreadmsg();
     void signalGetinfo();
     void signalSendinfo();
     void signalGetabsenceinfo();
