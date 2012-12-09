@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/logo">
+        <file>oipmsglogo.png</file>
+    </qresource>
+    <qresource prefix="/UI">
+        <file>chat.html</file>
+        <file>jquery-1.8.3.min.js</file>
+    </qresource>
+</RCC>

@@ -67,4 +67,6 @@ RESOURCES += \
 
 OTHER_FILES += \
     src/jquery-1.8.3.min.js \
-    src/chat.html
+    src/chat.html \
+    resource/jquery-1.8.3.min.js \
+    resource/chat.html
