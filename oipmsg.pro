@@ -62,7 +62,8 @@ FORMS    += \
     src/setup_window.ui \
     src/user_dialog.ui
 
-RESOURCES +=
+RESOURCES += \
+    resource/oipmsglogo.qrc
 
 OTHER_FILES += \
     src/jquery-1.8.3.min.js \

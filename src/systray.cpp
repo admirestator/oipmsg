@@ -24,15 +24,14 @@ Systray::Systray(QObject *parent)
 
     createActions();
     createMenus();
-
     createConnections();
-
     startTimer(500);
 
-    m_iconKey = "normal";
-    //trayIcon->setIcon(*Global::iconSet.value(m_iconKey));
+    trayIcon->setIcon(QIcon(":/logo/oipmsglogo.png"));
+    trayIcon->show();
+
     trayIcon->setContextMenu(trayIconMenu);
-    trayIcon->setToolTip(tr("IP Messenger(%1)").arg(0));
+    trayIcon->setToolTip(tr("Open IP Messenger"));
 }
 
 Systray::~Systray()

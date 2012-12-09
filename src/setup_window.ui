@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Preference</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resource/oipmsglogo.qrc">
+    <normaloff>:/logo/oipmsglogo.png</normaloff>:/logo/oipmsglogo.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QDialogButtonBox" name="buttonBox">
     <property name="geometry">
@@ -43,6 +47,8 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resource/oipmsglogo.qrc"/>
+ </resources>
  <connections/>
 </ui>

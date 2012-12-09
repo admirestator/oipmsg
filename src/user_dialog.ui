@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resource/oipmsglogo.qrc">
+    <normaloff>:/logo/oipmsglogo.png</normaloff>:/logo/oipmsglogo.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="labelUserInfo">
@@ -263,6 +267,8 @@
    <header>QtWebKit/QWebView</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resource/oipmsglogo.qrc"/>
+ </resources>
  <connections/>
 </ui>

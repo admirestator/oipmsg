@@ -12,7 +12,6 @@ int main(int argc, char *argv[])
     QApplication *app = new QApplication(argc, argv);
 
     //setup system tray
-    /*
     Systray *systemTray = new Systray();
     systemTray->show();
     if (!QSystemTrayIcon::isSystemTrayAvailable()) {
@@ -20,7 +19,6 @@ int main(int argc, char *argv[])
                               QObject::tr("There's no system tray on this system!"));
         app->quit();
     }
-    */
 
     Oipmsg *oipmsg = new Oipmsg();
     oipmsg->run();

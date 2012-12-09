@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>About OIPMsg</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resource/oipmsglogo.qrc">
+    <normaloff>:/logo/oipmsglogo.png</normaloff>:/logo/oipmsglogo.png</iconset>
+  </property>
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
@@ -138,6 +142,8 @@ along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resource/oipmsglogo.qrc"/>
+ </resources>
  <connections/>
 </ui>

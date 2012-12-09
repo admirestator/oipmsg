@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Open IP Messager</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resource/oipmsglogo.qrc">
+    <normaloff>:/logo/oipmsglogo.png</normaloff>:/logo/oipmsglogo.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
@@ -174,6 +178,8 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="../resource/oipmsglogo.qrc"/>
+ </resources>
  <connections/>
 </ui>
