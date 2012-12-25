@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>255</width>
-    <height>496</height>
+    <width>226</width>
+    <height>458</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,12 +23,12 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>251</width>
-      <height>451</height>
+      <width>221</width>
+      <height>411</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -75,24 +75,19 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>251</width>
+        <width>221</width>
         <height>431</height>
        </rect>
       </property>
      </widget>
-    </widget>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>Page</string>
-     </attribute>
     </widget>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>450</y>
-      <width>251</width>
+      <y>410</y>
+      <width>221</width>
       <height>24</height>
      </rect>
     </property>
