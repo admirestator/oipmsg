@@ -192,14 +192,14 @@ bool Udpserver::handleCmd (const QHostAddress &ipaddr, const QByteArray &newPack
 //-------------------- process slots ------------------------
 bool Udpserver::processNooperation(const QHostAddress &ipaddr)
 {
-    qDebug() << "[OPT]" << "NoOpt" << ipaddr;
+    qDebug() << "[Optn]" << "NoOpt" << ipaddr;
     return true;
 }
 
 bool Udpserver::processBrEntry(const QHostAddress &ipaddr,
                                const QByteArray &packet)
 {
-    qDebug() << "[OPT]" << "BrEntry" << ipaddr << packet;
+    qDebug() << "[Optn]" << "BrEntry" << ipaddr << packet;
     QList<QByteArray> argumentList = packet.split (':');
 
     if (argumentList.at(4).toInt() & IPMSG_ABSENCEOPT) {
@@ -215,14 +215,14 @@ bool Udpserver::processBrEntry(const QHostAddress &ipaddr,
 bool Udpserver::processBrExit(const QString &username)
 {
 
-    qDebug() << "[OPT]" << "BrExit" << username;
+    qDebug() << "[Optn]" << "BrExit" << username;
     return true;
 }
 
 bool Udpserver::processAnsentry(const QHostAddress &ipaddr,
                                 const QByteArray &packet)
 {
-    qDebug() << "[OPT]" << "AnsEntry";
+    qDebug() << "[Optn]" << "AnsEntry" << ipaddr;
     return true;
 }
 
@@ -264,7 +264,7 @@ bool Udpserver::processBrIsgetlist2()
 bool Udpserver::processSendmsg(const QHostAddress &ipaddr,
                                const QByteArray &packet)
 {
-    qDebug() << "[OPT]" << "SendMsg";
+    qDebug() << "[Optn]" << "SendMsg";
     QList<QByteArray> argumentList = packet.split(':');
     if (argumentList.at(4).toUInt() & IPMSG_SENDCHECKOPT) {
         sendcmdRecvmsg(ipaddr, argumentList.at(1).toUInt());
@@ -279,7 +279,7 @@ bool Udpserver::processSendmsg(const QHostAddress &ipaddr,
 bool Udpserver::processRecvmsg(const QHostAddress &ipaddr,
                               const quint32 &cmd)
 {
-    qDebug() << "[OPT]" << "RecvMsg";
+    qDebug() << "[Optn]" << "RecvMsg";
     if (cmd & IPMSG_AUTORETOPT) { // no replay
         return true;
     } else {
@@ -291,7 +291,7 @@ bool Udpserver::processRecvmsg(const QHostAddress &ipaddr,
 bool Udpserver::processReadmsg(const QHostAddress &ipaddr,
                                const QByteArray packet)
 {
-    qDebug() << "[OPT]" << "ReadMsg";
+    qDebug() << "[Optn]" << "ReadMsg";
     QList<QByteArray> argumentList = packet.split(':');
     if (argumentList.at(4).toUInt() & IPMSG_READCHECKOPT) {
         sendcmdAnsreadmsg(ipaddr, argumentList.at(5).constData());
@@ -394,7 +394,7 @@ bool Udpserver::sendcmdBrEntry(const bool &absenceState)
         datagram = protocolObj->buildcmdBrEntry();
     }
 
-    qDebug () << "[Send] " << datagram;
+    qDebug () << "[Send]" << datagram;
     if (udpSocket->writeDatagram(datagram.data(),
                                  datagram.size(),
                                  QHostAddress::Broadcast,
