@@ -53,8 +53,10 @@ public slots:
     bool sendcmdSendmsg(const QHostAddress &ipaddr,
                         const QString &msg,
                         const quint16 &port = IPMSG_DEFAULT_PORT);
+    //bool sendcmdRecvmsg(const QHostAddress &ipaddr,
+    //                    const quint16 &port = IPMSG_DEFAULT_PORT);
     bool sendcmdRecvmsg(const QHostAddress &ipaddr,
-                        const quint16 &port = IPMSG_DEFAULT_PORT);
+                        const quint64 &pacetno);
     bool sendcmdReadmsg(const QHostAddress &ipaddr,
                         const QString &packetno);
     bool sendcmdDelmsg();

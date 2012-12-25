@@ -76,7 +76,7 @@ void UserDialog::updateLocalUserData(const User &userinfo)
 
 void UserDialog::showRecvMsg(const QString &msg)
 {
-    qDebug () << msg;
+    //qDebug () << msg;
     QString formatedMsg = "displayMsg('<li class=\"wordbox1\"><div class=\"arrow_box\"><h1 class=\"logo\">"
         + msg
         + "</h1></div><span class=\"wordtime\">"
@@ -87,7 +87,7 @@ void UserDialog::showRecvMsg(const QString &msg)
 
 void UserDialog::showSendMsg(const QString &msg)
 {
-    qDebug () << msg;
+    //qDebug () << msg;
     QString formatedMsg = "displayMsg('<li class=\"wordbox2\"><div class=\"arrow_box\"><h1 class=\"logo\">"
         + msg
         + "</h1></div><span class=\"wordtime\">"
