@@ -103,7 +103,7 @@ void Oipmsg::buildConnection()
 bool Oipmsg::addUser(const QHostAddress &ipaddr, const QByteArray &packet)
 {
     if (hosts->addHost(ipaddr, packet)) {
-        qDebug () << "adduser:" << packet;
+        //qDebug () << "adduser:" << packet;
         //Refresh ui widget
         mainWin->buildItems(hosts->userList);
         return true;
